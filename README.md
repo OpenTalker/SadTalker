@@ -68,7 +68,7 @@ pip install -r requirements.txt
 
 #### **Models**
 
-Please download our [pre-trained model](https://drive.google.com/drive/folders/1saOtHRVLz2D55V8GIxyJvPIq5kFjSAmJ?usp=sharing) and put it in ./checkpoints.
+Please download our [pre-trained model](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and put it in ./checkpoints.
 
 | Model | Description
 | :--- | :----------
