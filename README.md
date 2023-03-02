@@ -47,10 +47,12 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 - [ ] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [ ] Gradio/Colab Demo.
-- [ ] integrade with stable-diffusion-web-ui.
+- [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
+
+https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
+
+
 - [ ] training code of each componments.
-
-
 
 
 ## **Test**
