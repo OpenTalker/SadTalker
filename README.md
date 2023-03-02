@@ -142,4 +142,4 @@ Facerender code borrows heavily from [zhanglonghao](https://github.com/zhanglong
 - [VideoReTalking: Audio-based Lip Synchronization for Talking Head Video Editing In the Wild (SIGGRAPH Asia 2022)](https://github.com/vinthony/video-retalking)
 - [DPE: Disentanglement of Pose and Expression for General Video Portrait Editing (CVPR 2023)](https://arxiv.org/abs/2301.06281)
 - [3D GAN Inversion with Facial Symmetry Prior (CVPR 2023)](https://github.com/FeiiYin/SPI/)
-- [T2M-GPT: Generating Human Motion from Textual Descriptions with Discrete Representations](https://github.com/Mael-zys/T2M-GPT)
+- [T2M-GPT: Generating Human Motion from Textual Descriptions with Discrete Representations (CVPR 2023)](https://github.com/Mael-zys/T2M-GPT)
