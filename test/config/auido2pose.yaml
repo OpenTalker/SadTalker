@@ -1,0 +1,49 @@
+DATASET:
+  TRAIN_FILE_LIST: /apdcephfs_cq2/share_1290939/wenxuazhang/code/audio2pose_unet_noAudio/dataset/train_33.txt
+  EVAL_FILE_LIST: /apdcephfs_cq2/share_1290939/wenxuazhang/code/audio2pose_unet_noAudio/dataset/val.txt
+  TRAIN_BATCH_SIZE: 64
+  EVAL_BATCH_SIZE: 1
+  EXP: True
+  EXP_DIM: 64
+  FRAME_LEN: 32
+  COEFF_LEN: 73
+  NUM_CLASSES: 46
+  AUDIO_ROOT_PATH: /apdcephfs_cq2/share_1290939/wenxuazhang/voxceleb1/wav
+  COEFF_ROOT_PATH: /apdcephfs_cq2/share_1290939/shadowcun/datasets/VoxCeleb/v1/imdb
+  DEBUG: True
+  
+
+MODEL:
+  AUDIOENCODER:
+    LEAKY_RELU: True
+    NORM: 'IN'
+  DISCRIMINATOR:
+    LEAKY_RELU: False
+    INPUT_CHANNELS: 6
+  CVAE:
+    AUDIO_EMB_IN_SIZE: 512
+    AUDIO_EMB_OUT_SIZE: 6
+    SEQ_LEN: 32
+    LATENT_SIZE: 64
+    ENCODER_LAYER_SIZES: [192, 128]
+    DECODER_LAYER_SIZES: [128, 192]
+    
+
+TRAIN:
+  MAX_EPOCH: 150
+  GENERATOR:
+    LR: 1.0e-4
+  DISCRIMINATOR:
+    LR: 1.0e-4
+  LOSS:
+    LAMBDA_REG: 1
+    LAMBDA_LANDMARKS: 0
+    LAMBDA_VERTICES: 0
+    LAMBDA_GAN_MOTION: 0.7
+    LAMBDA_GAN_COEFF: 0
+    LAMBDA_KL: 1
+
+TAG:
+  NAME: cvae_UNET_useAudio_usewav2lipAudioEncoder
+
+
