@@ -26,7 +26,7 @@
 
 ![sadtalker](https://user-images.githubusercontent.com/4397546/222328789-44fa1c03-050d-4a96-8e22-d15fedeb29ab.gif)
 
-<b>TR;DL: A realistic talking head video generation method using a <i>single input image</i> and the <i>speech audio</i>.</b>
+<b>TL;DR: A realistic talking head video generation method using a <i>single input image</i> and the <i>speech audio</i>.</b>
 
 ## Brife Introduction
 
