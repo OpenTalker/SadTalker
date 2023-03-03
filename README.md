@@ -68,7 +68,6 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 ```
 git clone https://github.com/Winfredy/SadTalker.git
 cd SadTalker 
-cd test
 conda create -n sadtalker python=3.7
 source activate sadtalker
 pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113
