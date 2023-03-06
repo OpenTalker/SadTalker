@@ -79,8 +79,7 @@ class CropAndExtract():
                     break 
                 full_frames.append(frame)
                 break
-        #x_full_frames = [cv2.cvtColor(cv2.resize(full_frames[0],(pic_size,pic_size)), cv2.COLOR_BGR2RGB) ]
-        x_full_frames = full_frames
+        x_full_frames = [cv2.cvtColor(full_frames[0], cv2.COLOR_BGR2RGB) ] 
 
         if True:
             x_full_frames, crop, quad = self.croper.crop(x_full_frames, xsize=pic_size)

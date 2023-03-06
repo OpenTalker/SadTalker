@@ -7,7 +7,7 @@
 <div>
     <a target='_blank'>Wenxuan Zhang <sup>*,1,2</sup> </a>&emsp;
     <a href='https://vinthony.github.io/' target='_blank'>Xiaodong Cun <sup>*,2</a>&emsp;
-    <a href='https://xuanwangvc.github.io/' target='_blank'>Xuan Wang <sup>3</sup></a>&emsp;
+    <a href='https://xuanwangvc.github.io/' target='_blank'>Xuan Wang <sup>2</sup></a>&emsp;
     <a href='https://yzhang2016.github.io/' target='_blank'>Yong Zhang <sup>2</sup></a>&emsp;
     <a href='https://xishen0220.github.io/' target='_blank'>Xi Shen <sup>2</sup></a>&emsp; </br>
     <a href='https://yuguo-xjtu.github.io/' target='_blank'>Yu Guo<sup>1</sup> </a>&emsp;
@@ -16,7 +16,7 @@
 </div>
 <br>
 <div>
-    <sup>1</sup> Xi'an Jiaotong University &emsp; <sup>2</sup> Tencent AI Lab &emsp; <sup>3</sup> Ant Group &emsp;
+    <sup>1</sup> Xi'an Jiaotong University &emsp; <sup>2</sup> Tencent AI Lab &emsp; 
 </div>
 <br>
 <i><strong><a href='https://arxiv.org/abs/2211.12194' target='_blank'>CVPR 2023</a></strong></i>
@@ -33,12 +33,15 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 
 ## Changelog
+- 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
 - 2023.02.28 SadTalker has been accepted by CVPR 2023!
 
 
 ## Pipeline
 ![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png)
+
+![main_of_sadtalker1](https://github.com/Winfredy/Figurebed/blob/master/img/20190319102852.png)
 
 
 ## **TODO**
@@ -59,7 +62,7 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 #### **Requirements**
 
-  * Python >= 3.6
+  * Python
   * PyTorch  
   * ffmpeg
 
@@ -68,9 +71,9 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 ```
 git clone https://github.com/Winfredy/SadTalker.git
 cd SadTalker 
-conda create -n sadtalker python=3.7
+conda create -n sadtalker python=3.8
 source activate sadtalker
-pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0 --extra-index-url https://download.pytorch.org/whl/cu113
+pip3 install torch torchvision torchaudio
 conda config --add channels conda-forge
 conda install ffmpeg
 pip install ffmpy
@@ -134,7 +137,7 @@ If you find our work useful in your research, please consider citing:
 
 Acknowledgements
 ----------
-Facerender code borrows heavily from [zhanglonghao](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
+Facerender code borrows heavily from [zhanglonghao](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the author for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
 
 
 ## Related Work

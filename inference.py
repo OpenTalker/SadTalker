@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     parser = ArgumentParser()  
     parser.add_argument("--driven_audio", default='./examples/driven_audio/RD_Radio31_000.wav', help="path to driven audio")
-    parser.add_argument("--source_image", default='./examples/source_image/temp_RD_Radio34_000.mp4', help="path to source image")
+    parser.add_argument("--source_image", default='/root/SadTalker/examples/source_image/art_2.png', help="path to source image")
     parser.add_argument("--result_dir", default='./examples/results', help="path to output")
     parser.add_argument("--pose_style", type=int, default=0,  help="input pose style from [0, 46)")
     parser.add_argument("--batch_size", type=int, default=8,  help="the batch size of facerender")
