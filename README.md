@@ -39,9 +39,7 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 
 ## Pipeline
-![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png)
-
-![main_of_sadtalker1](https://github.com/Winfredy/Figurebed/blob/master/img/20190319102852.png)
+![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png) 
 
 
 ## **TODO**
@@ -118,7 +116,7 @@ python inference.py --driven_audio <audio.wav> \
                     --result_dir <a file to store results> \
                     --camera_yaw -20 30 10
 ```
-
+![free_view](https://github.com/Winfredy/SadTalker/blob/main/free_view_result.gif)
 
 
 
