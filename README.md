@@ -145,3 +145,7 @@ Facerender code borrows heavily from [zhanglonghao](https://github.com/zhanglong
 - [DPE: Disentanglement of Pose and Expression for General Video Portrait Editing (CVPR 2023)](https://arxiv.org/abs/2301.06281)
 - [3D GAN Inversion with Facial Symmetry Prior (CVPR 2023)](https://github.com/FeiiYin/SPI/)
 - [T2M-GPT: Generating Human Motion from Textual Descriptions with Discrete Representations (CVPR 2023)](https://github.com/Mael-zys/T2M-GPT)
+
+##  Disclaimer
+
+This is not an official product of Tencent. This repository can only be used for personal/research/non-commercial purposes.
