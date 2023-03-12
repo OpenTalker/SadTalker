@@ -32,17 +32,17 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 </div>
 
 
-## Changelog
+## 📋 Changelog
 - 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
 - 2023.02.28 SadTalker has been accepted by CVPR 2023!
 
 
-## Pipeline
+## 🎼 Pipeline
 ![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png) 
 
 
-## **TODO**
+## 🚧 TODO
 
 - [x] Generating 2D face from a single Image.
 - [ ] Generating 3D face from Audio.
@@ -56,15 +56,15 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 - [ ] training code of each componments.
 
 
-## **Test**
+## 🔮 Test!
 
-#### **Requirements**
+#### Requirements
 
   * Python
   * PyTorch  
   * ffmpeg
 
-#### **Conda Installation**
+#### Conda Installation
 
 ```
 git clone https://github.com/Winfredy/SadTalker.git
@@ -81,7 +81,7 @@ conda install dlib
 pip install -r requirements.txt
 ```  
 
-#### **Models**
+#### Models
 
 Please download our [pre-trained model](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and put it in ./checkpoints.
 
@@ -97,17 +97,17 @@ Please download our [pre-trained model](https://drive.google.com/drive/folders/1
 |checkpoints/BFM | 3DMM library file.  
 |checkpoints/hub | Face detection models used in [face alignment](https://github.com/1adrianb/face-alignment).
 
-#### **Generating 2D face from a single Image**
+#### Generating 2D face from a single Image
 
 ```
 python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --result_dir <a file to store results>
 ```
 
-#### **Generating 3D face from Audio**
+#### Generating 3D face from Audio
 
 To do ...
 
-#### **Generating 4D free-view talking examples from audio and a single image**
+#### Generating 4D free-view talking examples from audio and a single image
 
 We use `camera_yaw`, `camera_pitch`, `camera_roll` to control camera pose. For example, `--camera_yaw -20 30 10` means the camera yaw degree changes from -20 to 30 and then changes from 30 to 10.
 ```
@@ -120,7 +120,7 @@ python inference.py --driven_audio <audio.wav> \
 
 
 
-## **Citation**
+## 🛎 Citation
 
 If you find our work useful in your research, please consider citing:
 
@@ -133,12 +133,12 @@ If you find our work useful in your research, please consider citing:
 }
 ```
 
-Acknowledgements
-----------
+## 💗 Acknowledgements
+
 Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the author for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
 
 
-## Related Work
+## 🥂 Related Works
 - [StyleHEAT: One-Shot High-Resolution Editable Talking Face Generation via Pre-trained StyleGAN (ECCV 2020)](https://github.com/FeiiYin/StyleHEAT)
 - [CodeTalker: Speech-Driven 3D Facial Animation with Discrete Motion Prior (CVPR 2023)](https://github.com/Doubiiu/CodeTalker)
 - [VideoReTalking: Audio-based Lip Synchronization for Talking Head Video Editing In the Wild (SIGGRAPH Asia 2022)](https://github.com/vinthony/video-retalking)
@@ -146,6 +146,6 @@ Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vi
 - [3D GAN Inversion with Facial Symmetry Prior (CVPR 2023)](https://github.com/FeiiYin/SPI/)
 - [T2M-GPT: Generating Human Motion from Textual Descriptions with Discrete Representations (CVPR 2023)](https://github.com/Mael-zys/T2M-GPT)
 
-##  Disclaimer
+## 📢 Disclaimer
 
 This is not an official product of Tencent. This repository can only be used for personal/research/non-commercial purposes.
