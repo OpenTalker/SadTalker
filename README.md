@@ -48,23 +48,28 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 - [ ] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [ ] Gradio/Colab Demo.
+- [ ] training code of each componments.
+- [ ] Audio-driven Anime Avatar.
 - [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
 
-- [ ] training code of each componments.
+## 🔮 Inference Demo!
 
-
-## 🔮 Test!
 
 #### Requirements
+<details><summary>CLICK ME</summary>
 
-  * Python
+  * Python 3.8
   * PyTorch  
   * ffmpeg
 
-#### Conda Installation
+</details>
+
+#### Dependence Installation
+
+<details><summary>CLICK ME</summary>
 
 ```
 git clone https://github.com/Winfredy/SadTalker.git
@@ -81,7 +86,10 @@ conda install dlib
 pip install -r requirements.txt
 ```  
 
-#### Models
+</details>
+
+#### Trained Models
+<details><summary>CLICK ME</summary>
 
 Please download our [pre-trained model](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and put it in ./checkpoints.
 
@@ -97,10 +105,14 @@ Please download our [pre-trained model](https://drive.google.com/drive/folders/1
 |checkpoints/BFM | 3DMM library file.  
 |checkpoints/hub | Face detection models used in [face alignment](https://github.com/1adrianb/face-alignment).
 
+</details>
+
 #### Generating 2D face from a single Image
 
-```
-python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --result_dir <a file to store results>
+```bash
+python inference.py --driven_audio <audio.wav> \
+                    --source_image <video.mp4 or picture.png> \
+                    --result_dir <a file to store results>
 ```
 
 #### Generating 3D face from Audio
@@ -110,7 +122,7 @@ To do ...
 #### Generating 4D free-view talking examples from audio and a single image
 
 We use `camera_yaw`, `camera_pitch`, `camera_roll` to control camera pose. For example, `--camera_yaw -20 30 10` means the camera yaw degree changes from -20 to 30 and then changes from 30 to 10.
-```
+```bash
 python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
                     --result_dir <a file to store results> \
