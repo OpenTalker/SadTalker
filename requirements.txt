@@ -11,3 +11,5 @@ kornia==0.6.8
 tqdm
 yacs==0.1.8
 pyyaml  
+joblib==1.1.0
+scikit-image==0.19.3

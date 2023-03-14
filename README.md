@@ -33,6 +33,8 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 
 ## 📋 Changelog
+
+- 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`
 - 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
 - 2023.02.28 SadTalker has been accepted by CVPR 2023!
@@ -57,6 +59,9 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 ## 🔮 Inference Demo!
 
+#### Colab
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) 
 
 #### Requirements
 <details><summary>CLICK ME</summary>
@@ -76,7 +81,7 @@ git clone https://github.com/Winfredy/SadTalker.git
 cd SadTalker 
 conda create -n sadtalker python=3.8
 source activate sadtalker
-pip3 install torch torchvision torchaudio
+pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 conda config --add channels conda-forge
 conda install ffmpeg
 pip install ffmpy
@@ -147,7 +152,7 @@ If you find our work useful in your research, please consider citing:
 
 ## 💗 Acknowledgements
 
-Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the author for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
+Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
 
 
 ## 🥂 Related Works
