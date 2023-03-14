@@ -2,7 +2,7 @@
 
 <h2> 😭 SadTalker： <span style="font-size:12px">Learning Realistic 3D Motion Coefficients for  Stylized Audio-Driven Single Image Talking Face Animation </span> </h2> 
 
-  <a href='https://arxiv.org/abs/2211.12194'><img src='https://img.shields.io/badge/ArXiv-2211.14758-red'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://sadtalker.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+  <a href='https://arxiv.org/abs/2211.12194'><img src='https://img.shields.io/badge/ArXiv-2211.14758-red'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://sadtalker.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) 
 
 <div>
     <a target='_blank'>Wenxuan Zhang <sup>*,1,2</sup> </a>&emsp;
@@ -34,7 +34,7 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 ## 📋 Changelog
 
-- 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`
+- 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
 - 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
 - 2023.02.28 SadTalker has been accepted by CVPR 2023!
@@ -49,7 +49,7 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 - [x] Generating 2D face from a single Image.
 - [ ] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
-- [ ] Gradio/Colab Demo.
+- [x] Gradio/Colab Demo.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
@@ -58,10 +58,6 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 
 ## 🔮 Inference Demo!
-
-#### Colab
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) 
 
 #### Requirements
 <details><summary>CLICK ME</summary>
