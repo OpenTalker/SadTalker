@@ -92,7 +92,9 @@ pip install -r requirements.txt
 #### Trained Models
 <details><summary>CLICK ME</summary>
 
-Please download our [pre-trained model](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and put it in ./checkpoints.
+Please download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1).
+
+and then, put it in ./checkpoints.
 
 | Model | Description
 | :--- | :----------
