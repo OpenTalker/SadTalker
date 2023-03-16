@@ -52,6 +52,7 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 - [x] Gradio/Colab Demo.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
+- [ ] interpolate ChatGPT for a conversation demo 🤔
 - [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
