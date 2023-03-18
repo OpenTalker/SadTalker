@@ -10,7 +10,7 @@ from face3d.models import networks
 from face3d.extract_kp_videos import KeypointExtractor
 
 from scipy.io import loadmat, savemat
-from croper import Croper
+from utils.croper import Croper
 
 import warnings 
 warnings.filterwarnings("ignore")

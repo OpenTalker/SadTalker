@@ -4,7 +4,7 @@ import numpy as np
 # import tensorflow as tf
 from scipy import signal
 from scipy.io import wavfile
-from hparams import hparams as hp
+from utils.hparams import hparams as hp
 
 def load_wav(path, sr):
     return librosa.core.load(path, sr=sr)[0]

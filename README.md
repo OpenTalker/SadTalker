@@ -81,11 +81,12 @@ source activate sadtalker
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 conda config --add channels conda-forge
 conda install ffmpeg
-pip install ffmpy
-pip install Cmake
-pip install boost
-conda install dlib
+pip install ffmpy Cmake boost dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
 pip install -r requirements.txt
+
+### install gpfgan for enhancer
+pip install git+https://github.com/TencentARC/GFPGAN
+
 ```  
 
 </details>
@@ -93,9 +94,13 @@ pip install -r requirements.txt
 #### Trained Models
 <details><summary>CLICK ME</summary>
 
-Please download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1).
+You can run to put all the models in the right place.
 
-and then, put it in ./checkpoints.
+```bash
+bash download_models.sh
+```
+
+OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
 
 | Model | Description
 | :--- | :----------
@@ -132,7 +137,7 @@ python inference.py --driven_audio <audio.wav> \
                     --result_dir <a file to store results> \
                     --camera_yaw -20 30 10
 ```
-![free_view](https://github.com/Winfredy/SadTalker/blob/main/free_view_result.gif)
+![free_view](https://github.com/Winfredy/SadTalker/blob/main/docs/free_view_result.gif)
 
 
 

@@ -1,8 +1,6 @@
 import os
 import sys 
 import yaml
-import time
-from tqdm import tqdm
 import numpy as np
 import warnings
 from skimage import img_as_ubyte
@@ -10,15 +8,14 @@ warnings.filterwarnings('ignore')
 
 import imageio
 import torch
-import torch.nn as nn  
 
 from facerender.modules.keypoint_detector import HEEstimator, KPDetector
 from facerender.modules.mapping import MappingNet
 from facerender.modules.generator import OcclusionAwareGenerator, OcclusionAwareSPADEGenerator
 from facerender.modules.make_animation import make_animation 
 
-import subprocess  
 from pydub import AudioSegment 
+from utils.face_enhancer import enhancer as face_enhancer
 
 
 class AnimateFromCoeff():
@@ -110,7 +107,7 @@ class AnimateFromCoeff():
 
         return checkpoint['epoch']
 
-    def generate(self, x, video_save_dir):
+    def generate(self, x, video_save_dir, enhancer=None):
 
         source_image=x['source_image'].type(torch.FloatTensor)
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
@@ -141,10 +138,16 @@ class AnimateFromCoeff():
             video.append(image)
         result = img_as_ubyte(video)
 
-        video_name = x['video_name'] 
-        video_name = video_name + '.mp4'
+        video_name = x['video_name']  + '.mp4'
         path = os.path.join(video_save_dir, 'temp_'+video_name)
         imageio.mimsave(path, result, fps=float(25))
+
+        if enhancer:
+            video_name_enhancer = x['video_name']  + '_enhanced.mp4'
+            av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer) 
+            enhanced_path = os.path.join(video_save_dir, 'temp_'+video_name_enhancer)
+            enhanced_images = face_enhancer(result, method=enhancer)
+            imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
 
         av_path = os.path.join(video_save_dir, video_name) 
         audio_path =  x['audio_path'] 
@@ -160,6 +163,12 @@ class AnimateFromCoeff():
 
         cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (path, new_audio_path, av_path)
         os.system(cmd)
+
+        if enhancer:
+            cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (enhanced_path, new_audio_path, av_path_enhancer)
+            os.system(cmd)
+            os.remove(enhanced_path)
+
         os.remove(path)
         os.remove(new_audio_path)
 

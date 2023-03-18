@@ -34,6 +34,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
 
     generated_dict = scio.loadmat(coeff_path)
     generated_3dmm = generated_dict['coeff_3dmm']
+    generated_3dmm[:64] = generated_3dmm[:64]*1.5
 
     with open(txt_path+'.txt', 'w') as f:
         for coeff in generated_3dmm:
