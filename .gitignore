@@ -161,3 +161,4 @@ cython_debug/
 
 examples/results/*
 gfpgan/*
+checkpoints/

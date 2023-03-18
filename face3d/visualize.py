@@ -9,14 +9,14 @@ import os
 import torch
 import pickle
 import subprocess, platform
-import torchaudio
 
 
+# draft
 def gen_composed_video(device, coeff_ground, audio_path, save_path, exp_dim=64):
     
     tmp_video_path = '/tmp/tmp.mp4'
-    v_info_path =  '/apdcephfs_cq2/share_1290939/wenxuazhang/checkpoints/v_info.pkl'
-    original_pkl = '/apdcephfs_cq2/share_1290939/wenxuazhang/checkpoints/fitting_res.pkl'
+    v_info_path =  './checkpoints/v_info.pkl'
+    original_pkl = './checkpoints/fitting_res.pkl'
     
     with open(original_pkl, 'rb') as f:
         fitting_dict = pickle.load(f)

@@ -6,7 +6,7 @@ import torch
 import scipy.io as scio
 
 def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path, 
-                        batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list):
+                        batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list, expression_scale=1.0):
 
     semantic_radius = 13
     video_name = os.path.splitext(os.path.split(coeff_path)[-1])[0]
@@ -34,7 +34,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
 
     generated_dict = scio.loadmat(coeff_path)
     generated_3dmm = generated_dict['coeff_3dmm']
-    generated_3dmm[:64] = generated_3dmm[:64]*1.5
+    generated_3dmm[:64] = generated_3dmm[:64] * expression_scale
 
     with open(txt_path+'.txt', 'w') as f:
         for coeff in generated_3dmm:

@@ -34,6 +34,8 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 ## 📋 Changelog
 
+- 2023.03.18 Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
+- 2023.03.18 We have offically integrate the GFPGAN for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
 - 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
 - 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
@@ -97,7 +99,7 @@ pip install git+https://github.com/TencentARC/GFPGAN
 You can run to put all the models in the right place.
 
 ```bash
-bash download_models.sh
+bash utils/download_models.sh
 ```
 
 OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
@@ -121,7 +123,10 @@ OR download our pre-trained model from [google drive](https://drive.google.com/d
 ```bash
 python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
-                    --result_dir <a file to store results>
+                    --batch_size <default equals 2, a larger run faster> \
+                    --expression_scale <default is 1.0, a larger value will make the motion stronger> \
+                    --result_dir <a file to store results> \
+                    --enhancer <default is None, you can choose gpgan or RestoreFormer>
 ```
 
 #### Generating 3D face from Audio

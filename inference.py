@@ -72,9 +72,10 @@ def main(args):
     
     #coeff2video
     data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, 
-                                batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list)
+                                batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list,
+                                expression_scale=args.expression_scale)
     
-    animate_from_coeff.generate(data, save_dir, enhancer=args.enhancer)
+    animate_from_coeff.generate(data, save_dir,  enhancer=args.enhancer)
     video_name = data['video_name']
 
     if args.enhancer is not None:
@@ -92,6 +93,7 @@ if __name__ == '__main__':
     parser.add_argument("--result_dir", default='./examples/results', help="path to output")
     parser.add_argument("--pose_style", type=int, default=0,  help="input pose style from [0, 46)")
     parser.add_argument("--batch_size", type=int, default=2,  help="the batch size of facerender")
+    parser.add_argument("--expression_scale", type=int, default=1.,  help="the batch size of facerender")
     parser.add_argument('--camera_yaw', nargs='+', type=int, default=[0], help="the camera yaw degree")
     parser.add_argument('--camera_pitch', nargs='+', type=int, default=[0], help="the camera pitch degree")
     parser.add_argument('--camera_roll', nargs='+', type=int, default=[0], help="the camera roll degree")
