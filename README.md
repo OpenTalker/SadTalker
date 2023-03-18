@@ -25,7 +25,7 @@
 
 ![sadtalker](https://user-images.githubusercontent.com/4397546/222490039-b1f6156b-bf00-405b-9fda-0c9a9156f991.gif)
 
-TL;DR: A realistic and stylized talking head video generation method from a single image and audio
+<b>TL;DR: A realistic and stylized talking head video generation method from a single image and audio.</b>
 
 <br>
 
@@ -33,6 +33,8 @@ TL;DR: A realistic and stylized talking head video generation method from a sing
 
 
 ## 📋 Changelog
+
+- 2023.03.18 Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 2(some value > 1)`.
 
 - 2023.03.18 Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
 - 2023.03.18 We have offically integrate the GFPGAN for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
@@ -126,8 +128,14 @@ python inference.py --driven_audio <audio.wav> \
                     --batch_size <default equals 2, a larger run faster> \
                     --expression_scale <default is 1.0, a larger value will make the motion stronger> \
                     --result_dir <a file to store results> \
-                    --enhancer <default is None, you can choose gpgan or RestoreFormer>
+                    --enhancer <default is None, you can choose gfpgan or RestoreFormer>
 ```
+
+<!-- ###### The effectness of enhancer `gfpgan`. -->
+| basic        |  w/ gfpgan   | w/gfpgan, w/ expression scale = 2  |
+| ------------- |:-------------:| -----:|
+|  <video src="docs/art_0##japanese.mp4">  | <video src="docs/art_0##japanese_es1.mp4">     | <video src="docs/art_0##japanese_es2.mp4">    |
+
 
 #### Generating 3D face from Audio
 
@@ -145,12 +153,11 @@ python inference.py --driven_audio <audio.wav> \
 ![free_view](https://github.com/Winfredy/SadTalker/blob/main/docs/free_view_result.gif)
 
 
-
 ## 🛎 Citation
 
 If you find our work useful in your research, please consider citing:
 
-```
+```bibtex
 @article{zhang2022sadtalker,
   title={SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation},
   author={Zhang, Wenxuan and Cun, Xiaodong and Wang, Xuan and Zhang, Yong and Shen, Xi and Guo, Yu and Shan, Ying and Wang, Fei},
