@@ -132,9 +132,11 @@ python inference.py --driven_audio <audio.wav> \
 ```
 
 <!-- ###### The effectness of enhancer `gfpgan`. -->
-| basic        |  w/ gfpgan   | w/gfpgan, w/ expression scale = 2  |
-| ------------- |:-------------:| -----:|
-|  <video src="docs/art_0##japanese.mp4">  | <video src="docs/art_0##japanese_es1.mp4">     | <video src="docs/art_0##japanese_es2.mp4">    |
+| basic        |  w/ gfpgan   | w/ gfpgan, w/ expression scale = 2  |
+| ------------- |:-------------:| :-----:|
+|  <video src="https://user-images.githubusercontent.com/4397546/226097707-bef1dd41-403e-48d3-a6e6-6adf923843af.mp4"></video>  | <video src="https://user-images.githubusercontent.com/4397546/226097717-12a1a2a1-ac0f-428d-b2cb-bd6917aff73e.mp4"></video>     | <video src="https://user-images.githubusercontent.com/4397546/226097732-fac6be37-cd87-44f0-a12a-be768337986f.mp4"></video>    |
+
+
 
 
 #### Generating 3D face from Audio
