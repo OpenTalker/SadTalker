@@ -37,7 +37,7 @@
 - 2023.03.18 Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 2(some value > 1)`.
 
 - 2023.03.18 Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
-- 2023.03.18 We have offically integrate the GFPGAN for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
+- 2023.03.18 We have offically integrate the [GFPGAN](https://github.com/TencentARC/GFPGAN) for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
 - 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
 - 2023.03.06 Solve some bugs in code and errors in installation 
 - 2023.03.03 Release the test code for audio-driven single image animation!
