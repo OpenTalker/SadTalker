@@ -39,10 +39,12 @@
 - 2023.03.18 Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
 - 2023.03.18 We have offically integrate the GFPGAN for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
 - 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
-- 2023.03.06 Solve some bugs in code and errors in installation 
-- 2023.03.03 Release the test code for audio-driven single image animation!
-- 2023.02.28 SadTalker has been accepted by CVPR 2023!
+&nbsp;&nbsp;&nbsp;&nbsp; <details><summary> Previous Changelogs</summary>
+  - 2023.03.06 Solve some bugs in code and errors in installation 
+  - 2023.03.03 Release the test code for audio-driven single image animation!
+  - 2023.02.28 SadTalker has been accepted by CVPR 2023!
 
+</details>
 
 ## 🎼 Pipeline
 ![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png) 
@@ -64,15 +66,6 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 ## 🔮 Inference Demo!
 
-#### Requirements
-<details><summary>CLICK ME</summary>
-
-  * Python 3.8
-  * PyTorch  
-  * ffmpeg
-
-</details>
-
 #### Dependence Installation
 
 <details><summary>CLICK ME</summary>
@@ -83,7 +76,6 @@ cd SadTalker
 conda create -n sadtalker python=3.8
 source activate sadtalker
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
-conda config --add channels conda-forge
 conda install ffmpeg
 pip install ffmpy Cmake boost dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
 pip install -r requirements.txt
@@ -98,7 +90,7 @@ pip install git+https://github.com/TencentARC/GFPGAN
 #### Trained Models
 <details><summary>CLICK ME</summary>
 
-You can run to put all the models in the right place.
+You can run the following script to put all the models in the right place.
 
 ```bash
 bash utils/download_models.sh

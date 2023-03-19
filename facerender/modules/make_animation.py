@@ -106,7 +106,7 @@ def make_animation(source_image, source_semantics, target_semantics,
         he_source = mapping(source_semantics)
         kp_source = keypoint_transformation(kp_canonical, he_source)
     
-        for frame_idx in tqdm(range(target_semantics.shape[1])):
+        for frame_idx in tqdm(range(target_semantics.shape[1]), 'Face Renderer:'):
             target_semantics_frame = target_semantics[:, frame_idx]
             he_driving = mapping(target_semantics_frame)
             if not use_exp:
