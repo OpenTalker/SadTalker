@@ -34,11 +34,12 @@
 
 ## 📋 Changelog
 
-- 2023.03.18 Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 2(some value > 1)`.
+- __2023.03.22__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`.
+- __2023.03.18__: Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 1.3 (some value > 1)`.
 
-- 2023.03.18 Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
-- 2023.03.18 We have offically integrate the [GFPGAN](https://github.com/TencentARC/GFPGAN) for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
-- 2023.03.14 Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
+- __2023.03.18__: Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
+- __2023.03.18__: We have offically integrate the [GFPGAN](https://github.com/TencentARC/GFPGAN) for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
+- __2023.03.14__: Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
 &nbsp;&nbsp;&nbsp;&nbsp; <details><summary> Previous Changelogs</summary>
   - 2023.03.06 Solve some bugs in code and errors in installation 
   - 2023.03.03 Release the test code for audio-driven single image animation!
@@ -53,7 +54,7 @@
 ## 🚧 TODO
 
 - [x] Generating 2D face from a single Image.
-- [ ] Generating 3D face from Audio.
+- [x] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
 - [ ] training code of each componments.
@@ -77,7 +78,7 @@ conda create -n sadtalker python=3.8
 source activate sadtalker
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 conda install ffmpeg
-pip install ffmpy Cmake boost dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
+pip install dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
 pip install -r requirements.txt
 
 ### install gpfgan for enhancer
@@ -93,7 +94,7 @@ pip install git+https://github.com/TencentARC/GFPGAN
 You can run the following script to put all the models in the right place.
 
 ```bash
-bash utils/download_models.sh
+bash scripts/download_models.sh
 ```
 
 OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
@@ -124,16 +125,27 @@ python inference.py --driven_audio <audio.wav> \
 ```
 
 <!-- ###### The effectness of enhancer `gfpgan`. -->
-| basic        |  w/ gfpgan   | w/ gfpgan, w/ expression scale = 2  |
-| ------------- |:-------------:| :-----:|
-|  <video src="https://user-images.githubusercontent.com/4397546/226097707-bef1dd41-403e-48d3-a6e6-6adf923843af.mp4"></video>  | <video src="https://user-images.githubusercontent.com/4397546/226097717-12a1a2a1-ac0f-428d-b2cb-bd6917aff73e.mp4"></video>     | <video src="https://user-images.githubusercontent.com/4397546/226097732-fac6be37-cd87-44f0-a12a-be768337986f.mp4"></video>    |
+
+| basic        | w/ still mode |  w/ exp_scale 1.3   | w/ gfpgan  |
+|:-------------: |:-------------: |:-------------: |:-------------: |
+|  <video src="https://user-images.githubusercontent.com/4397546/226097707-bef1dd41-403e-48d3-a6e6-6adf923843af.mp4"></video>  | <video src='https://user-images.githubusercontent.com/4397546/226804933-b717229f-1919-4bd5-b6af-bea7ab66cad3.mp4'></video>  |  <video style='width:256px' src="https://user-images.githubusercontent.com/4397546/226806013-7752c308-8235-4e7a-9465-72d8fc1aa03d.mp4"></video>     | <video style='width:256px' src="https://user-images.githubusercontent.com/4397546/226097717-12a1a2a1-ac0f-428d-b2cb-bd6917aff73e.mp4"></video>    |
+
+> Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
 
 
+<!-- <video src="./docs/art_0##japanese_still.mp4"></video> -->
 
 
 #### Generating 3D face from Audio
 
-To do ...
+
+| Input        | Animated 3d face | 
+|:-------------: | :-------------: |
+|  <img src='examples/source_image/art_0.png' width='200px'> | <video src="https://user-images.githubusercontent.com/4397546/226856847-5a6a0a4d-a5ec-49e2-9b05-3206db65e8e3.mp4"></video>  | 
+
+> Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
+
+More details to generate the 3d face can be founded [here](docs/face3d.md)
 
 #### Generating 4D free-view talking examples from audio and a single image
 
