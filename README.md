@@ -34,7 +34,10 @@
 
 ## 📋 Changelog
 
-- __2023.03.22__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`.
+
+- __2023.03.22__: Launch new feature: generating the 3d face animation from a single image. New applications about it will be updated.
+
+- __2023.03.22__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`. 
 - __2023.03.18__: Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 1.3 (some value > 1)`.
 
 - __2023.03.18__: Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
@@ -57,6 +60,7 @@
 - [x] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
+- [ ] Full body/image Generation.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
