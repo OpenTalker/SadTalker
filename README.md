@@ -40,7 +40,7 @@
 - __2023.03.22__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`. 
 - __2023.03.18__: Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 1.3 (some value > 1)`.
 
-- __2023.03.18__: Reconfig the data folders, now you can download the checkpoint automatically using `bash utils/download_models.sh`.
+- __2023.03.18__: Reconfig the data folders, now you can download the checkpoint automatically using `bash scripts/download_models.sh`.
 - __2023.03.18__: We have offically integrate the [GFPGAN](https://github.com/TencentARC/GFPGAN) for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
 - __2023.03.14__: Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
 &nbsp;&nbsp;&nbsp;&nbsp; <details><summary> Previous Changelogs</summary>
