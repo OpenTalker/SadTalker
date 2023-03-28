@@ -34,7 +34,7 @@
 
 ## 📋 Changelog
 
-- __[2023.03.22]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
+- __[2023.03.28]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
 
 - __[2023.03.22]__: Launch new feature: generating the 3d face animation from a single image. New applications about it will be updated.
 
