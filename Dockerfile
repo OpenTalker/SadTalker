@@ -1,4 +1,3 @@
-# Use the official NVIDIA CUDA Docker image as the base image
 FROM python:3.8.16-bullseye
 ARG DEBIAN_FRONTEND=noninteractive
 
