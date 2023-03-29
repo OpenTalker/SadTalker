@@ -157,7 +157,6 @@ class AnimateFromCoeff():
 
             imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
 
-        
         av_path = os.path.join(video_save_dir, video_name) 
         audio_path =  x['audio_path'] 
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
