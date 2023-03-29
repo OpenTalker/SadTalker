@@ -70,11 +70,11 @@
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
 
-## 🔮 Inference Demo!
+## 🔮 Installation
 
 #### Dependence Installation
 
-<details><summary>CLICK ME</summary>
+<details><summary>CLICK ME For Mannual Installation </summary>
 
 ```
 git clone https://github.com/Winfredy/SadTalker.git
@@ -92,6 +92,21 @@ pip install git+https://github.com/TencentARC/GFPGAN
 ```  
 
 </details>
+
+<details><summary>CLICK For Docker Installation </summary>
+
+A dockerfile are also provided by [@thegenerativegeneration](https://github.com/thegenerativegeneration) in [docker hub](https://hub.docker.com/repository/docker/wawa9000/sadtalker), which can be used directly as:
+
+```bash
+docker run --gpus "all" --rm -v $(pwd):/host_dir wawa9000/sadtalker \
+    --driven_audio /host_dir/deyu.wav \
+    --source_image /host_dir/image.jpg \
+    --expression_scale 1.0 \
+    --still \
+    --result_dir /host_dir
+```
+</details>
+
 
 #### Trained Models
 <details><summary>CLICK ME</summary>
@@ -118,6 +133,8 @@ OR download our pre-trained model from [google drive](https://drive.google.com/d
 
 </details>
 
+## 🔮 Inference Demo
+
 #### Generating 2D face from a single Image
 
 ```bash
@@ -126,6 +143,7 @@ python inference.py --driven_audio <audio.wav> \
                     --batch_size <default equals 2, a larger run faster> \
                     --expression_scale <default is 1.0, a larger value will make the motion stronger> \
                     --result_dir <a file to store results> \
+                    --still <add this flag will show fewer head motion> \
                     --enhancer <default is None, you can choose gfpgan or RestoreFormer>
 ```
 
