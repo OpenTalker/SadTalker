@@ -81,7 +81,7 @@ class Audio2Coeff():
         
             savemat(os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name'])),  
                     {'coeff_3dmm': coeffs_pred_numpy})
-            torch.cuda.empty_cache()
+
             return os.path.join(coeff_save_dir, '%s##%s.mat'%(batch['pic_name'], batch['audio_name']))
 
 

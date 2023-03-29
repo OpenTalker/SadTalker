@@ -1,4 +1,6 @@
 import os
+
+from tqdm import tqdm
 import torch
 import numpy as np
 import random
@@ -24,7 +26,6 @@ def generate_blink_seq(num_frames):
     ratio = np.zeros((num_frames,1))
     frame_id = 0
     while frame_id in range(num_frames):
-        #start = random.choice(range(60,70))
         start = 80
         if frame_id+start+9<=num_frames - 1:
             ratio[frame_id+start:frame_id+start+9, 0] = [0.5,0.6,0.7,0.9,1, 0.9, 0.7,0.6,0.5]
@@ -39,7 +40,6 @@ def generate_blink_seq_randomly(num_frames):
         return ratio
     frame_id = 0
     while frame_id in range(num_frames):
-        #start = random.choice(range(60,70))
         start = random.choice(range(min(10,num_frames), min(int(num_frames/2), 70))) 
         if frame_id+start+5<=num_frames - 1:
             ratio[frame_id+start:frame_id+start+5, 0] = [0.5, 0.9, 1.0, 0.9, 0.5]
@@ -51,8 +51,6 @@ def generate_blink_seq_randomly(num_frames):
 def get_data(first_coeff_path, audio_path, device):
 
     syncnet_mel_step_size = 16
-    syncnet_T = 5
-    MAX_FRAME = 32
     fps = 25
 
     pic_name = os.path.splitext(os.path.split(first_coeff_path)[-1])[0]
@@ -69,7 +67,7 @@ def get_data(first_coeff_path, audio_path, device):
     spec = orig_mel.copy()         # nframes 80
     indiv_mels = []
 
-    for i in range(num_frames):
+    for i in tqdm(range(num_frames), 'mel:'):
         start_frame_num = i-2
         start_idx = int(80. * (start_frame_num / float(fps)))
         end_idx = start_idx + syncnet_mel_step_size
@@ -79,7 +77,6 @@ def get_data(first_coeff_path, audio_path, device):
         indiv_mels.append(m.T)
     indiv_mels = np.asarray(indiv_mels)         # T 80 16
     ratio = generate_blink_seq_randomly(num_frames)      # T
-
     
     indiv_mels = torch.FloatTensor(indiv_mels).unsqueeze(1).unsqueeze(0) # bs T 1 80 16
     ratio = torch.FloatTensor(ratio).unsqueeze(0)                        # bs T

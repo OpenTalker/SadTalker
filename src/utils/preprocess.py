@@ -110,7 +110,7 @@ class CropAndExtract():
         if not os.path.isfile(coeff_path):
             # load 3dmm paramter generator from Deep3DFaceRecon_pytorch 
             video_coeffs, full_coeffs = [],  []
-            for idx in tqdm(range(len(frames_pil)), desc=' 3DMM Extraction In Video:'):
+            for idx in tqdm(range(len(frames_pil)), desc='3DMM Extraction In Video:'):
                 frame = frames_pil[idx]
                 W,H = frame.size
                 lm1 = lm[idx].reshape([-1, 2])

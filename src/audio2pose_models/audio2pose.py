@@ -76,6 +76,7 @@ class Audio2Pose(nn.Module):
             batch['audio_emb'] = audio_emb
             batch = self.netG.test(batch)
             pose_motion_pred_list.append(batch['pose_motion_pred'])  #list of bs seq_len 6
+        
         if re != 0:
             z = torch.randn(bs, self.latent_dim).to(ref.device)
             batch['z'] = z

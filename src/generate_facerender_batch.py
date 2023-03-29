@@ -6,7 +6,7 @@ import torch
 import scipy.io as scio
 
 def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path, 
-                        batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list, 
+                        batch_size, camera_yaw_list=[0], camera_pitch_list=[0], camera_roll_list=[0], 
                         expression_scale=1.0, still_mode = False):
 
     semantic_radius = 13
