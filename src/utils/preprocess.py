@@ -1,5 +1,5 @@
 import numpy as np
-import cv2, os, sys,torch
+import cv2, os, sys, torch
 from tqdm import tqdm
 from PIL import Image 
 
@@ -43,7 +43,7 @@ class CropAndExtract():
     def __init__(self, path_of_lm_croper, path_of_net_recon_model, dir_of_BFM_fitting, device):
 
         self.croper = Croper(path_of_lm_croper)
-        self.kp_extractor = KeypointExtractor()
+        self.kp_extractor = KeypointExtractor(device)
         self.net_recon = networks.define_net_recon(net_recon='resnet50', use_last_fc=False, init_path='').to(device)
         checkpoint = torch.load(path_of_net_recon_model, map_location=torch.device(device))    
         self.net_recon.load_state_dict(checkpoint['net_recon'])
@@ -51,7 +51,7 @@ class CropAndExtract():
         self.lm3d_std = load_lm3d(dir_of_BFM_fitting)
         self.device = device
     
-    def generate(self, input_path, save_dir):
+    def generate(self, input_path, save_dir, crop_or_resize='crop'):
 
         pic_size = 256
         pic_name = os.path.splitext(os.path.split(input_path)[-1])[0]  
@@ -81,7 +81,7 @@ class CropAndExtract():
                 break
         x_full_frames = [cv2.cvtColor(full_frames[0], cv2.COLOR_BGR2RGB) ] 
 
-        if True:
+        if crop_or_resize.lower() == 'crop': # default crop
             x_full_frames, crop, quad = self.croper.crop(x_full_frames, xsize=pic_size)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
@@ -90,7 +90,9 @@ class CropAndExtract():
             original_size = (ox2 - ox1, oy2 - oy1)
         else:
             oy1, oy2, ox1, ox2 = 0, x_full_frames[0].shape[0], 0, x_full_frames[0].shape[1] 
-        frames_pil = [Image.fromarray(cv2.resize(frame,(pic_size,pic_size))) for frame in x_full_frames]
+            original_size = (ox2 - ox1, oy2 - oy1)
+
+        frames_pil = [Image.fromarray(cv2.resize(frame,(pic_size, pic_size))) for frame in x_full_frames]
         if len(frames_pil) == 0:
             print('No face is detected in the input file')
             return None, None
@@ -147,4 +149,4 @@ class CropAndExtract():
 
             savemat(coeff_path, {'coeff_3dmm': semantic_npy, 'full_3dmm': np.array(full_coeffs)[0]})
 
-        return coeff_path, png_path
+        return coeff_path, png_path, original_size

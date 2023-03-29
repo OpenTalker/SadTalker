@@ -84,7 +84,7 @@ class SadTalker():
         #crop image and extract 3dmm from image
         first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
         os.makedirs(first_frame_dir, exist_ok=True)
-        first_coeff_path, crop_pic_path = self.preprocess_model.generate(pic_path, first_frame_dir)
+        first_coeff_path, crop_pic_path, original_size = self.preprocess_model.generate(pic_path, first_frame_dir)
         
         if first_coeff_path is None:
             raise AttributeError("No face is detected")
@@ -95,7 +95,7 @@ class SadTalker():
         #coeff2video
         batch_size = 4
         data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode)
-        self.animate_from_coeff.generate(data, save_dir, enhancer='gfpgan' if use_enhancer else None)
+        self.animate_from_coeff.generate(data, save_dir, enhancer='gfpgan' if use_enhancer else None, original_size=original_size)
         video_name = data['video_name']
         print(f'The generated video is named {video_name} in {save_dir}')
 

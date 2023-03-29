@@ -61,7 +61,7 @@ def main(args):
     #crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
     os.makedirs(first_frame_dir, exist_ok=True)
-    first_coeff_path, crop_pic_path =  preprocess_model.generate(pic_path, first_frame_dir)
+    first_coeff_path, crop_pic_path, original_size =  preprocess_model.generate(pic_path, first_frame_dir, args.preprocess)
     if first_coeff_path is None:
         print("Can't get the coeffs of the input")
         return
@@ -80,7 +80,7 @@ def main(args):
                                 batch_size, camera_yaw_list, camera_pitch_list, camera_roll_list,
                                 expression_scale=args.expression_scale, still_mode=args.still)
     
-    animate_from_coeff.generate(data, save_dir,  enhancer=args.enhancer)
+    animate_from_coeff.generate(data, save_dir,  enhancer=args.enhancer, original_size=original_size)
     video_name = data['video_name']
 
     if args.enhancer is not None:
@@ -92,7 +92,7 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
-    parser.add_argument("--driven_audio", default='./examples/driven_audio/japanese.wav', help="path to driven audio")
+    parser.add_argument("--driven_audio", default='./examples/driven_audio/bus_chinese.wav', help="path to driven audio")
     parser.add_argument("--source_image", default='./examples/source_image/art_0.png', help="path to source image")
     parser.add_argument("--checkpoint_dir", default='./checkpoints', help="path to output")
     parser.add_argument("--result_dir", default='./results', help="path to output")
@@ -106,10 +106,11 @@ if __name__ == '__main__':
     parser.add_argument("--cpu", dest="cpu", action="store_true") 
     parser.add_argument("--face3dvis", action="store_true", help="generate 3d face and 3d landmarks") 
     parser.add_argument("--still", action="store_true") 
+    parser.add_argument("--preprocess", default='crop', choices=['crop', 'resize'] ) 
 
     # net structure and parameters
-    parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='not use')
-    parser.add_argument('--init_path', type=str, default=None, help='not Use')
+    parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='useless')
+    parser.add_argument('--init_path', type=str, default=None, help='Useless')
     parser.add_argument('--use_last_fc',default=False, help='zero initialize the last fc')
     parser.add_argument('--bfm_folder', type=str, default='./checkpoints/BFM_Fitting/')
     parser.add_argument('--bfm_model', type=str, default='BFM_model_front.mat', help='bfm model')

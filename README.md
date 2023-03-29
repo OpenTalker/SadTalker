@@ -34,6 +34,8 @@
 
 ## 📋 Changelog
 
+- __[2023.03.29]__: `resize mode` is online by `python infererence.py --preprocess resize`! Where we can produce a larger crop of the image as discussed in https://github.com/Winfredy/SadTalker/issues/35.
+
 - __[2023.03.29]__: local gradio demo is online! `python app.py` to start the demo. New `requirments.txt` is used to avoid the bugs in `librosa`.
 
 - __[2023.03.28]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
@@ -148,6 +150,7 @@ python inference.py --driven_audio <audio.wav> \
                     --expression_scale <default is 1.0, a larger value will make the motion stronger> \
                     --result_dir <a file to store results> \
                     --still <add this flag will show fewer head motion> \
+                    --preprocess <resize or crop the input image, default is crop> \
                     --enhancer <default is None, you can choose gfpgan or RestoreFormer>
 ```
 
@@ -183,7 +186,7 @@ python inference.py --driven_audio <audio.wav> \
                     --result_dir <a file to store results> \
                     --camera_yaw -20 30 10
 ```
-![free_view](https://github.com/Winfredy/SadTalker/blob/main/docs/free_view_result.gif)
+![free_view](docs/free_view_result.gif)
 
 
 ## 🛎 Citation

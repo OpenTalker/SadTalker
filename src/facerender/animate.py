@@ -1,4 +1,5 @@
 import os
+import cv2
 import yaml
 import numpy as np
 import warnings
@@ -106,7 +107,7 @@ class AnimateFromCoeff():
 
         return checkpoint['epoch']
 
-    def generate(self, x, video_save_dir, enhancer=None):
+    def generate(self, x, video_save_dir, enhancer=None, original_size=None):
 
         source_image=x['source_image'].type(torch.FloatTensor)
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
@@ -137,6 +138,10 @@ class AnimateFromCoeff():
             video.append(image)
         result = img_as_ubyte(video)
 
+        ### the generated video is 256x256, so we  keep the aspect ratio, 
+        if original_size:
+            result = [ cv2.resize(result_i,(256, int(256.0 * original_size[1]/original_size[0]) )) for result_i in result ]
+        
         video_name = x['video_name']  + '.mp4'
         path = os.path.join(video_save_dir, 'temp_'+video_name)
         imageio.mimsave(path, result, fps=float(25))
@@ -146,8 +151,13 @@ class AnimateFromCoeff():
             av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer) 
             enhanced_path = os.path.join(video_save_dir, 'temp_'+video_name_enhancer)
             enhanced_images = face_enhancer(result, method=enhancer)
+
+            if original_size:
+                enhanced_images = [ cv2.resize(result_i,(256, int(256.0 * original_size[1]/original_size[0]) )) for result_i in enhanced_images ]
+
             imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
 
+        
         av_path = os.path.join(video_save_dir, video_name) 
         audio_path =  x['audio_path'] 
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
