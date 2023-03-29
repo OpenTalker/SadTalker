@@ -86,7 +86,7 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 git clone https://github.com/Winfredy/SadTalker.git
 cd SadTalker 
 conda create -n sadtalker python=3.8
-source activate sadtalker
+conda activate sadtalker
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 conda install ffmpeg
 pip install dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
