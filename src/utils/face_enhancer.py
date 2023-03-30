@@ -52,8 +52,7 @@ def enhancer(images, method='gfpgan'):
             images[idx],
             has_aligned=True,
             only_center_face=False,
-            paste_back=True,
-            weight=0.5)
+            paste_back=True)
         
         restored_img += restored_faces
        

@@ -22,6 +22,7 @@ def main(args):
     camera_yaw_list = args.camera_yaw
     camera_pitch_list = args.camera_pitch
     camera_roll_list = args.camera_roll
+    ref_video = args.ref_video
 
     current_code_path = sys.argv[0]
     current_root_path = os.path.split(current_code_path)[0]
@@ -66,8 +67,15 @@ def main(args):
         print("Can't get the coeffs of the input")
         return
 
+    if ref_video is not None:
+        refvideo_frame_dir = os.path.join(save_dir, 'refvideo_frame_dir')
+        os.makedirs(refvideo_frame_dir, exist_ok=True)
+        refvideo_coeff_path, _, _ =  preprocess_model.generate(ref_video, refvideo_frame_dir)
+    else:
+        refvideo_coeff_path=None
+
     #audio2ceoff
-    batch = get_data(first_coeff_path, audio_path, device)
+    batch = get_data(first_coeff_path, audio_path, device, refvideo_coeff_path)
     coeff_path = audio_to_coeff.generate(batch, save_dir, pose_style)
 
     # 3dface render
@@ -92,8 +100,9 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
-    parser.add_argument("--driven_audio", default='./examples/driven_audio/bus_chinese.wav', help="path to driven audio")
-    parser.add_argument("--source_image", default='./examples/source_image/art_0.png', help="path to source image")
+    parser.add_argument("--driven_audio", default='./examples/driven_audio/RD_Radio31_000.wav', help="path to driven audio")
+    parser.add_argument("--source_image", default='./examples/source_image/people_0.png', help="path to source image")
+    parser.add_argument("--ref_video", default=None, help="path to reference video")
     parser.add_argument("--checkpoint_dir", default='./checkpoints', help="path to output")
     parser.add_argument("--result_dir", default='./results', help="path to output")
     parser.add_argument("--pose_style", type=int, default=0,  help="input pose style from [0, 46)")

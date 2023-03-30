@@ -77,9 +77,8 @@ class CropAndExtract():
                 if not still_reading:
                     video_stream.release()
                     break 
-                full_frames.append(frame)
-                break
-        x_full_frames = [cv2.cvtColor(full_frames[0], cv2.COLOR_BGR2RGB) ] 
+                full_frames.append(frame) 
+        x_full_frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  for frame in full_frames] 
 
         if crop_or_resize.lower() == 'crop': # default crop
             x_full_frames, crop, quad = self.croper.crop(x_full_frames, xsize=pic_size)

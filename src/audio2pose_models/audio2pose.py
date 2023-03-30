@@ -81,6 +81,10 @@ class Audio2Pose(nn.Module):
             z = torch.randn(bs, self.latent_dim).to(ref.device)
             batch['z'] = z
             audio_emb = self.audio_encoder(indiv_mels_use[:, -1*self.seq_len:,:,:,:]) #bs seq_len  512
+            if audio_emb.shape[1] != self.seq_len:
+                pad_dim = self.seq_len-audio_emb.shape[1]
+                pad_audio_emb = audio_emb[:, :1].repeat(1, pad_dim, 1) 
+                audio_emb = torch.cat([pad_audio_emb, audio_emb], 1) 
             batch['audio_emb'] = audio_emb
             batch = self.netG.test(batch)
             pose_motion_pred_list.append(batch['pose_motion_pred'][:,-1*re:,:])   

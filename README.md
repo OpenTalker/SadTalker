@@ -34,6 +34,8 @@
 
 ## 📋 Changelog
 
+- __[2023.03.30]__: Launch new feature: through using reference videos, our algorithm can generate videos with more natural eye blinking and some eyebrow movement.
+
 - __[2023.03.29]__: `resize mode` is online by `python infererence.py --preprocess resize`! Where we can produce a larger crop of the image as discussed in https://github.com/Winfredy/SadTalker/issues/35.
 
 - __[2023.03.29]__: local gradio demo is online! `python app.py` to start the demo. New `requirments.txt` is used to avoid the bugs in `librosa`.
@@ -151,7 +153,8 @@ python inference.py --driven_audio <audio.wav> \
                     --result_dir <a file to store results> \
                     --still <add this flag will show fewer head motion> \
                     --preprocess <resize or crop the input image, default is crop> \
-                    --enhancer <default is None, you can choose gfpgan or RestoreFormer>
+                    --enhancer <default is None, you can choose gfpgan or RestoreFormer> \
+                    --ref_video <default is None, ref_video is used to provide more natural eyebrow movement and eye blinking>
 ```
 
 <!-- ###### The effectness of enhancer `gfpgan`. -->
@@ -162,6 +165,11 @@ python inference.py --driven_audio <audio.wav> \
 
 > Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
 
+| basic          | w/ reference video          | reference video          |  
+
+![free_view](docs/using_ref_video.gif)
+
+> If the reference video is shorter than the input audio, we will loop the reference video .
 
 <!-- <video src="./docs/art_0##japanese_still.mp4"></video> -->
 
@@ -176,6 +184,7 @@ python inference.py --driven_audio <audio.wav> \
 > Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
 
 More details to generate the 3d face can be founded [here](docs/face3d.md)
+
 
 #### Generating 4D free-view talking examples from audio and a single image
 
