@@ -235,3 +235,6 @@ Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vi
 ## 📢 Disclaimer
 
 This is not an official product of Tencent. This repository can only be used for personal/research/non-commercial purposes.
+
+LOGO: color and font suggestion: [ChatGPT](ai.com), logo font：[Montserrat Alternates
+](https://fonts.google.com/specimen/Montserrat+Alternates?preview.text=SadTalker&preview.text_type=custom&query=mont).
