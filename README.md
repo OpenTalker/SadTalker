@@ -37,8 +37,8 @@
 
 ## 🔥🔥🔥 Highlight
 - Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
-- Happy to see our method is used in various videos for a lively singing avatar, checkout these wanderful videos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
-).
+- Happy to see our method is used in various talking or singing avatar, checkout these wanderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
+) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog
 
