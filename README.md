@@ -35,9 +35,10 @@
 
 </div>
 
-## 🔥🔥🔥 Highlight
-- Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
-- Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
+## 🔥 Highlight
+- 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#full-bodyimage-generation) for more details.
+- 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
+- 🔥 Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog
@@ -208,7 +209,7 @@ python inference.py --driven_audio <audio.wav> \
 ```
 ![free_view](docs/free_view_result.gif)
 
-#### Full body/image Generation
+#### [Beta] Full body/image Generation
 
 Now you can use `--still` to generate a natural full body video. You can add `enhancer` or `full_img_enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
 
@@ -221,11 +222,9 @@ python inference.py --driven_audio <audio.wav> \
                     --full_img_enhancer gfpgan
 ```
 
-| still                 | still + enhancer          |  still+full_img_enhancer  |
-|:--------------------: |:--------------------: |:-----------------------:|
-|  <video src="https://user-images.githubusercontent.com/4397546/229479493-2ba8b121-1e4b-43b1-8e66-c2a53734a296.mp4"></video> | <video src="https://user-images.githubusercontent.com/4397546/229479543-63c2b514-3c6a-40f5-b18f-6d07b733afad.mp4"></video> |  <video src="https://user-images.githubusercontent.com/4397546/229478296-0f7f6e58-8838-44c0-9281-99631b0f1df7.mp4"></video> | 
-
-
+| still                 | still + enhancer          |  still+full_img_enhancer  | front image|
+|:--------------------: |:--------------------: |:-----------------------:| :----: |
+| <video src="https://user-images.githubusercontent.com/4397546/229481345-3a84966d-13d8-48df-8d81-8672cd44e7ff.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/4397546/229481539-121ea720-484e-42c9-a3a7-ec7dd07006ff.mp4" type="video/mp4"> </video>  |  <video  muted="" loop="" autoplay="" src="https://user-images.githubusercontent.com/4397546/229478296-0f7f6e58-8838-44c0-9281-99631b0f1df7.mp4"></video> | <video  muted="" loop="" autoplay="" src="https://user-images.githubusercontent.com/4397546/229482461-1f2adaa0-32e0-454f-8192-17011bf39f51.mp4"></video> 
 
 
 
@@ -251,6 +250,10 @@ If you find our work useful in your research, please consider citing:
   year={2022}
 }
 ```
+
+
+
+
 
 ## 💗 Acknowledgements
 
