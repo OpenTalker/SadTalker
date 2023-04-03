@@ -48,6 +48,8 @@
 
 ## 📋 Changelog
 
+- __[2023.03.30]__: Launch beta version of the full body mode.
+
 - __[2023.03.30]__: Launch new feature: through using reference videos, our algorithm can generate videos with more natural eye blinking and some eyebrow movement.
 
 - __[2023.03.29]__: `resize mode` is online by `python infererence.py --preprocess resize`! Where we can produce a larger crop of the image as discussed in https://github.com/Winfredy/SadTalker/issues/35.
@@ -56,11 +58,12 @@
 
 - __[2023.03.28]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
 
-- __[2023.03.22]__: Launch new feature: generating the 3d face animation from a single image. New applications about it will be updated.
-
-- __[2023.03.22]__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`. 
 
 &nbsp;&nbsp;&nbsp;&nbsp; <details><summary> Previous Changelogs</summary>
+
+  - __[2023.03.22]__: Launch new feature: generating the 3d face animation from a single image. New applications about it will be updated.
+
+  - __[2023.03.22]__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`. 
 
   - __[2023.03.18]__: Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 1.3 (some value > 1)`.
 
@@ -79,11 +82,15 @@
 
 ## 🚧 TODO
 
+<details><summary> Previous TODOs </summary>
+
 - [x] Generating 2D face from a single Image.
 - [x] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
 - [x] Full body/image Generation.
+</details>
+
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
