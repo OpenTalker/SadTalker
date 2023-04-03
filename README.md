@@ -77,7 +77,7 @@
 - [x] Generating 3D face from Audio.
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
-- [ ] Full body/image Generation.
+- [x] Full body/image Generation.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
@@ -223,7 +223,15 @@ python inference.py --driven_audio <audio.wav> \
 
 | still                 | still + enhancer          |  still+full_img_enhancer  |
 |:--------------------: |:--------------------: |:-----------------------:|
-|  <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still1.mp4"></video>  | <video src=" https://github.com/Winfredy/SadTalker/blob/main/docs/still_e.mp4"></video>   | <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still1.mp4"></video>    | 
+|  <video src="https://user-images.githubusercontent.com/4397546/229479493-2ba8b121-1e4b-43b1-8e66-c2a53734a296.mp4"></video> | <video src="https://user-images.githubusercontent.com/4397546/229479543-63c2b514-3c6a-40f5-b18f-6d07b733afad.mp4"></video> |  <video src="https://user-images.githubusercontent.com/4397546/229478296-0f7f6e58-8838-44c0-9281-99631b0f1df7.mp4"></video> | 
+
+
+
+
+
+
+
+
 
 
 
