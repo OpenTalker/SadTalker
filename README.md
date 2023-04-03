@@ -37,6 +37,11 @@
 
 ## 🔥 Highlight
 - 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
+
+| still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
+|:--------------------: |:--------------------: | :----: |
+| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | ![image](https://github.com/Winfredy/SadTalker/blob/main/examples/source_image/full_body_2.png) 
+
 - 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
 - 🔥 Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
