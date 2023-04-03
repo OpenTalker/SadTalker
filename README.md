@@ -162,7 +162,10 @@ python inference.py --driven_audio <audio.wav> \
                     --still <add this flag will show fewer head motion> \
                     --preprocess <resize or crop the input image, default is crop> \
                     --enhancer <default is None, you can choose gfpgan or RestoreFormer> \
-                    --ref_video <default is None, ref_video is used to provide more natural eyebrow movement and eye blinking>
+                    --full_img_enhancer <default is None, you can choose gfpgan or RestoreFormer> \
+                    --ref_eyeblink <default is None, ref_eyeblink is used to provide more natural eyebrow movement and eye blinking> \ 
+                    --ref_pose <default is None, ref_pose is used to provide head pose> 
+
 ```
 
 <!-- ###### The effectness of enhancer `gfpgan`. -->
@@ -196,14 +199,36 @@ More details to generate the 3d face can be founded [here](docs/face3d.md)
 
 #### Generating 4D free-view talking examples from audio and a single image
 
-We use `camera_yaw`, `camera_pitch`, `camera_roll` to control camera pose. For example, `--camera_yaw -20 30 10` means the camera yaw degree changes from -20 to 30 and then changes from 30 to 10.
+We use `input_yaw`, `input_pitch`, `input_roll` to control head pose. For example, `--input_yaw -20 30 10` means the input head yaw degree changes from -20 to 30 and then changes from 30 to 10.
 ```bash
 python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
                     --result_dir <a file to store results> \
-                    --camera_yaw -20 30 10
+                    --input_yaw -20 30 10
 ```
 ![free_view](docs/free_view_result.gif)
+
+#### Full body/image Generation
+
+Now you can use `--still` to generate a natural full body video. You can add `enhancer` or `full_img_enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
+
+```bash
+python inference.py --driven_audio <audio.wav> \
+                    --source_image <video.mp4 or picture.png> \
+                    --result_dir <a file to store results> \
+                    --still \
+                    --enhancer gfpgan \
+                    --full_img_enhancer gfpgan
+```
+
+| still       | still + enhancer |  still+full_img_enhancer  |
+|:-------------: |:-------------: |:-------------:|
+|  <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still1.mp4"></video>  | <video src=" https://github.com/Winfredy/SadTalker/blob/main/docs/still_e.mp4"></video>   | <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still_full_e.mp4"></video>    | 
+
+
+
+
+
 
 
 ## 🛎 Citation

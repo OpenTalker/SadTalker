@@ -86,10 +86,10 @@ class CropAndExtract():
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-            original_size = (ox2 - ox1, oy2 - oy1)
+            crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
         else:
             oy1, oy2, ox1, ox2 = 0, x_full_frames[0].shape[0], 0, x_full_frames[0].shape[1] 
-            original_size = (ox2 - ox1, oy2 - oy1)
+            crop_info = ((ox2 - ox1, oy2 - oy1))
 
         frames_pil = [Image.fromarray(cv2.resize(frame,(pic_size, pic_size))) for frame in x_full_frames]
         if len(frames_pil) == 0:
@@ -148,4 +148,4 @@ class CropAndExtract():
 
             savemat(coeff_path, {'coeff_3dmm': semantic_npy, 'full_3dmm': np.array(full_coeffs)[0]})
 
-        return coeff_path, png_path, original_size
+        return coeff_path, png_path, crop_info

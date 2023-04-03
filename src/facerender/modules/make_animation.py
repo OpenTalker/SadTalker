@@ -62,29 +62,33 @@ def get_rotation_matrix(yaw, pitch, roll):
 
     return rot_mat
 
-def keypoint_transformation(kp_canonical, he):
+def keypoint_transformation(kp_canonical, he, wo_exp=False):
     kp = kp_canonical['value']    # (bs, k, 3) 
     yaw, pitch, roll= he['yaw'], he['pitch'], he['roll']      
     yaw = headpose_pred_to_degree(yaw) 
     pitch = headpose_pred_to_degree(pitch)
     roll = headpose_pred_to_degree(roll)
 
-    if 'yaw_c' in he: 
-        yaw = yaw + he['yaw_c']
-    if 'pitch_c' in he: 
-        pitch = pitch + he['pitch_c']
-    if 'roll_c' in he: 
-        roll = roll + he['roll_c'] 
+    if 'yaw_in' in he:
+        yaw = he['yaw_in']
+    if 'pitch_in' in he:
+        pitch = he['pitch_in']
+    if 'roll_in' in he:
+        roll = he['roll_in']
 
     rot_mat = get_rotation_matrix(yaw, pitch, roll)    # (bs, 3, 3)
 
     t, exp = he['t'], he['exp']
+    if wo_exp:
+        exp =  exp*0  
     
     # keypoint rotation
     kp_rotated = torch.einsum('bmp,bkp->bkm', rot_mat, kp)
 
     # keypoint translation
-    t = t.unsqueeze_(1).repeat(1, kp.shape[1], 1)
+    t[:, 0] = t[:, 0]*0
+    t[:, 2] = t[:, 2]*0
+    t = t.unsqueeze(1).repeat(1, kp.shape[1], 1)
     kp_t = kp_rotated + t
 
     # add expression deviation 
@@ -96,7 +100,7 @@ def keypoint_transformation(kp_canonical, he):
 
 
 def make_animation(source_image, source_semantics, target_semantics,
-                            generator, kp_detector, mapping, 
+                            generator, kp_detector, he_estimator, mapping, 
                             yaw_c_seq=None, pitch_c_seq=None, roll_c_seq=None,
                             use_exp=True):
     with torch.no_grad():
@@ -109,14 +113,12 @@ def make_animation(source_image, source_semantics, target_semantics,
         for frame_idx in tqdm(range(target_semantics.shape[1]), 'Face Renderer:'):
             target_semantics_frame = target_semantics[:, frame_idx]
             he_driving = mapping(target_semantics_frame)
-            if not use_exp:
-                he_driving['exp'] = he_driving['exp']*0
             if yaw_c_seq is not None:
-                he_driving['yaw_c'] = yaw_c_seq[:, frame_idx]
+                he_driving['yaw_in'] = yaw_c_seq[:, frame_idx]
             if pitch_c_seq is not None:
-                he_driving['pitch_c'] = pitch_c_seq[:, frame_idx]
+                he_driving['pitch_in'] = pitch_c_seq[:, frame_idx] 
             if roll_c_seq is not None:
-                he_driving['roll_c'] = roll_c_seq[:, frame_idx]
+                he_driving['roll_in'] = roll_c_seq[:, frame_idx] 
             
             kp_driving = keypoint_transformation(kp_canonical, he_driving)
                 
@@ -124,6 +126,14 @@ def make_animation(source_image, source_semantics, target_semantics,
                                    #kp_driving_initial=kp_driving_initial)
             kp_norm = kp_driving
             out = generator(source_image, kp_source=kp_source, kp_driving=kp_norm)
+            '''
+            source_image_new = out['prediction'].squeeze(1)
+            kp_canonical_new =  kp_detector(source_image_new)
+            he_source_new = he_estimator(source_image_new) 
+            kp_source_new = keypoint_transformation(kp_canonical_new, he_source_new, wo_exp=True)
+            kp_driving_new = keypoint_transformation(kp_canonical_new, he_driving, wo_exp=True)
+            out = generator(source_image_new, kp_source=kp_source_new, kp_driving=kp_driving_new)
+            '''
             predictions.append(out['prediction'])
         predictions_ts = torch.stack(predictions, dim=1)
     return predictions_ts
