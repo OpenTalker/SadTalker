@@ -223,7 +223,7 @@ python inference.py --driven_audio <audio.wav> \
 
 | still       | still + enhancer |  still+full_img_enhancer  |
 |:-------------: |:-------------: |:-------------:|
-|  <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still1.mp4"></video>  | <video src=" https://github.com/Winfredy/SadTalker/blob/main/docs/still_e.mp4"></video>   | <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still_full_e.mp4"></video>    | 
+|  <video src="docs/still1.mp4"></video>  | <video src=" https://github.com/Winfredy/SadTalker/blob/main/docs/still_e.mp4"></video>   | <video src="https://github.com/Winfredy/SadTalker/blob/main/docs/still_full_e.mp4"></video>    | 
 
 
 
