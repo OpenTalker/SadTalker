@@ -274,3 +274,5 @@ This is not an official product of Tencent. This repository can only be used for
 
 LOGO: color and font suggestion: [ChatGPT](ai.com), logo font：[Montserrat Alternates
 ](https://fonts.google.com/specimen/Montserrat+Alternates?preview.text=SadTalker&preview.text_type=custom&query=mont).
+
+All the copyright demo images are from communities users or the geneartion from stable diffusion. Free free to contact us if you feel uncomfortable.
