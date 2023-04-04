@@ -7,7 +7,7 @@ def get_source_image(image):
 
 def sadtalker_demo(result_dir='./results'):
 
-    sad_talker = SadTalker('/apdcephfs/private_shadowcun/sadtalker-huggingface2/checkpoints')
+    sad_talker = SadTalker()
     with gr.Blocks(analytics_enabled=False) as sadtalker_interface:
         gr.Markdown("<div align='center'> <h2> 😭 SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation (CVPR 2023) </span> </h2> \
                     <a style='font-size:18px;color: #efefef' href='https://arxiv.org/abs/2211.12194'>Arxiv</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
