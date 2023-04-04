@@ -238,14 +238,8 @@ python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
                     --result_dir <a file to store results> \
                     --still \
-                    --enhancer gfpgan \
-                    --full_img_enhancer gfpgan
+                    --enhancer gfpgan 
 ```
-
-| still                 | still + enhancer          |  still+full_img_enhancer  | [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
-|:--------------------: |:--------------------: |:-----------------------:| :----: |
-| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video>  |  <video  muted="" loop="" autoplay="" src="https://user-images.githubusercontent.com/48216707/229485014-5780d3af-14b2-4fe8-8997-8a3f3111123d.mp4"></video> |  <img src='./examples/source_image/full_body_2.png' width='380'/> |
-
 
 
 
