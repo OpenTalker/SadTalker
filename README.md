@@ -40,9 +40,10 @@
 
 | still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
-| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | ![image](https://github.com/Winfredy/SadTalker/blob/main/examples/source_image/full_body_2.png) 
+| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <img src='./examples/source_image/full_body_2.png' width='380'> 
 
 - 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
+
 - 🔥 Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
@@ -105,18 +106,25 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 <details><summary>CLICK ME For Mannual Installation </summary>
 
-```
+```bash
 git clone https://github.com/Winfredy/SadTalker.git
+
 cd SadTalker 
+
 conda create -n sadtalker python=3.8
-source activate sadtalker
+
+conda activate sadtalker
+
 pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+
 conda install ffmpeg
+
 pip install dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
+
 pip install -r requirements.txt
 
 ### install gpfgan for enhancer
-pip install git+https://github.com/TencentARC/GFPGAN
+pip install gfpgan ### or:  pip install git+https://github.com/TencentARC/GFPGAN.git
 
 ```  
 
@@ -236,7 +244,7 @@ python inference.py --driven_audio <audio.wav> \
 
 | still                 | still + enhancer          |  still+full_img_enhancer  | [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: |:-----------------------:| :----: |
-| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video>  |  <video  muted="" loop="" autoplay="" src="https://user-images.githubusercontent.com/48216707/229485014-5780d3af-14b2-4fe8-8997-8a3f3111123d.mp4"></video> | ![image](https://github.com/Winfredy/SadTalker/blob/main/examples/source_image/full_body_2.png)
+| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video>  |  <video  muted="" loop="" autoplay="" src="https://user-images.githubusercontent.com/48216707/229485014-5780d3af-14b2-4fe8-8997-8a3f3111123d.mp4"></video> |  <img src='./examples/source_image/full_body_2.png' width='380'/> |
 
 
 
