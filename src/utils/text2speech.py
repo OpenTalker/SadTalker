@@ -1,12 +1,21 @@
 import os
+import tempfile
+from TTS.api import TTS
 
-def text2speech(txt, audio_path):
-    print(txt)
-    cmd = f'tts --text "{txt}" --out_path {audio_path}'
-    print(cmd)
-    try:
-        os.system(cmd)
-        return audio_path
-    except:
-        print("Error: Failed convert txt to audio")
-        return None
+
+
+class TTSTalker():
+    def __init__(self) -> None:
+        model_name = TTS.list_models()[0]
+        self.tts = TTS(model_name)
+
+    def test(self, text, language='en'):
+
+        tempf  = tempfile.NamedTemporaryFile(
+                delete = False,
+                suffix = ('.'+'wav'),
+            )
+
+        self.tts.tts_to_file(text, speaker=self.tts.speakers[0], language=language, file_path=tempf.name)
+
+        return tempf.name

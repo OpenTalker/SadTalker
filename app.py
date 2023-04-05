@@ -1,13 +1,19 @@
 import os, sys
+import tempfile
 import gradio as gr
 from src.gradio_demo import SadTalker  
+from src.utils.text2speech import TTSTalker
 
 def get_source_image(image):   
         return image
 
-def sadtalker_demo(result_dir='./results'):
+
+
+def sadtalker_demo():
 
     sad_talker = SadTalker()
+    tts_talker = TTSTalker()
+
     with gr.Blocks(analytics_enabled=False) as sadtalker_interface:
         gr.Markdown("<div align='center'> <h2> 😭 SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation (CVPR 2023) </span> </h2> \
                     <a style='font-size:18px;color: #efefef' href='https://arxiv.org/abs/2211.12194'>Arxiv</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
@@ -22,9 +28,15 @@ def sadtalker_demo(result_dir='./results'):
                             source_image = gr.Image(label="Source image", source="upload", type="filepath").style(height=256,width=256)
  
                 with gr.Tabs(elem_id="sadtalker_driven_audio"):
-                    with gr.TabItem('Upload audio'):
+                    with gr.TabItem('Upload OR TTS'):
                         with gr.Column(variant='panel'):
                             driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
+                    
+                        with gr.Column(variant='panel'):
+                            input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
+                            tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
+                            tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
+                        
 
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
@@ -36,7 +48,6 @@ def sadtalker_demo(result_dir='./results'):
 
                 with gr.Tabs(elem_id="sadtalker_genearted"):
                         gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
-                        gen_text = gr.Textbox(visible=False)
 
 
         with gr.Row():
@@ -71,9 +82,8 @@ def sadtalker_demo(result_dir='./results'):
                             source_image,
                             driven_audio,
                             is_still_mode,
-                            enhancer,
-                            gr.Textbox(value=result_dir, visible=False)], 
-                        outputs=[gen_video, gen_text],
+                            enhancer], 
+                        outputs=[gen_video],
                         fn=sad_talker.test,
                         cache_examples=os.getenv('SYSTEM') == 'spaces')
 
@@ -82,9 +92,8 @@ def sadtalker_demo(result_dir='./results'):
                     inputs=[source_image,
                             driven_audio,
                             is_still_mode,
-                            enhancer,
-                            gr.Textbox(value=result_dir, visible=False)], 
-                    outputs=[gen_video, gen_text]
+                            enhancer], 
+                    outputs=[gen_video]
                     )
 
     return sadtalker_interface

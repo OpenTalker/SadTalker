@@ -1,12 +1,10 @@
 import torch, uuid
-from time import gmtime, strftime
 import os, sys, shutil
 from src.utils.preprocess import CropAndExtract
 from src.test_audio2coeff import Audio2Coeff  
 from src.facerender.animate import AnimateFromCoeff
 from src.generate_batch import get_data
 from src.generate_facerender_batch import get_facerender_data
-from src.utils.text2speech import text2speech
 
 from pydub import AudioSegment
 
@@ -53,7 +51,7 @@ class SadTalker():
                                             facerender_yaml_path, device)
         self.device = device
 
-    def test(self, source_image, driven_audio, still_mode, use_enhancer, result_dir='./'):
+    def test(self, source_image, driven_audio, still_mode, use_enhancer, result_dir='./results/'):
 
         time_tag = str(uuid.uuid4())
         save_dir = os.path.join(result_dir, time_tag)
@@ -76,7 +74,7 @@ class SadTalker():
             else:
                 shutil.move(driven_audio, input_dir)
         else:
-            text2speech
+            raise AttributeError("error audio")
 
 
         os.makedirs(save_dir, exist_ok=True)
@@ -103,6 +101,6 @@ class SadTalker():
         torch.cuda.synchronize()
         import gc; gc.collect()
         
-        return return_path, return_path        
+        return return_path    
 
     
