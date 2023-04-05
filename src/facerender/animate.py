@@ -176,7 +176,9 @@ class AnimateFromCoeff():
 
             imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
 
-        av_path = os.path.join(video_save_dir, video_name) 
+        av_path = os.path.join(video_save_dir, video_name)
+        return_path = av_path 
+        
         audio_path =  x['audio_path'] 
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
         new_audio_path = os.path.join(video_save_dir, audio_name+'.wav')
@@ -193,6 +195,7 @@ class AnimateFromCoeff():
         print(f'The generated video is named {video_name} in {video_save_dir}')
 
         if enhancer:
+            return_path = av_path_enhancer
             cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (enhanced_path, new_audio_path, av_path_enhancer)
             os.system(cmd)
             os.remove(enhanced_path)
@@ -201,6 +204,7 @@ class AnimateFromCoeff():
         if len(crop_info) == 3:
             video_name_full = x['video_name']  + '_full.mp4'
             full_video_path = os.path.join(video_save_dir, video_name_full)
+            return_path = full_video_path
             if enhancer:
                 paste_pic(av_path_enhancer, pic_path, crop_info, new_audio_path, full_video_path)
             else:
@@ -208,25 +212,8 @@ class AnimateFromCoeff():
             print(f'The generated video is named {video_name_full} in {video_save_dir}') 
 
 
-            if full_img_enhancer:
-                video_stream = cv2.VideoCapture(full_video_path) 
-                full_frames = []
-                while 1:
-                    still_reading, frame = video_stream.read()
-                    if not still_reading:
-                        video_stream.release()
-                        break
-                    full_frames.append(frame)
-                full_frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  for frame in full_frames] 
-                origin_pic_h, origin_pic_w = full_frames[0].shape[0], full_frames[0].shape[1]
-                enhanced_full_images = face_enhancer(full_frames, method=full_img_enhancer)
-                enhanced_full_images = [ cv2.resize(image_i,(origin_pic_w, origin_pic_h)) for image_i in enhanced_full_images ]
-                enhanced_full_video_path_tmp = './tmp.mp4'
-                enhanced_full_video_path = os.path.join(video_save_dir, x['video_name']  + '_full_enhancer.mp4')
-                imageio.mimsave(enhanced_full_video_path_tmp, enhanced_full_images, fps=float(25))
-                cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (enhanced_full_video_path_tmp, new_audio_path, enhanced_full_video_path)
-                os.system(cmd)
-                os.remove(enhanced_full_video_path_tmp)
         os.remove(path)
         os.remove(new_audio_path)
+
+        return return_path
 

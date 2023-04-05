@@ -30,20 +30,26 @@ def sadtalker_demo(result_dir='./results'):
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
                     with gr.TabItem('Settings'):
                         with gr.Column(variant='panel'):
-                            is_still_mode = gr.Checkbox(label="w/ Still Mode (fewer hand motion)")
+                            is_still_mode = gr.Checkbox(label="w/ Still Mode (fewer hand motion, works on full body)")
                             enhancer = gr.Checkbox(label="w/ GFPGAN as Face enhancer")
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
 
                 with gr.Tabs(elem_id="sadtalker_genearted"):
-                        gen_video = gr.Video(label="Generated video", format="mp4").style(height=256,width=256)
+                        gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
                         gen_text = gr.Textbox(visible=False)
 
 
         with gr.Row():
             examples = [
                 [
-                    'examples/source_image/art_10.png',
-                    'examples/driven_audio/deyu.wav',
+                    'examples/source_image/full_body_1.png',
+                    'examples/driven_audio/bus_chinese.wav',
+                    True,
+                    False
+                ],
+                [
+                    'examples/source_image/full_body_2.png',
+                    'examples/driven_audio/itosinger1.wav',
                     True,
                     False
                 ],

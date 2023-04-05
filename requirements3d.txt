@@ -17,3 +17,5 @@ basicsr==1.4.2
 facexlib==0.2.5
 trimesh==3.9.20
 dlib-bin
+gradio
+gfpgan

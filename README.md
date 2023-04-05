@@ -47,7 +47,7 @@
 - 🔥 Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
-## 📋 Changelog
+## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
 - __[2023.03.30]__: Launch beta version of the full body mode.
 
@@ -60,25 +60,12 @@
 - __[2023.03.28]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
 
 
-&nbsp;&nbsp;&nbsp;&nbsp; <details><summary> Previous Changelogs</summary>
-
-  - __[2023.03.22]__: Launch new feature: generating the 3d face animation from a single image. New applications about it will be updated.
-
-  - __[2023.03.22]__: Launch new feature: `still mode`, where only a small head pose will be produced via `python inference.py --still`. 
-
-  - __[2023.03.18]__: Support `expression intensity`, now you can change the intensity of the generated motion: `python inference.py --expression_scale 1.3 (some value > 1)`.
-
-  - __[2023.03.18]__: Reconfig the data folders, now you can download the checkpoint automatically using `bash scripts/download_models.sh`.
-  - __[2023.03.18]__: We have offically integrate the [GFPGAN](https://github.com/TencentARC/GFPGAN) for face enhancement, using `python inference.py --enhancer gfpgan` for  better visualization performance.
-  - __[2023.03.14]__: Specify the version of package `joblib` to remove the errors in using `librosa`, [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) is online!
-  - __[2023.03.06]__: Solve some bugs in code and errors in installation 
-  - __[2023.03.03]__: Release the test code for audio-driven single image animation!
-  - __[2023.02.28]__: SadTalker has been accepted by CVPR 2023!
-
-</details>
-
 ## 🎼 Pipeline
 ![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png) 
+> Our method uses the coefficients of 3DMM as intermediate motion representation. To this end, we first generate
+realistic 3D motion coefficients (facial expression β, head pose ρ)
+from audio, then these coefficients are used to implicitly modulate
+the 3D-aware face render for final video generation.
 
 
 ## 🚧 TODO
@@ -100,7 +87,7 @@
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
 
-## 🔮 Installation
+## ⚙️ Installation
 
 #### Dependence Installation
 
@@ -119,12 +106,7 @@ pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --e
 
 conda install ffmpeg
 
-pip install dlib-bin # [dlib-bin is much faster than dlib installation] conda install dlib 
-
 pip install -r requirements.txt
-
-### install gpfgan for enhancer
-pip install gfpgan ### or:  pip install git+https://github.com/TencentARC/GFPGAN.git
 
 ```  
 
@@ -145,7 +127,7 @@ docker run --gpus "all" --rm -v $(pwd):/host_dir wawa9000/sadtalker \
 </details>
 
 
-#### Trained Models
+#### Download Trained Models
 <details><summary>CLICK ME</summary>
 
 You can run the following script to put all the models in the right place.
@@ -170,26 +152,32 @@ OR download our pre-trained model from [google drive](https://drive.google.com/d
 
 </details>
 
-## 🔮 Inference Demo
+## 🔮 Quick Start
 
-#### Generating 2D face from a single Image
+#### Generating 2D face from a single Image from default config.
 
 ```bash
-python inference.py --driven_audio <audio.wav> \
-                    --source_image <video.mp4 or picture.png> \
-                    --batch_size <default equals 2, a larger run faster> \
-                    --expression_scale <default is 1.0, a larger value will make the motion stronger> \
-                    --result_dir <a file to store results> \
-                    --still <add this flag will show fewer head motion> \
-                    --preprocess <resize or crop the input image, default is crop> \
-                    --enhancer <default is None, you can choose gfpgan or RestoreFormer> \
-                    --full_img_enhancer <default is None, you can choose gfpgan or RestoreFormer> \
-                    --ref_eyeblink <default is None, ref_eyeblink is used to provide more natural eyebrow movement and eye blinking> \ 
-                    --ref_pose <default is None, ref_pose is used to provide head pose> 
-
+python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> 
 ```
+The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 
-<!-- ###### The effectness of enhancer `gfpgan`. -->
+
+#### Advanced Configuration
+
+| Name        | Configuration | default |   Explaination  | 
+|:------------- |:------------- |:----- | :------------- |
+| `Enhance Mode` | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
+| `Still Mode`   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
+| `Expressive Mode` | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
+| `save path` | `--result_dir` |`./results` | The file will be save in the newer location.
+|`preprocess` | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution.
+|`ref Mode (eye)`| `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
+|`ref Mode (pose)`| `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
+|`3D Mode`| `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
+|`free-view Mode`| `--input_yaw`, `--input_pitch`, `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
+
+
+#### Examples
 
 | basic        | w/ still mode |  w/ exp_scale 1.3   | w/ gfpgan  |
 |:-------------: |:-------------: |:-------------: |:-------------: |
@@ -215,8 +203,6 @@ python inference.py --driven_audio <audio.wav> \
 
 > Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
 
-More details to generate the 3d face can be founded [here](docs/face3d.md)
-
 
 #### Generating 4D free-view talking examples from audio and a single image
 
@@ -227,11 +213,14 @@ python inference.py --driven_audio <audio.wav> \
                     --result_dir <a file to store results> \
                     --input_yaw -20 30 10
 ```
-![free_view](docs/free_view_result.gif)
 
-#### [Beta] Full body/image Generation
+| Results, Free-view results,  Novel view results  | 
+|:-------------: | 
+|  ![free_view](docs/free_view_result.gif)| 
 
-Now you can use `--still` to generate a natural full body video. You can add `enhancer` or `full_img_enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
+#### [Beta Application] Full body/image Generation
+
+Now, you can use `--still` to generate a natural full body video. You can add `enhancer` or `full_img_enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
 
 ```bash
 python inference.py --driven_audio <audio.wav> \

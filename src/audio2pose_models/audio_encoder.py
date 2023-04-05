@@ -19,7 +19,7 @@ class Conv2d(nn.Module):
         return self.act(out)
 
 class AudioEncoder(nn.Module):
-    def __init__(self, wav2lip_checkpoint):
+    def __init__(self, wav2lip_checkpoint, device):
         super(AudioEncoder, self).__init__()
 
         self.audio_encoder = nn.Sequential(
@@ -41,8 +41,8 @@ class AudioEncoder(nn.Module):
             Conv2d(256, 512, kernel_size=3, stride=1, padding=0),
             Conv2d(512, 512, kernel_size=1, stride=1, padding=0),)
 
-        #### load the pre-trained audio_encoder\
-        wav2lip_state_dict = torch.load(wav2lip_checkpoint)['state_dict']
+        #### load the pre-trained audio_encoder
+        wav2lip_state_dict = torch.load(wav2lip_checkpoint, map_location=torch.device(device))['state_dict']
         state_dict = self.audio_encoder.state_dict()
 
         for k,v in wav2lip_state_dict.items():

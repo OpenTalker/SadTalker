@@ -12,7 +12,7 @@ class Audio2Pose(nn.Module):
         self.latent_dim = cfg.MODEL.CVAE.LATENT_SIZE
         self.device = device
 
-        self.audio_encoder = AudioEncoder(wav2lip_checkpoint)
+        self.audio_encoder = AudioEncoder(wav2lip_checkpoint, device)
         self.audio_encoder.eval()
         for param in self.audio_encoder.parameters():
             param.requires_grad = False
@@ -20,10 +20,6 @@ class Audio2Pose(nn.Module):
         self.netG = CVAE(cfg)
         self.netD_motion = PoseSequenceDiscriminator(cfg)
         
-        self.gan_criterion = nn.MSELoss()
-        self.reg_criterion = nn.L1Loss(reduction='none')
-        self.pair_criterion = nn.PairwiseDistance()
-        self.cosine_loss = nn.CosineSimilarity(dim=1)
         
     def forward(self, x):
 
