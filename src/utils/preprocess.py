@@ -77,9 +77,8 @@ class CropAndExtract():
                 if not still_reading:
                     video_stream.release()
                     break 
-                full_frames.append(frame)
-                break
-        x_full_frames = [cv2.cvtColor(full_frames[0], cv2.COLOR_BGR2RGB) ] 
+                full_frames.append(frame) 
+        x_full_frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  for frame in full_frames] 
 
         if crop_or_resize.lower() == 'crop': # default crop
             x_full_frames, crop, quad = self.croper.crop(x_full_frames, xsize=pic_size)
@@ -87,10 +86,10 @@ class CropAndExtract():
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-            original_size = (ox2 - ox1, oy2 - oy1)
+            crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
         else:
             oy1, oy2, ox1, ox2 = 0, x_full_frames[0].shape[0], 0, x_full_frames[0].shape[1] 
-            original_size = (ox2 - ox1, oy2 - oy1)
+            crop_info = ((ox2 - ox1, oy2 - oy1))
 
         frames_pil = [Image.fromarray(cv2.resize(frame,(pic_size, pic_size))) for frame in x_full_frames]
         if len(frames_pil) == 0:
@@ -149,4 +148,4 @@ class CropAndExtract():
 
             savemat(coeff_path, {'coeff_3dmm': semantic_npy, 'full_3dmm': np.array(full_coeffs)[0]})
 
-        return coeff_path, png_path, original_size
+        return coeff_path, png_path, crop_info

@@ -84,18 +84,18 @@ class SadTalker():
         #crop image and extract 3dmm from image
         first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
         os.makedirs(first_frame_dir, exist_ok=True)
-        first_coeff_path, crop_pic_path, original_size = self.preprocess_model.generate(pic_path, first_frame_dir)
+        first_coeff_path, crop_pic_path, crop_info = self.preprocess_model.generate(pic_path, first_frame_dir)
         
         if first_coeff_path is None:
             raise AttributeError("No face is detected")
 
         #audio2ceoff
-        batch = get_data(first_coeff_path, audio_path, self.device) # longer audio?
+        batch = get_data(first_coeff_path, audio_path, self.device, None) # longer audio?
         coeff_path = self.audio_to_coeff.generate(batch, save_dir, pose_style)
         #coeff2video
-        batch_size = 4
+        batch_size = 2
         data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode)
-        self.animate_from_coeff.generate(data, save_dir, enhancer='gfpgan' if use_enhancer else None, original_size=original_size)
+        return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None)
         video_name = data['video_name']
         print(f'The generated video is named {video_name} in {save_dir}')
 
@@ -103,11 +103,6 @@ class SadTalker():
         torch.cuda.synchronize()
         import gc; gc.collect()
         
-        if use_enhancer:
-            return os.path.join(save_dir, video_name+'_enhanced.mp4'), os.path.join(save_dir, video_name+'_enhanced.mp4')
-
-        else:
-            return os.path.join(save_dir, video_name+'.mp4'), os.path.join(save_dir, video_name+'.mp4')
-        
+        return return_path, return_path        
 
     

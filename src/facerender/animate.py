@@ -16,6 +16,8 @@ from src.facerender.modules.make_animation import make_animation
 
 from pydub import AudioSegment 
 from src.utils.face_enhancer import enhancer as face_enhancer
+from src.utils.paste_pic import paste_pic
+
 
 
 class AnimateFromCoeff():
@@ -30,21 +32,26 @@ class AnimateFromCoeff():
                                                     **config['model_params']['common_params'])
         kp_extractor = KPDetector(**config['model_params']['kp_detector_params'],
                                     **config['model_params']['common_params'])
+        he_estimator = HEEstimator(**config['model_params']['he_estimator_params'],
+                               **config['model_params']['common_params'])
         mapping = MappingNet(**config['model_params']['mapping_params'])
 
 
         generator.to(device)
         kp_extractor.to(device)
+        he_estimator.to(device)
         mapping.to(device)
         for param in generator.parameters():
             param.requires_grad = False
         for param in kp_extractor.parameters():
             param.requires_grad = False 
+        for param in he_estimator.parameters():
+            param.requires_grad = False
         for param in mapping.parameters():
             param.requires_grad = False
 
         if free_view_checkpoint is not None:
-            self.load_cpk_facevid2vid(free_view_checkpoint, kp_detector=kp_extractor, generator=generator)
+            self.load_cpk_facevid2vid(free_view_checkpoint, kp_detector=kp_extractor, generator=generator, he_estimator=he_estimator)
         else:
             raise AttributeError("Checkpoint should be specified for video head pose estimator.")
 
@@ -55,10 +62,12 @@ class AnimateFromCoeff():
 
         self.kp_extractor = kp_extractor
         self.generator = generator
+        self.he_estimator = he_estimator
         self.mapping = mapping
 
         self.kp_extractor.eval()
         self.generator.eval()
+        self.he_estimator.eval()
         self.mapping.eval()
          
         self.device = device
@@ -107,26 +116,35 @@ class AnimateFromCoeff():
 
         return checkpoint['epoch']
 
-    def generate(self, x, video_save_dir, enhancer=None, original_size=None):
+    def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, full_img_enhancer=None):
 
         source_image=x['source_image'].type(torch.FloatTensor)
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
-        target_semantics=x['target_semantics_list'].type(torch.FloatTensor)
-        yaw_c_seq = x['yaw_c_seq'].type(torch.FloatTensor)
-        pitch_c_seq = x['pitch_c_seq'].type(torch.FloatTensor)
-        roll_c_seq = x['roll_c_seq'].type(torch.FloatTensor)
+        target_semantics=x['target_semantics_list'].type(torch.FloatTensor) 
         source_image=source_image.to(self.device)
         source_semantics=source_semantics.to(self.device)
         target_semantics=target_semantics.to(self.device)
-        yaw_c_seq = x['yaw_c_seq'].to(self.device)
-        pitch_c_seq = x['pitch_c_seq'].to(self.device)
-        roll_c_seq = x['roll_c_seq'].to(self.device)
+        if 'yaw_c_seq' in x:
+            yaw_c_seq = x['yaw_c_seq'].type(torch.FloatTensor)
+            yaw_c_seq = x['yaw_c_seq'].to(self.device)
+        else:
+            yaw_c_seq = None
+        if 'pitch_c_seq' in x:
+            pitch_c_seq = x['pitch_c_seq'].type(torch.FloatTensor)
+            pitch_c_seq = x['pitch_c_seq'].to(self.device)
+        else:
+            pitch_c_seq = None
+        if 'roll_c_seq' in x:
+            roll_c_seq = x['roll_c_seq'].type(torch.FloatTensor) 
+            roll_c_seq = x['roll_c_seq'].to(self.device)
+        else:
+            roll_c_seq = None
 
         frame_num = x['frame_num']
 
         predictions_video = make_animation(source_image, source_semantics, target_semantics,
-                                        self.generator, self.kp_extractor, self.mapping, 
-                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True,)
+                                        self.generator, self.kp_extractor, self.he_estimator, self.mapping, 
+                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True)
 
         predictions_video = predictions_video.reshape((-1,)+predictions_video.shape[2:])
         predictions_video = predictions_video[:frame_num]
@@ -139,6 +157,7 @@ class AnimateFromCoeff():
         result = img_as_ubyte(video)
 
         ### the generated video is 256x256, so we  keep the aspect ratio, 
+        original_size = crop_info[0]
         if original_size:
             result = [ cv2.resize(result_i,(256, int(256.0 * original_size[1]/original_size[0]) )) for result_i in result ]
         
@@ -157,7 +176,9 @@ class AnimateFromCoeff():
 
             imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
 
-        av_path = os.path.join(video_save_dir, video_name) 
+        av_path = os.path.join(video_save_dir, video_name)
+        return_path = av_path 
+        
         audio_path =  x['audio_path'] 
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
         new_audio_path = os.path.join(video_save_dir, audio_name+'.wav')
@@ -171,12 +192,28 @@ class AnimateFromCoeff():
 
         cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (path, new_audio_path, av_path)
         os.system(cmd)
+        print(f'The generated video is named {video_name} in {video_save_dir}')
 
         if enhancer:
+            return_path = av_path_enhancer
             cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (enhanced_path, new_audio_path, av_path_enhancer)
             os.system(cmd)
             os.remove(enhanced_path)
+            print(f'The generated video is named {video_name_enhancer} in {video_save_dir}')
+
+        if len(crop_info) == 3:
+            video_name_full = x['video_name']  + '_full.mp4'
+            full_video_path = os.path.join(video_save_dir, video_name_full)
+            return_path = full_video_path
+            if enhancer:
+                paste_pic(av_path_enhancer, pic_path, crop_info, new_audio_path, full_video_path)
+            else:
+                paste_pic(path, pic_path, crop_info, new_audio_path, full_video_path)
+            print(f'The generated video is named {video_name_full} in {video_save_dir}') 
+
 
         os.remove(path)
         os.remove(new_audio_path)
+
+        return return_path
 

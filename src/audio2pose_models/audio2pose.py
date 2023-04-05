@@ -12,7 +12,7 @@ class Audio2Pose(nn.Module):
         self.latent_dim = cfg.MODEL.CVAE.LATENT_SIZE
         self.device = device
 
-        self.audio_encoder = AudioEncoder(wav2lip_checkpoint)
+        self.audio_encoder = AudioEncoder(wav2lip_checkpoint, device)
         self.audio_encoder.eval()
         for param in self.audio_encoder.parameters():
             param.requires_grad = False
@@ -20,10 +20,6 @@ class Audio2Pose(nn.Module):
         self.netG = CVAE(cfg)
         self.netD_motion = PoseSequenceDiscriminator(cfg)
         
-        self.gan_criterion = nn.MSELoss()
-        self.reg_criterion = nn.L1Loss(reduction='none')
-        self.pair_criterion = nn.PairwiseDistance()
-        self.cosine_loss = nn.CosineSimilarity(dim=1)
         
     def forward(self, x):
 
@@ -81,6 +77,10 @@ class Audio2Pose(nn.Module):
             z = torch.randn(bs, self.latent_dim).to(ref.device)
             batch['z'] = z
             audio_emb = self.audio_encoder(indiv_mels_use[:, -1*self.seq_len:,:,:,:]) #bs seq_len  512
+            if audio_emb.shape[1] != self.seq_len:
+                pad_dim = self.seq_len-audio_emb.shape[1]
+                pad_audio_emb = audio_emb[:, :1].repeat(1, pad_dim, 1) 
+                audio_emb = torch.cat([pad_audio_emb, audio_emb], 1) 
             batch['audio_emb'] = audio_emb
             batch = self.netG.test(batch)
             pose_motion_pred_list.append(batch['pose_motion_pred'][:,-1*re:,:])   
