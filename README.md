@@ -169,6 +169,8 @@ python app.py
 
 #### Advanced Configuration
 
+<details><summary> Click Me </summary>
+
 | Name        | Configuration | default |   Explaination  | 
 |:------------- |:------------- |:----- | :------------- |
 | Enhance Mode | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
@@ -181,6 +183,7 @@ python app.py
 | 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
 | free-view Mode | `--input_yaw`,<br> `--input_pitch`,<br> `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
 
+</details>
 
 #### Examples
 
