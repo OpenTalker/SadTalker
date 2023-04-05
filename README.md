@@ -3,7 +3,7 @@
 <img src='https://user-images.githubusercontent.com/4397546/229094115-862c747e-7397-4b54-ba4a-bd368bfe2e0f.png' width='500px'/>
 
 
-<!--<h2> 😭 SadTalker： <span style="font-size:12px">Learning Realistic 3D Motion Coefficients for  Stylized Audio-Driven Single Image Talking Face Animation </span> </h2> -->
+<!--<h2> 😭 SadTalker： <span style="font-size:12px">Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation </span> </h2> -->
 
   <a href='https://arxiv.org/abs/2211.12194'><img src='https://img.shields.io/badge/ArXiv-PDF-red'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='https://sadtalker.github.io'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker)
 
@@ -161,20 +161,25 @@ python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or pict
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 
+Or a local gradio demo can be run by:
+
+```bash
+python app.py
+```
 
 #### Advanced Configuration
 
 | Name        | Configuration | default |   Explaination  | 
 |:------------- |:------------- |:----- | :------------- |
-| `Enhance Mode` | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
-| `Still Mode`   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
-| `Expressive Mode` | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
-| `save path` | `--result_dir` |`./results` | The file will be save in the newer location.
-|`preprocess` | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution.
-|`ref Mode (eye)`| `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
-|`ref Mode (pose)`| `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
-|`3D Mode`| `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
-|`free-view Mode`| `--input_yaw`, `--input_pitch`, `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
+| Enhance Mode | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
+| Still Mode   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
+| Expressive Mode | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
+| save path | `--result_dir` |`./results` | The file will be save in the newer location.
+| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution.
+| ref Mode (eye) | `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
+| ref Mode (pose) | `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
+| 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
+| free-view Mode | `--input_yaw`,<br> `--input_pitch`,<br> `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
 
 
 #### Examples
@@ -232,7 +237,6 @@ python inference.py --driven_audio <audio.wav> \
 
 
 
-
 ## 🛎 Citation
 
 If you find our work useful in your research, please consider citing:
@@ -245,8 +249,6 @@ If you find our work useful in your research, please consider citing:
   year={2022}
 }
 ```
-
-
 
 
 
