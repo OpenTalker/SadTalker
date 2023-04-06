@@ -101,6 +101,6 @@ class SadTalker():
         torch.cuda.synchronize()
         import gc; gc.collect()
         
-        return return_path    
+        return return_path
 
     
