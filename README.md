@@ -36,6 +36,9 @@
 </div>
 
 ## 🔥 Highlight
+
+- 🔥 The extension of the stable-webui is online. just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, which may takes several minutes to download the models automatically.
+
 - 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
 | still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
