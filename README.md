@@ -161,9 +161,12 @@ python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or pict
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 
-Or a local gradio demo can be run by:
+Or a local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
 
 ```bash
+
+## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
+
 python app.py
 ```
 
