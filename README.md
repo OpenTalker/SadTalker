@@ -39,6 +39,8 @@
 
 - 🔥 The extension of the stable-webui is online. just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, which may takes several minutes to download the models automatically.
 
+https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
+
 - 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
 | still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
@@ -85,9 +87,9 @@ the 3D-aware face render for final video generation.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
-- [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
+- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 
-https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
+
 
 
 ## ⚙️ Installation
