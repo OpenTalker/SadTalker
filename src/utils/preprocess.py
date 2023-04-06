@@ -63,7 +63,7 @@ class CropAndExtract():
         #load input
         if not os.path.isfile(input_path):
             raise ValueError('input_path must be a valid path to video/image file')
-        elif input_path.split('.')[1] in ['jpg', 'png', 'jpeg']:
+        elif input_path.split('.')[-1] in ['jpg', 'png', 'jpeg']:
             # loader for first frame
             full_frames = [cv2.imread(input_path)]
             fps = 25
