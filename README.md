@@ -54,6 +54,10 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
+- __[2023.04.06]__: stable-diffiusion webui extension is release.
+
+- __[2023.04.03]__: Enable TTS in huggingface and gradio local demo.
+
 - __[2023.03.30]__: Launch beta version of the full body mode.
 
 - __[2023.03.30]__: Launch new feature: through using reference videos, our algorithm can generate videos with more natural eye blinking and some eyebrow movement.
