@@ -26,6 +26,9 @@ class SadTalker():
 
         os.environ['TORCH_HOME']= checkpoint_path
 
+        self.checkpoint_path = checkpoint_path
+        self.config_path = config_path
+
         self.path_of_lm_croper = os.path.join( checkpoint_path, 'shape_predictor_68_face_landmarks.dat')
         self.path_of_net_recon_model = os.path.join( checkpoint_path, 'epoch_20.pth')
         self.dir_of_BFM_fitting = os.path.join( checkpoint_path, 'BFM_Fitting')
@@ -38,8 +41,7 @@ class SadTalker():
         self.audio2exp_yaml_path = os.path.join( config_path, 'auido2exp.yaml')
 
         self.free_view_checkpoint = os.path.join( checkpoint_path, 'facevid2vid_00189-model.pth.tar')
-        self.mapping_checkpoint = os.path.join( checkpoint_path, 'mapping_00229-model.pth.tar')
-        self.facerender_yaml_path = os.path.join( config_path, 'facerender.yaml')
+
         
         self.lazy_load = lazy_load
 
@@ -51,11 +53,10 @@ class SadTalker():
             print(self.audio2pose_checkpoint)
             self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
                                     self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
-            print(self.free_view_checkpoint)
-            self.animate_from_coeff = AnimateFromCoeff(self.free_view_checkpoint, self.mapping_checkpoint, 
-                                                self.facerender_yaml_path, self.device)
 
-    def test(self, source_image, driven_audio, still_mode, use_enhancer, result_dir='./results/'):
+    def test(self, source_image, driven_audio, preprocess='crop', still_mode=False, use_enhancer=False, result_dir='./results/'):
+
+        ### crop: only model,
 
         if self.lazy_load:
             #init model
@@ -65,9 +66,17 @@ class SadTalker():
             print(self.audio2pose_checkpoint)
             self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
                                     self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
-            print(self.free_view_checkpoint)
-            self.animate_from_coeff = AnimateFromCoeff(self.free_view_checkpoint, self.mapping_checkpoint, 
-                                                self.facerender_yaml_path, self.device)
+        
+        if preprocess == 'full': 
+            self.mapping_checkpoint = os.path.join(self.checkpoint_path, 'mapping_00109-model.pth.tar')
+            self.facerender_yaml_path = os.path.join(self.config_path, 'facerender_still.yaml')
+        else:
+            self.mapping_checkpoint = os.path.join(self.checkpoint_path, 'mapping_00229-model.pth.tar')
+            self.facerender_yaml_path = os.path.join(self.config_path, 'facerender.yaml')
+
+        print(self.free_view_checkpoint)
+        self.animate_from_coeff = AnimateFromCoeff(self.free_view_checkpoint, self.mapping_checkpoint, 
+                                            self.facerender_yaml_path, self.device)
 
         time_tag = str(uuid.uuid4())
         save_dir = os.path.join(result_dir, time_tag)
@@ -98,18 +107,18 @@ class SadTalker():
         #crop image and extract 3dmm from image
         first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
         os.makedirs(first_frame_dir, exist_ok=True)
-        first_coeff_path, crop_pic_path, crop_info = self.preprocess_model.generate(pic_path, first_frame_dir)
+        first_coeff_path, crop_pic_path, crop_info = self.preprocess_model.generate(pic_path, first_frame_dir,preprocess)
         
         if first_coeff_path is None:
             raise AttributeError("No face is detected")
 
         #audio2ceoff
-        batch = get_data(first_coeff_path, audio_path, self.device, None) # longer audio?
+        batch = get_data(first_coeff_path, audio_path, self.device, ref_eyeblink_coeff_path=None, still=still_mode) # longer audio?
         coeff_path = self.audio_to_coeff.generate(batch, save_dir, pose_style)
         #coeff2video
         batch_size = 2
-        data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode)
-        return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None)
+        data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode, preprocess=preprocess)
+        return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None, preprocess=preprocess)
         video_name = data['video_name']
         print(f'The generated video is named {video_name} in {save_dir}')
 

@@ -41,8 +41,10 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     generated_3dmm = generated_dict['coeff_3dmm']
     generated_3dmm[:, :64] = generated_3dmm[:, :64] * expression_scale
 
-    if still_mode:
+    if preprocess.lower() == 'full':
         generated_3dmm = np.concatenate([generated_3dmm, np.repeat(source_semantics[:,70:], generated_3dmm.shape[0], axis=0)], axis=1)
+
+    if still_mode:
         generated_3dmm[:, 64:] = np.repeat(source_semantics[:, 64:], generated_3dmm.shape[0], axis=0)
 
     with open(txt_path+'.txt', 'w') as f:
@@ -130,8 +132,3 @@ def gen_camera_pose(camera_degree_list, frame_num, batch_size):
     new_degree_np = np.array(new_degree_list).reshape(batch_size, -1) 
     return new_degree_np
     
-
-
-
-
-
