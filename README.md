@@ -41,7 +41,7 @@
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
-- 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
+- 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
 | still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
@@ -53,6 +53,8 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
+
+- __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
 
 - __[2023.04.06]__: stable-diffiusion webui extension is release.
 
