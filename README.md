@@ -102,7 +102,7 @@ the 3D-aware face render for final video generation.
 
 
 
-## ⚙️ Installation
+## ⚙️ Installation (中文教程)[https://www.bilibili.com/video/BV17N411P7m7/?vd_source=653f1e6e187ffc29a9b677b6ed23169a]
 
 #### Installing Sadtalker on Linux:
 
