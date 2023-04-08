@@ -159,11 +159,14 @@ bash scripts/download_models.sh
 
 OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
 
+OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) 提取码: sadt.
+
 | Model | Description
 | :--- | :----------
 |checkpoints/auido2exp_00300-model.pth | Pre-trained ExpNet in Sadtalker.
 |checkpoints/auido2pose_00140-model.pth | Pre-trained PoseVAE in Sadtalker.
 |checkpoints/mapping_00229-model.pth.tar | Pre-trained MappingNet in Sadtalker.
+|checkpoints/mapping_00109-model.pth.tar | Pre-trained MappingNet in Sadtalker.
 |checkpoints/facevid2vid_00189-model.pth.tar | Pre-trained face-vid2vid model from [the reappearance of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis).
 |checkpoints/epoch_20.pth | Pre-trained 3DMM extractor in [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction).
 |checkpoints/wav2lip.pth | Highly accurate lip-sync model in [Wav2lip](https://github.com/Rudrabha/Wav2Lip).
