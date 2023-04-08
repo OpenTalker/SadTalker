@@ -37,7 +37,7 @@
 
 ## 🔥 Highlight
 
-- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, which may take several minutes to download the models automatically 😭.
+- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, checkout more details [here](docs/sdwebui_extension.md).
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
@@ -96,7 +96,7 @@ the 3D-aware face render for final video generation.
 
 #### Dependence Installation
 
-<details><summary>CLICK ME For Mannual Installation </summary>
+###### Installing Sadtalker on Linux:
 
 ```bash
 git clone https://github.com/Winfredy/SadTalker.git
@@ -113,23 +113,16 @@ conda install ffmpeg
 
 pip install -r requirements.txt
 
+### tts is optional for gradio demo. 
+### pip install TTS
+
 ```  
+More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-</details>
+###### Sd-Webui-Extension:
 
-<details><summary>CLICK For Docker Installation </summary>
 
-A dockerfile are also provided by [@thegenerativegeneration](https://github.com/thegenerativegeneration) in [docker hub](https://hub.docker.com/repository/docker/wawa9000/sadtalker), which can be used directly as:
 
-```bash
-docker run --gpus "all" --rm -v $(pwd):/host_dir wawa9000/sadtalker \
-    --driven_audio /host_dir/deyu.wav \
-    --source_image /host_dir/image.jpg \
-    --expression_scale 1.0 \
-    --still \
-    --result_dir /host_dir
-```
-</details>
 
 
 #### Download Trained Models

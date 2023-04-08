@@ -41,7 +41,6 @@ def install():
         "pyyaml": "pyyaml", 
         "dlib": "dlib-bin",
         "gfpgan": "gfpgan",
-        "TTS": "tts==0.13.0",
     }
 
     for k,v in kv.items():
@@ -50,11 +49,14 @@ def install():
             launch.run_pip("install "+ v, "requirements for SadTalker")
 
 
-    ### run the scripts to downlod models to correct localtion.
-    print('download models for SadTalker')
-    launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
-    print('SadTalker is successfully installed!')
-   
+    if os.getenv('SADTALKER_CHECKPOINTS'):
+        print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
+    else:
+        ### run the scripts to downlod models to correct localtion.
+        print('download models for SadTalker')
+        launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
+        print('SadTalker is successfully installed!')
+    
  
 def on_ui_tabs():
     install()
@@ -67,10 +69,13 @@ def on_ui_tabs():
     os.makedirs(result_dir, exist_ok=True)
 
     from src.gradio_demo import SadTalker  
-    from src.utils.text2speech import TTSTalker
 
-    sad_talker = SadTalker(checkpoint_path=repo_dir+'checkpoints/', config_path=repo_dir+'src/config')
-    tts_talker = TTSTalker()
+    if  os.getenv('SADTALKER_CHECKPOINTS'):
+        checkpoint_path = os.getenv('SADTALKER_CHECKPOINTS')
+    else:
+        checkpoint_path = repo_dir+'checkpoints/'
+
+    sad_talker = SadTalker(checkpoint_path=checkpoint_path, config_path=repo_dir+'src/config', lazy_load=True)
     
     with gr.Blocks(analytics_enabled=False) as audio_to_video:
         with gr.Row().style(equal_height=False):
@@ -88,16 +93,11 @@ def on_ui_tabs():
                             submit_image3.click(fn=get_img_from_img2img, inputs=input_image, outputs=[input_image, input_image])
 
                 with gr.Tabs(elem_id="sadtalker_driven_audio"):
-                    with gr.TabItem('Upload OR TTS'):
+                    with gr.TabItem('Upload'):
                         with gr.Column(variant='panel'):
 
                             with gr.Row():
                                 driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
-                    
-                                with gr.Column(variant='panel'):
-                                    input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
-                                    tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
-                                    tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
                                     
                             
             with gr.Column(variant='panel'): 
