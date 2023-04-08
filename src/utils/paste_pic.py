@@ -1,12 +1,13 @@
 import cv2, os
 import numpy as np
 from tqdm import tqdm
-import uuid 
+import uuid
+
+from src.utils.videoio import save_video_with_watermark 
 
 def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path):
 
     full_img = cv2.imread(pic_path)
-    print(full_img.dtype)
     frame_h = full_img.shape[0]
     frame_w = full_img.shape[1]
 
@@ -28,20 +29,22 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path):
         clx, cly, crx, cry = crop_info[1]
         lx, ly, rx, ry = crop_info[2]
         lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-        oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+        # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+        # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+        oy1, oy2, ox1, ox2 = cly, cry, clx, crx
+
 
     tmp_path = str(uuid.uuid4())+'.mp4'
     out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
     for crop_frame in tqdm(crop_frames, 'seamlessClone:'):
-        p = cv2.resize(crop_frame.astype(np.uint8), (r_w, r_h)) 
+        p = cv2.resize(crop_frame.astype(np.uint8), (crx-clx, cry - cly)) 
 
         mask = 255*np.ones(p.shape, p.dtype)
         location = ((ox1+ox2) // 2, (oy1+oy2) // 2)
         gen_img = cv2.seamlessClone(p, full_img, mask, location, cv2.NORMAL_CLONE)
-
-        #full_img[oy1:oy2, ox1:ox2] = p
         out_tmp.write(gen_img)
+
     out_tmp.release()
-    cmd = r'ffmpeg -y -i "%s" -i "%s"  "%s"' % (tmp_path, new_audio_path, full_video_path)
-    os.system(cmd)
+
+    save_video_with_watermark(tmp_path, new_audio_path, full_video_path)
     os.remove(tmp_path)

@@ -48,7 +48,7 @@ def generate_blink_seq_randomly(num_frames):
             break
     return ratio
 
-def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path):
+def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=False):
 
     syncnet_mel_step_size = 16
     fps = 25
@@ -95,7 +95,12 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path):
         ref_coeff[:, :64] = refeyeblink_coeff[:num_frames, :64] 
     
     indiv_mels = torch.FloatTensor(indiv_mels).unsqueeze(1).unsqueeze(0) # bs T 1 80 16
-    ratio = torch.FloatTensor(ratio).unsqueeze(0)                        # bs T
+
+    if still:
+        ratio = torch.FloatTensor(ratio).unsqueeze(0).fill_(0.)                        # bs T
+    else:
+        ratio = torch.FloatTensor(ratio).unsqueeze(0)
+                               # bs T
     ref_coeff = torch.FloatTensor(ref_coeff).unsqueeze(0)                # bs 1 70
 
     indiv_mels = indiv_mels.to(device)

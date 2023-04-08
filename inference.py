@@ -8,7 +8,6 @@ from src.test_audio2coeff import Audio2Coeff
 from src.facerender.animate import AnimateFromCoeff
 from src.generate_batch import get_data
 from src.generate_facerender_batch import get_facerender_data
-from src.utils.paste_pic import paste_pic
 
 def main(args):
     #torch.backends.cudnn.enabled = False
@@ -43,8 +42,13 @@ def main(args):
     audio2exp_yaml_path = os.path.join(current_root_path, 'src', 'config', 'auido2exp.yaml')
 
     free_view_checkpoint = os.path.join(current_root_path, args.checkpoint_dir, 'facevid2vid_00189-model.pth.tar')
-    mapping_checkpoint = os.path.join(current_root_path, args.checkpoint_dir, 'mapping_00229-model.pth.tar')
-    facerender_yaml_path = os.path.join(current_root_path, 'src', 'config', 'facerender.yaml')
+
+    if args.preprocess == 'full':
+        mapping_checkpoint = os.path.join(current_root_path, args.checkpoint_dir, 'mapping_00109-model.pth.tar')
+        facerender_yaml_path = os.path.join(current_root_path, 'src', 'config', 'facerender_still.yaml')
+    else:
+        mapping_checkpoint = os.path.join(current_root_path, args.checkpoint_dir, 'mapping_00229-model.pth.tar')
+        facerender_yaml_path = os.path.join(current_root_path, 'src', 'config', 'facerender.yaml')
 
     #init model
     print(path_of_net_recon_model)
@@ -92,7 +96,7 @@ def main(args):
         ref_pose_coeff_path=None
 
     #audio2ceoff
-    batch = get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path)
+    batch = get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=args.still)
     coeff_path = audio_to_coeff.generate(batch, save_dir, pose_style, ref_pose_coeff_path)
 
     # 3dface render
@@ -103,16 +107,16 @@ def main(args):
     #coeff2video
     data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, 
                                 batch_size, input_yaw_list, input_pitch_list, input_roll_list,
-                                expression_scale=args.expression_scale, still_mode=args.still)
+                                expression_scale=args.expression_scale, still_mode=args.still, preprocess=args.preprocess)
     
     animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
-                                enhancer=args.enhancer, full_img_enhancer=args.full_img_enhancer)
+                                enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess)
     
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
-    parser.add_argument("--driven_audio", default='./examples/driven_audio/bus_chinese.wav', help="path to driven audio")
-    parser.add_argument("--source_image", default='./examples/source_image/full_body_2.png', help="path to source image")
+    parser.add_argument("--driven_audio", default='./examples/driven_audio/eluosi.wav', help="path to driven audio")
+    parser.add_argument("--source_image", default='./examples/source_image/full3.png', help="path to source image")
     parser.add_argument("--ref_eyeblink", default=None, help="path to reference video providing eye blinking")
     parser.add_argument("--ref_pose", default=None, help="path to reference video providing pose")
     parser.add_argument("--checkpoint_dir", default='./checkpoints', help="path to output")
@@ -123,12 +127,12 @@ if __name__ == '__main__':
     parser.add_argument('--input_yaw', nargs='+', type=int, default=None, help="the input yaw degree of the user ")
     parser.add_argument('--input_pitch', nargs='+', type=int, default=None, help="the input pitch degree of the user")
     parser.add_argument('--input_roll', nargs='+', type=int, default=None, help="the input roll degree of the user")
-    parser.add_argument('--enhancer',  type=str, default=None, help="Face enhancer, [gfpgan]")
-    parser.add_argument('--full_img_enhancer',  type=str, default=None, help="Full image enhancer, [gfpgan]")
+    parser.add_argument('--enhancer',  type=str, default=None, help="Face enhancer, [gfpgan, RestoreFormer]")
+    parser.add_argument('--background_enhancer',  type=str, default=None, help="background enhancer, [realesrgan]")
     parser.add_argument("--cpu", dest="cpu", action="store_true") 
     parser.add_argument("--face3dvis", action="store_true", help="generate 3d face and 3d landmarks") 
-    parser.add_argument("--still", action="store_true") 
-    parser.add_argument("--preprocess", default='crop', choices=['crop', 'resize'] ) 
+    parser.add_argument("--still", action="store_true", help="can crop back to the orginal videos for the full body aniamtion") 
+    parser.add_argument("--preprocess", default='crop', choices=['crop', 'resize', 'full'], help="how to preprocess the images" ) 
 
     # net structure and parameters
     parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='useless')

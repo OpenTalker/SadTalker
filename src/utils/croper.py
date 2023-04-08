@@ -161,7 +161,7 @@ class Croper:
     #         img_np_list[_i] = _inp
     #     return img_np_list
     
-    def crop(self, img_np_list, xsize=512):    # first frame for all video
+    def crop(self, img_np_list, still=False, xsize=512):    # first frame for all video
         img_np = img_np_list[0]
         lm = self.get_landmark(img_np)
         if lm is None:
@@ -174,7 +174,8 @@ class Croper:
             _inp = img_np_list[_i]
             _inp = _inp[cly:cry, clx:crx]
             # cv2.imwrite('test1.jpg', _inp)
-            _inp = _inp[ly:ry, lx:rx]
+            if not still:
+                _inp = _inp[ly:ry, lx:rx]
             # cv2.imwrite('test2.jpg', _inp)
             img_np_list[_i] = _inp
         return img_np_list, crop, quad
