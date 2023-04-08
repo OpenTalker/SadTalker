@@ -35,6 +35,8 @@
 
 </div>
 
+
+
 ## 🔥 Highlight
 
 - 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, checkout more details [here](#sd-webui-extension).
@@ -43,9 +45,9 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 - 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
-| still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
+| still+enhancer in v0.0.1                 | still + enhancer   in v0.0.2       |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
-| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <img src='./examples/source_image/full_body_2.png' width='380'> 
+| <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <video  src="https://user-images.githubusercontent.com/4397546/230717873-355b7bf3-d3de-49f9-a439-9220e623fce7.mp4" type="video/mp4"> </video>  | <img src='./examples/source_image/full_body_2.png' width='380'> 
 
 - 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
 
@@ -203,10 +205,11 @@ python app.py
 | Name        | Configuration | default |   Explaination  | 
 |:------------- |:------------- |:----- | :------------- |
 | Enhance Mode | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
+| Background Enhancer | `--background_enhancer` | None | Using `realesrgan` to enhance the full video. 
 | Still Mode   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
 | Expressive Mode | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
 | save path | `--result_dir` |`./results` | The file will be save in the newer location.
-| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution.
+| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution. `full` Run the full image animation, use with `--still` to get better results.
 | ref Mode (eye) | `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
 | ref Mode (pose) | `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
 | 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
@@ -264,6 +267,7 @@ python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
                     --result_dir <a file to store results> \
                     --still \
+                    --preprocess full \
                     --enhancer gfpgan 
 ```
 
