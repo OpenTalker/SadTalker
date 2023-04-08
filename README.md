@@ -35,17 +35,19 @@
 
 </div>
 
+
+
 ## 🔥 Highlight
 
 - 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, checkout more details [here](#sd-webui-extension).
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
-- 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
+- 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
-| still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
+| still+enhancer in v0.0.1                 | still + enhancer   in v0.0.2       |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
-| <video src="https://user-images.githubusercontent.com/48216707/229485024-d9319678-fad4-4b52-b96c-7d0f9f40f4ee.mp4" type="video/mp4"> </video>  | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <img src='./examples/source_image/full_body_2.png' width='380'> 
+| <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <video  src="https://user-images.githubusercontent.com/4397546/230717873-355b7bf3-d3de-49f9-a439-9220e623fce7.mp4" type="video/mp4"> </video>  | <img src='./examples/source_image/full_body_2.png' width='380'> 
 
 - 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
 
@@ -53,6 +55,10 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
+
+- __[2023.04.08]__: ❗️❗️❗️ In v0.0.2, we add a logo watermark to the generated video to prevent abusing since it is very realistic.
+
+- __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
 
 - __[2023.04.06]__: stable-diffiusion webui extension is release.
 
@@ -96,7 +102,7 @@ the 3D-aware face render for final video generation.
 
 
 
-## ⚙️ Installation
+## ⚙️ Installation ([中文教程](https://www.bilibili.com/video/BV17N411P7m7/?vd_source=653f1e6e187ffc29a9b677b6ed23169a))
 
 #### Installing Sadtalker on Linux:
 
@@ -159,11 +165,14 @@ bash scripts/download_models.sh
 
 OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
 
+OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) 提取码: sadt.
+
 | Model | Description
 | :--- | :----------
 |checkpoints/auido2exp_00300-model.pth | Pre-trained ExpNet in Sadtalker.
 |checkpoints/auido2pose_00140-model.pth | Pre-trained PoseVAE in Sadtalker.
 |checkpoints/mapping_00229-model.pth.tar | Pre-trained MappingNet in Sadtalker.
+|checkpoints/mapping_00109-model.pth.tar | Pre-trained MappingNet in Sadtalker.
 |checkpoints/facevid2vid_00189-model.pth.tar | Pre-trained face-vid2vid model from [the reappearance of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis).
 |checkpoints/epoch_20.pth | Pre-trained 3DMM extractor in [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction).
 |checkpoints/wav2lip.pth | Highly accurate lip-sync model in [Wav2lip](https://github.com/Rudrabha/Wav2Lip).
@@ -198,10 +207,11 @@ python app.py
 | Name        | Configuration | default |   Explaination  | 
 |:------------- |:------------- |:----- | :------------- |
 | Enhance Mode | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
+| Background Enhancer | `--background_enhancer` | None | Using `realesrgan` to enhance the full video. 
 | Still Mode   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
 | Expressive Mode | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
 | save path | `--result_dir` |`./results` | The file will be save in the newer location.
-| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution.
+| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution. `full` Run the full image animation, use with `--still` to get better results.
 | ref Mode (eye) | `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
 | ref Mode (pose) | `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
 | 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
@@ -259,6 +269,7 @@ python inference.py --driven_audio <audio.wav> \
                     --source_image <video.mp4 or picture.png> \
                     --result_dir <a file to store results> \
                     --still \
+                    --preprocess full \
                     --enhancer gfpgan 
 ```
 
@@ -299,4 +310,5 @@ This is not an official product of Tencent. This repository can only be used for
 LOGO: color and font suggestion: [ChatGPT](ai.com), logo font：[Montserrat Alternates
 ](https://fonts.google.com/specimen/Montserrat+Alternates?preview.text=SadTalker&preview.text_type=custom&query=mont).
 
-All the copyright demo images are from communities users or the geneartion from stable diffusion. Free free to contact us if you feel uncomfortable.
+All the copyright of the demo images and audio are from communities users or the geneartion from stable diffusion. Free free to contact us if you feel uncomfortable.
+
