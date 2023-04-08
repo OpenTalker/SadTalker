@@ -15,43 +15,59 @@ def mp3_to_wav(mp3_filename,wav_filename,frame_rate):
 
 class SadTalker():
 
-    def __init__(self, checkpoint_path='checkpoints', config_path='src/config'):
+    def __init__(self, checkpoint_path='checkpoints', config_path='src/config', lazy_load=False):
 
         if torch.cuda.is_available() :
             device = "cuda"
         else:
             device = "cpu"
         
-        os.environ['TORCH_HOME']= checkpoint_path
-
-        path_of_lm_croper = os.path.join( checkpoint_path, 'shape_predictor_68_face_landmarks.dat')
-        path_of_net_recon_model = os.path.join( checkpoint_path, 'epoch_20.pth')
-        dir_of_BFM_fitting = os.path.join( checkpoint_path, 'BFM_Fitting')
-        wav2lip_checkpoint = os.path.join( checkpoint_path, 'wav2lip.pth')
-
-        audio2pose_checkpoint = os.path.join( checkpoint_path, 'auido2pose_00140-model.pth')
-        audio2pose_yaml_path = os.path.join( config_path, 'auido2pose.yaml')
-    
-        audio2exp_checkpoint = os.path.join( checkpoint_path, 'auido2exp_00300-model.pth')
-        audio2exp_yaml_path = os.path.join( config_path, 'auido2exp.yaml')
-
-        free_view_checkpoint = os.path.join( checkpoint_path, 'facevid2vid_00189-model.pth.tar')
-        mapping_checkpoint = os.path.join( checkpoint_path, 'mapping_00229-model.pth.tar')
-        facerender_yaml_path = os.path.join( config_path, 'facerender.yaml')
-
-        #init model
-        print(path_of_lm_croper)
-        self.preprocess_model = CropAndExtract(path_of_lm_croper, path_of_net_recon_model, dir_of_BFM_fitting, device)
-
-        print(audio2pose_checkpoint)
-        self.audio_to_coeff = Audio2Coeff(audio2pose_checkpoint, audio2pose_yaml_path, 
-                                audio2exp_checkpoint, audio2exp_yaml_path, wav2lip_checkpoint, device)
-        print(free_view_checkpoint)
-        self.animate_from_coeff = AnimateFromCoeff(free_view_checkpoint, mapping_checkpoint, 
-                                            facerender_yaml_path, device)
         self.device = device
 
+        os.environ['TORCH_HOME']= checkpoint_path
+
+        self.path_of_lm_croper = os.path.join( checkpoint_path, 'shape_predictor_68_face_landmarks.dat')
+        self.path_of_net_recon_model = os.path.join( checkpoint_path, 'epoch_20.pth')
+        self.dir_of_BFM_fitting = os.path.join( checkpoint_path, 'BFM_Fitting')
+        self.wav2lip_checkpoint = os.path.join( checkpoint_path, 'wav2lip.pth')
+
+        self.audio2pose_checkpoint = os.path.join( checkpoint_path, 'auido2pose_00140-model.pth')
+        self.audio2pose_yaml_path = os.path.join( config_path, 'auido2pose.yaml')
+    
+        self.audio2exp_checkpoint = os.path.join( checkpoint_path, 'auido2exp_00300-model.pth')
+        self.audio2exp_yaml_path = os.path.join( config_path, 'auido2exp.yaml')
+
+        self.free_view_checkpoint = os.path.join( checkpoint_path, 'facevid2vid_00189-model.pth.tar')
+        self.mapping_checkpoint = os.path.join( checkpoint_path, 'mapping_00229-model.pth.tar')
+        self.facerender_yaml_path = os.path.join( config_path, 'facerender.yaml')
+        
+        self.lazy_load = lazy_load
+
+        if not self.lazy_load:
+            #init model
+            print(self.path_of_lm_croper)
+            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
+
+            print(self.audio2pose_checkpoint)
+            self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
+                                    self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
+            print(self.free_view_checkpoint)
+            self.animate_from_coeff = AnimateFromCoeff(self.free_view_checkpoint, self.mapping_checkpoint, 
+                                                self.facerender_yaml_path, self.device)
+
     def test(self, source_image, driven_audio, still_mode, use_enhancer, result_dir='./results/'):
+
+        if self.lazy_load:
+            #init model
+            print(self.path_of_lm_croper)
+            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
+
+            print(self.audio2pose_checkpoint)
+            self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
+                                    self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
+            print(self.free_view_checkpoint)
+            self.animate_from_coeff = AnimateFromCoeff(self.free_view_checkpoint, self.mapping_checkpoint, 
+                                                self.facerender_yaml_path, self.device)
 
         time_tag = str(uuid.uuid4())
         save_dir = os.path.join(result_dir, time_tag)
@@ -97,10 +113,15 @@ class SadTalker():
         video_name = data['video_name']
         print(f'The generated video is named {video_name} in {save_dir}')
 
+        if self.lazy_load:
+            del self.preprocess_model
+            del self.audio_to_coeff
+            del self.animate_from_coeff
+
         torch.cuda.empty_cache()
         torch.cuda.synchronize()
         import gc; gc.collect()
         
-        return return_path    
+        return return_path
 
     

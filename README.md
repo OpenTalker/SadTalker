@@ -36,6 +36,11 @@
 </div>
 
 ## 🔥 Highlight
+
+- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, checkout more details [here](#sd-webui-extension).
+
+https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
+
 - 🔥 Beta version of the `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
 
 | still                 | still + enhancer          |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
@@ -48,6 +53,10 @@
 ) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
+
+- __[2023.04.06]__: stable-diffiusion webui extension is release.
+
+- __[2023.04.03]__: Enable TTS in huggingface and gradio local demo.
 
 - __[2023.03.30]__: Launch beta version of the full body mode.
 
@@ -82,16 +91,14 @@ the 3D-aware face render for final video generation.
 - [ ] training code of each componments.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
-- [ ] integrade with stable-diffusion-web-ui. (stay tunning!)
+- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 
-https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
+
 
 
 ## ⚙️ Installation
 
-#### Dependence Installation
-
-<details><summary>CLICK ME For Mannual Installation </summary>
+#### Installing Sadtalker on Linux:
 
 ```bash
 git clone https://github.com/Winfredy/SadTalker.git
@@ -108,23 +115,37 @@ conda install ffmpeg
 
 pip install -r requirements.txt
 
+### tts is optional for gradio demo. 
+### pip install TTS
+
 ```  
 
-</details>
+More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-<details><summary>CLICK For Docker Installation </summary>
+#### Sd-Webui-Extension:
+<details><summary>CLICK ME</summary>
 
-A dockerfile are also provided by [@thegenerativegeneration](https://github.com/thegenerativegeneration) in [docker hub](https://hub.docker.com/repository/docker/wawa9000/sadtalker), which can be used directly as:
+Installing the lastest version of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and install the sadtalker via `extension`.
+<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698519-267d1d1f-6e99-4dd4-81e1-7b889259efbd.png">
+
+Then, retarting the stable-diffusion-webui, set some commandline args. The models will be downloaded automatically in the right place. Alternatively, you can add the path of pre-downloaded sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
 
 ```bash
-docker run --gpus "all" --rm -v $(pwd):/host_dir wawa9000/sadtalker \
-    --driven_audio /host_dir/deyu.wav \
-    --source_image /host_dir/image.jpg \
-    --expression_scale 1.0 \
-    --still \
-    --result_dir /host_dir
+# windows (webui_user.bat)
+set COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+set SADTALKER_CHECKPOINTS=D:\SadTalker\checkpoints
+
+# linux (webui_user.sh)
+export COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
 ```
+
+After installation, the SadTalker can be used in stable-diffusion-webui directly. 
+
+<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
+
 </details>
+
 
 
 #### Download Trained Models
@@ -161,9 +182,12 @@ python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or pict
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 
-Or a local gradio demo can be run by:
+Or a local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
 
 ```bash
+
+## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
+
 python app.py
 ```
 
