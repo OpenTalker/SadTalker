@@ -94,9 +94,7 @@ the 3D-aware face render for final video generation.
 
 ## ⚙️ Installation
 
-#### Dependence Installation
-
-###### Installing Sadtalker on Linux:
+#### Installing Sadtalker on Linux:
 
 ```bash
 git clone https://github.com/Winfredy/SadTalker.git
@@ -117,11 +115,32 @@ pip install -r requirements.txt
 ### pip install TTS
 
 ```  
+
 More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-###### Sd-Webui-Extension:
+#### Sd-Webui-Extension:
+<details><summary>CLICK ME</summary>
 
+Installing the lastest version of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and install the sadtalker via `extension`.
+<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698519-267d1d1f-6e99-4dd4-81e1-7b889259efbd.png">
 
+Then, retarting the stable-diffusion-webui, set some commandline args for . the models will be downloaded automatically in the right place. Alternatively, you can add the path of pre-downloaded sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
+
+```bash
+# windows (webui_user.bat)
+set COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+set SADTALKER_CHECKPOINTS=D:\SadTalker\checkpoints
+
+# linux (webui_user.sh)
+export COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
+```
+
+After installation, the SadTalker can be used in stable-diffusion-webui directly. 
+
+<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
+
+</details>
 
 
 
