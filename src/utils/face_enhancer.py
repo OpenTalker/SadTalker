@@ -47,7 +47,7 @@ def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
             model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
             bg_upsampler = RealESRGANer(
                 scale=2,
-                model_path='/apdcephfs/private_shadowcun/SadTalker/gfpgan/weights/RealESRGAN_x2plus.pth',
+                model_path='https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth',
                 model=model,
                 tile=400,
                 tile_pad=10,
