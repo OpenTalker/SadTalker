@@ -43,7 +43,7 @@
 
 https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8e41-96c32b47bd4e.mp4
 
-- 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#beta-full-bodyimage-generation) for more details.
+- 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#full-bodyimage-generation) for more details.
 
 | still+enhancer in v0.0.1                 | still + enhancer   in v0.0.2       |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
@@ -59,28 +59,6 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 - __[2023.04.08]__: ❗️❗️❗️ In v0.0.2, we add a logo watermark to the generated video to prevent abusing since it is very realistic.
 
 - __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
-
-- __[2023.04.06]__: stable-diffiusion webui extension is release.
-
-- __[2023.04.03]__: Enable TTS in huggingface and gradio local demo.
-
-- __[2023.03.30]__: Launch beta version of the full body mode.
-
-- __[2023.03.30]__: Launch new feature: through using reference videos, our algorithm can generate videos with more natural eye blinking and some eyebrow movement.
-
-- __[2023.03.29]__: `resize mode` is online by `python infererence.py --preprocess resize`! Where we can produce a larger crop of the image as discussed in https://github.com/Winfredy/SadTalker/issues/35.
-
-- __[2023.03.29]__: local gradio demo is online! `python app.py` to start the demo. New `requirments.txt` is used to avoid the bugs in `librosa`.
-
-- __[2023.03.28]__: Online demo is launched in [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/vinthony/SadTalker), thanks AK!
-
-
-## 🎼 Pipeline
-![main_of_sadtalker](https://user-images.githubusercontent.com/4397546/222490596-4c8a2115-49a7-42ad-a2c3-3bb3288a5f36.png) 
-> Our method uses the coefficients of 3DMM as intermediate motion representation. To this end, we first generate
-realistic 3D motion coefficients (facial expression β, head pose ρ)
-from audio, then these coefficients are used to implicitly modulate
-the 3D-aware face render for final video generation.
 
 
 ## 🚧 TODO
@@ -98,8 +76,6 @@ the 3D-aware face render for final video generation.
 - [ ] Audio-driven Anime Avatar.
 - [ ] interpolate ChatGPT for a conversation demo 🤔
 - [x] integrade with stable-diffusion-web-ui. (stay tunning!)
-
-
 
 
 ## ⚙️ Installation ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)|[日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) )
@@ -183,29 +159,19 @@ OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1n
 
 ## 🔮 Quick Start ([Best Practice](docs/best_practice.md))
 
-#### Generating 2D face from a single Image from default config.
-
+#### Animating Poartart Image from default config.
 
 ```bash
-python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> 
+python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --enhancer gfpgan 
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
-**More examples and configuration and tips can be founded in the [best practice documents](docs/best_practice.md) .**
 
-
-A local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
-
-```bash
-
-## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
-
-python app.py
-```
+More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
 
 
 #### Full body/image Generation
 
-Now, you can use `--still` to generate a natural full body video. You can add `enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
+Using `--still` to generate a natural full body video. You can add `enhancer` to improve the quality of the generated video. 
 
 ```bash
 python inference.py --driven_audio <audio.wav> \
@@ -216,6 +182,15 @@ python inference.py --driven_audio <audio.wav> \
                     --enhancer gfpgan 
 ```
 
+#### Local Gradio demo.
+A local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+
+```bash
+
+## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
+
+python app.py
+```
 
 
 ## 🛎 Citation
