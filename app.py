@@ -37,7 +37,6 @@ def sadtalker_demo():
                             tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
                             tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
                         
-
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
                     with gr.TabItem('Settings'):

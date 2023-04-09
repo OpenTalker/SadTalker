@@ -101,7 +101,6 @@ the 3D-aware face render for final video generation.
 
 
 
-
 ## ⚙️ Installation ([中文教程](https://www.bilibili.com/video/BV17N411P7m7/?vd_source=653f1e6e187ffc29a9b677b6ed23169a))
 
 #### Installing Sadtalker on Linux:
@@ -134,7 +133,7 @@ More tips about installnation on Windows and the Docker file can be founded [her
 Installing the lastest version of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and install the sadtalker via `extension`.
 <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698519-267d1d1f-6e99-4dd4-81e1-7b889259efbd.png">
 
-Then, retarting the stable-diffusion-webui, set some commandline args. The models will be downloaded automatically in the right place. Alternatively, you can add the path of pre-downloaded sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
+Then, restarting the stable-diffusion-webui(The models will be downloaded automatically in the right place if you have a good speed network). Or (**Important**!) you need pre-download sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
 
 ```bash
 # windows (webui_user.bat)
@@ -151,7 +150,6 @@ After installation, the SadTalker can be used in stable-diffusion-webui directly
 <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
 
 </details>
-
 
 
 #### Download Trained Models
@@ -186,12 +184,15 @@ OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1n
 
 #### Generating 2D face from a single Image from default config.
 
+
 ```bash
 python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> 
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
+**More examples and configuration and tips can be founded in the [best practice documents](docs/best_practice.md) .**
 
-Or a local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+
+A local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
 
 ```bash
 
@@ -200,69 +201,10 @@ Or a local gradio demo similar to our [hugging-face demo](https://huggingface.co
 python app.py
 ```
 
-#### Advanced Configuration
 
-<details><summary> Click Me </summary>
+#### Full body/image Generation
 
-| Name        | Configuration | default |   Explaination  | 
-|:------------- |:------------- |:----- | :------------- |
-| Enhance Mode | `--enhancer` | None | Using `gfpgan` or `RestoreFormer` to enhance the generated face via face restoration network 
-| Background Enhancer | `--background_enhancer` | None | Using `realesrgan` to enhance the full video. 
-| Still Mode   | ` --still` | False |  Using the same pose parameters as the original image, fewer head motion.
-| Expressive Mode | `--expression_scale` | 1.0 | a larger value will make the expression motion stronger.
-| save path | `--result_dir` |`./results` | The file will be save in the newer location.
-| preprocess | `--preprocess` | `crop` | Run and produce the results in the croped input image. Other choices: `resize`, where the images will be resized to the specific resolution. `full` Run the full image animation, use with `--still` to get better results.
-| ref Mode (eye) | `--ref_eyeblink` | None | A video path, where we borrow the eyeblink from this reference video to provide more natural eyebrow movement.
-| ref Mode (pose) | `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
-| 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
-| free-view Mode | `--input_yaw`,<br> `--input_pitch`,<br> `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
-
-</details>
-
-#### Examples
-
-| basic        | w/ still mode |  w/ exp_scale 1.3   | w/ gfpgan  |
-|:-------------: |:-------------: |:-------------: |:-------------: |
-|  <video src="https://user-images.githubusercontent.com/4397546/226097707-bef1dd41-403e-48d3-a6e6-6adf923843af.mp4"></video>  | <video src='https://user-images.githubusercontent.com/4397546/226804933-b717229f-1919-4bd5-b6af-bea7ab66cad3.mp4'></video>  |  <video style='width:256px' src="https://user-images.githubusercontent.com/4397546/226806013-7752c308-8235-4e7a-9465-72d8fc1aa03d.mp4"></video>     | <video style='width:256px' src="https://user-images.githubusercontent.com/4397546/226097717-12a1a2a1-ac0f-428d-b2cb-bd6917aff73e.mp4"></video>    |
-> Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
-
-| Input, w/ reference video   ,  reference video    | 
-|:-------------: | 
-|  ![free_view](docs/using_ref_video.gif)| 
-| If the reference video is shorter than the input audio, we will loop the reference video . 
-
-
-
-<!-- <video src="./docs/art_0##japanese_still.mp4"></video> -->
-
-
-#### Generating 3D face from Audio
-
-
-| Input        | Animated 3d face | 
-|:-------------: | :-------------: |
-|  <img src='examples/source_image/art_0.png' width='200px'> | <video src="https://user-images.githubusercontent.com/4397546/226856847-5a6a0a4d-a5ec-49e2-9b05-3206db65e8e3.mp4"></video>  | 
-
-> Kindly ensure to activate the audio as the default audio playing is incompatible with GitHub.
-
-
-#### Generating 4D free-view talking examples from audio and a single image
-
-We use `input_yaw`, `input_pitch`, `input_roll` to control head pose. For example, `--input_yaw -20 30 10` means the input head yaw degree changes from -20 to 30 and then changes from 30 to 10.
-```bash
-python inference.py --driven_audio <audio.wav> \
-                    --source_image <video.mp4 or picture.png> \
-                    --result_dir <a file to store results> \
-                    --input_yaw -20 30 10
-```
-
-| Results, Free-view results,  Novel view results  | 
-|:-------------: | 
-|  ![free_view](docs/free_view_result.gif)| 
-
-#### [Beta Application] Full body/image Generation
-
-Now, you can use `--still` to generate a natural full body video. You can add `enhancer` or `full_img_enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
+Now, you can use `--still` to generate a natural full body video. You can add `enhancer` to improve the quality of the generated video. However, if you add other mode, such as `ref_eyeblinking`, `ref_pose`, the result will be bad. We are still trying to fix this problem.
 
 ```bash
 python inference.py --driven_audio <audio.wav> \

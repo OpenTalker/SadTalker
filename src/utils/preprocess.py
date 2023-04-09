@@ -83,7 +83,7 @@ class CropAndExtract():
 
         #### crop images as the 
         if crop_or_resize.lower() == 'crop': # default crop
-            x_full_frames, crop, quad = self.croper.crop(x_full_frames, xsize=pic_size)
+            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=pic_size)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
