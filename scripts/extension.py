@@ -98,14 +98,15 @@ def on_ui_tabs():
 
                             with gr.Row():
                                 driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
-                                    
-                            
+                        
+
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
                     with gr.TabItem('Settings'):
                         with gr.Column(variant='panel'):
-                            is_still_mode = gr.Checkbox(label="Still Mode (fewer head motion)").style(container=True)
-                            is_enhance_mode = gr.Checkbox(label="Enhance Mode (better face quality )").style(container=True)
+                            preprocess_type = gr.Radio(['crop','resize','full'], value='crop', label='preprocess', info="How to handle input image?")
+                            is_still_mode = gr.Checkbox(label="w/ Still Mode (fewer hand motion, works with preprocess `full`)")
+                            enhancer = gr.Checkbox(label="w/ GFPGAN as Face enhancer")
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
 
                 with gr.Tabs(elem_id="sadtalker_genearted"):
@@ -117,8 +118,9 @@ def on_ui_tabs():
                     fn=wrap_queued_call(sad_talker.test), 
                     inputs=[input_image,
                             driven_audio,
+                            preprocess_type,
                             is_still_mode,
-                            is_enhance_mode], 
+                            enhancer], 
                     outputs=[gen_video, ]
                     )
 
