@@ -122,7 +122,7 @@ export COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
 export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
 ```
 
-After installation, the SadTalker can be used in stable-diffusion-webui directly. 
+After installation, the SadTalker can be used in stable-diffusion-webui directly. (Some [important discussion](https://github.com/Winfredy/SadTalker/issues/78) if you are unable to use `full` mode).
 
 <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
 
@@ -159,7 +159,7 @@ OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1n
 
 ## 🔮 Quick Start ([Best Practice](docs/best_practice.md))
 
-#### Animating Poartart Image from default config.
+#### Animating Portrait Image from default config.
 
 ```bash
 python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --enhancer gfpgan 
