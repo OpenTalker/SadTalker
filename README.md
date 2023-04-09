@@ -181,7 +181,7 @@ OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1n
 
 </details>
 
-## 🔮 Quick Start
+## 🔮 Quick Start ([Best Practice](docs/best_practice.md))
 
 #### Generating 2D face from a single Image from default config.
 
