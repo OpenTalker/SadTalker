@@ -17,15 +17,24 @@ def load_video_to_cv2(input_path):
         full_frames.append(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
     return full_frames
 
-def save_video_with_watermark(video, audio, save_path, watermark='docs/sadtalker_logo.png'):
+def save_video_with_watermark(video, audio, save_path, watermark=False):
     temp_file = str(uuid.uuid4())+'.mp4'
     cmd = r'ffmpeg -y -i "%s" -i "%s" -vcodec copy "%s"' % (video, audio, temp_file)
     os.system(cmd)
 
-    if not watermark:
+    if watermark is False:
         shutil.move(temp_file, save_path)
     else:
         # watermark
-        cmd = r'ffmpeg -y -hide_banner -i "%s" -i "%s" -filter_complex "[1]scale=100:-1[wm];[0][wm]overlay=(main_w-overlay_w)-10:10" "%s"' % (temp_file, watermark, save_path)
+        try:
+            ##### check if stable-diffusion-webui
+            import webui
+            from modules import paths
+            watarmark_path = paths.script_path+"/extensions/SadTalker/docs/sadtalker_logo.png"
+
+        except:
+            watarmark_path = "./docs/sadtalker_log.png"
+
+        cmd = r'ffmpeg -y -hide_banner -i "%s" -i "%s" -filter_complex "[1]scale=100:-1[wm];[0][wm]overlay=(main_w-overlay_w)-10:10" "%s"' % (temp_file, watarmark_path, save_path)
         os.system(cmd)
         os.remove(temp_file)

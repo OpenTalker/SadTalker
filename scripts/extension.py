@@ -7,6 +7,11 @@ from modules.shared import opts, OptionInfo
 from modules import shared, paths, script_callbacks
 import launch
 import glob
+from huggingface_hub import snapshot_download
+
+def download_model(local_dir='./checkpoints'):
+    REPO_ID = 'vinthony/SadTalker'
+    snapshot_download(repo_id=REPO_ID, local_dir=local_dir, local_dir_use_symlinks=True)
 
 def get_source_image(image):   
         return image
@@ -53,9 +58,10 @@ def install():
         print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
     else:
         ### run the scripts to downlod models to correct localtion.
-        print('download models for SadTalker')
-        launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
-        print('SadTalker is successfully installed!')
+        # print('download models for SadTalker')
+        # launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
+        # print('SadTalker is successfully installed!')
+        download_model(paths.script_path+'/extensions/SadTalker/checkpoints')
     
  
 def on_ui_tabs():
@@ -83,7 +89,7 @@ def on_ui_tabs():
                 with gr.Tabs(elem_id="sadtalker_source_image"):
                     with gr.TabItem('Upload image'):
                         with gr.Row():
-                            input_image = gr.Image(label="Source image", source="upload", type="filepath").style(height=512,width=512)
+                            input_image = gr.Image(label="Source image", source="upload", type="filepath").style(height=256,width=256)
                         
                         with gr.Row():
                             submit_image2 = gr.Button('load From txt2img', variant='primary')
