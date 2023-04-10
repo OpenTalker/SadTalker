@@ -1,4 +1,26 @@
 
+### Mac (Tested on M1 Mac OS 13.3)
+
+```
+git clone https://github.com/Winfredy/SadTalker.git
+
+cd SadTalker 
+
+conda create -n sadtalker python=3.8
+
+conda activate sadtalker
+
+# install pytorch 2.0
+pip install torch torchvision torchaudio
+
+conda install ffmpeg
+
+pip install -r requirements.txt
+
+pip install dlib # mac need to install the original dlib.
+
+```
+
 
 
 ### Windows Native
