@@ -131,7 +131,7 @@ if __name__ == '__main__':
     parser.add_argument('--background_enhancer',  type=str, default=None, help="background enhancer, [realesrgan]")
     parser.add_argument("--cpu", dest="cpu", action="store_true") 
     parser.add_argument("--face3dvis", action="store_true", help="generate 3d face and 3d landmarks") 
-    parser.add_argument("--still", action="store_true", help="can crop back to the orginal videos for the full body aniamtion") 
+    parser.add_argument("--still", action="store_true", help="can crop back to the original videos for the full body aniamtion") 
     parser.add_argument("--preprocess", default='crop', choices=['crop', 'resize', 'full'], help="how to preprocess the images" ) 
 
     # net structure and parameters
