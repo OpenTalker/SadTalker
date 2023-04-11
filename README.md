@@ -114,11 +114,11 @@ Then, restarting the stable-diffusion-webui(The models will be downloaded automa
 
 ```bash
 # windows (webui_user.bat)
-set COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+set COMMANDLINE_ARGS= --disable-safe-unpickle
 set SADTALKER_CHECKPOINTS=D:\SadTalker\checkpoints
 
 # linux (webui_user.sh)
-export COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+export COMMANDLINE_ARGS= --disable-safe-unpickle
 export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
 ```
 
