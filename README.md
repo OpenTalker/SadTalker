@@ -56,6 +56,8 @@ https://user-images.githubusercontent.com/4397546/222513483-89161f58-83d0-40e4-8
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
+- __[2023.04.12]__: Fixed the sd-webui safe issues becasue of the 3rd packages, optimize the output path in `sd-webui-extension`.
+
 - __[2023.04.08]__: ❗️❗️❗️ In v0.0.2, we add a logo watermark to the generated video to prevent abusing since it is very realistic.
 
 - __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
