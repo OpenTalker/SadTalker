@@ -42,7 +42,6 @@ class SadTalker():
 
         self.free_view_checkpoint = os.path.join( checkpoint_path, 'facevid2vid_00189-model.pth.tar')
 
-        
         self.lazy_load = lazy_load
 
         if not self.lazy_load:

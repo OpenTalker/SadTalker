@@ -111,6 +111,7 @@ def on_ui_tabs():
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
                     with gr.TabItem('Settings'):
                         with gr.Column(variant='panel'):
+                            gr.Markdown("Please visit [**[here]**](https://github.com/Winfredy/SadTalker/blob/main/docs/best_practice.md) if you don't know how to choose these configurations.")
                             preprocess_type = gr.Radio(['crop','resize','full'], value='crop', label='preprocess', info="How to handle input image?")
                             is_still_mode = gr.Checkbox(label="Remove head motion (works better with preprocess `full`)")
                             enhancer = gr.Checkbox(label="Face enhancement")
