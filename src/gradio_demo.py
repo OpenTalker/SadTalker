@@ -129,8 +129,10 @@ class SadTalker():
             del self.audio_to_coeff
             del self.animate_from_coeff
 
-        torch.cuda.empty_cache()
-        torch.cuda.synchronize()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
+            
         import gc; gc.collect()
         
         return return_path

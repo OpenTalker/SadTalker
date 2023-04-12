@@ -114,11 +114,11 @@ Then, restarting the stable-diffusion-webui(The models will be downloaded automa
 
 ```bash
 # windows (webui_user.bat)
-set COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+set COMMANDLINE_ARGS= --disable-safe-unpickle
 set SADTALKER_CHECKPOINTS=D:\SadTalker\checkpoints
 
 # linux (webui_user.sh)
-export COMMANDLINE_ARGS=--no-gradio-queue  --disable-safe-unpickle
+export COMMANDLINE_ARGS= --disable-safe-unpickle
 export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
 ```
 
@@ -138,7 +138,7 @@ You can run the following script to put all the models in the right place.
 bash scripts/download_models.sh
 ```
 
-OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [github release page](https://github.com/Winfredy/SadTalker/releases/tag/v0.0.1), and then, put it in ./checkpoints.
+OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [lastest github release page](https://github.com/Winfredy/SadTalker/releases), and then, put it in ./checkpoints.
 
 OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) 提取码: sadt.
 
