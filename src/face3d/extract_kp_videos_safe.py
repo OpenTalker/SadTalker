@@ -6,16 +6,33 @@ import argparse
 import face_alignment
 import numpy as np
 from PIL import Image
+import torch
 from tqdm import tqdm
 from itertools import cycle
-
+from facexlib.alignment import init_alignment_model, landmark_98_to_68
+from facexlib.detection import init_detection_model
 from torch.multiprocessing import Pool, Process, set_start_method
 
+
+# det_net = init_detection_model('retinaface_resnet50', half=False)
+# img = cv2.imread(input_img)
+# with torch.no_grad():
+#     bboxes = det_net.detect_faces(img, 0.97)
+#     # x0, y0, x1, y1, confidence_score, five points (x, y)
+# print(bboxes.shape)
+# bboxes = bboxes[3]
+
+# bboxes[0] -= 100
+# bboxes[1] -= 100
+# bboxes[2] += 100
+# bboxes[3] += 100
+# img = img[int(bboxes[1]):int(bboxes[3]), int(bboxes[0]):int(bboxes[2]), :]
+
+
 class KeypointExtractor():
-    def __init__(self, device):
-        self.detector = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, 
-                                                     face_detector_kwargs={"path_to_detector":"/root/.cache/torch/hub/checkpoints/s3fd-619a316812.pth"},
-                                                     device=device)   
+    def __init__(self, device='cuda'):
+        self.detector = init_alignment_model('awing_fan',device=device)   
+        self.det_net = init_detection_model('retinaface_resnet50', half=False,device=device)
 
     def extract_keypoint(self, images, name=None, info=True):
         if isinstance(images, list):
@@ -27,6 +44,7 @@ class KeypointExtractor():
 
             for image in i_range:
                 current_kp = self.extract_keypoint(image)
+                # current_kp = self.detector.get_landmarks(np.array(image))
                 if np.mean(current_kp) == -1 and keypoints:
                     keypoints.append(keypoints[-1])
                 else:
@@ -38,8 +56,26 @@ class KeypointExtractor():
         else:
             while True:
                 try:
-                    keypoints = self.detector.get_landmarks_from_image(np.array(images))[0]
-                    break
+                    with torch.no_grad():
+                        # face detection -> face alignment.
+                        img = np.array(images)
+                        bboxes = self.det_net.detect_faces(images, 0.97)
+                        
+                        bboxes = bboxes[0]
+
+                        # bboxes[0] -= 100
+                        # bboxes[1] -= 100
+                        # bboxes[2] += 100
+                        # bboxes[3] += 100
+                        img = img[int(bboxes[1]):int(bboxes[3]), int(bboxes[0]):int(bboxes[2]), :]
+
+                        keypoints = landmark_98_to_68(self.detector.get_landmarks(img)) # [0]
+
+                        #### keypoints to the original location
+                        keypoints[:,0] += int(bboxes[0])
+                        keypoints[:,1] += int(bboxes[1])
+
+                        break
                 except RuntimeError as e:
                     if str(e).startswith('CUDA'):
                         print("Warning: out of memory, sleep for 1s")

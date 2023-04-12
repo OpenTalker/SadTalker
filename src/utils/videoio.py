@@ -31,7 +31,6 @@ def save_video_with_watermark(video, audio, save_path, watermark=False):
             import webui
             from modules import paths
             watarmark_path = paths.script_path+"/extensions/SadTalker/docs/sadtalker_logo.png"
-
         except:
             watarmark_path = "./docs/sadtalker_log.png"
 

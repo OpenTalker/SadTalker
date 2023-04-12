@@ -47,12 +47,13 @@ class SadTalker():
 
         if not self.lazy_load:
             #init model
-            print(self.path_of_lm_croper)
-            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
-
+            
             print(self.audio2pose_checkpoint)
             self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
                                     self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
+
+            print(self.path_of_lm_croper)
+            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
 
     def test(self, source_image, driven_audio, preprocess='crop', still_mode=False, use_enhancer=False, result_dir='./results/'):
 
@@ -60,13 +61,14 @@ class SadTalker():
 
         if self.lazy_load:
             #init model
-            print(self.path_of_lm_croper)
-            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
-
+            
             print(self.audio2pose_checkpoint)
             self.audio_to_coeff = Audio2Coeff(self.audio2pose_checkpoint, self.audio2pose_yaml_path, 
                                     self.audio2exp_checkpoint, self.audio2exp_yaml_path, self.wav2lip_checkpoint, self.device)
         
+            print(self.path_of_lm_croper)
+            self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
+
         if preprocess == 'full': 
             self.mapping_checkpoint = os.path.join(self.checkpoint_path, 'mapping_00109-model.pth.tar')
             self.facerender_yaml_path = os.path.join(self.config_path, 'facerender_still.yaml')

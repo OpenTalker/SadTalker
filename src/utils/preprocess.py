@@ -7,7 +7,12 @@ from PIL import Image
 from src.face3d.util.preprocess import align_img
 from src.face3d.util.load_mats import load_lm3d
 from src.face3d.models import networks
-from src.face3d.extract_kp_videos import KeypointExtractor
+
+try:
+    import webui
+    from src.face3d.extract_kp_videos_safe import KeypointExtractor
+except:
+    from src.face3d.extract_kp_videos import KeypointExtractor
 
 from scipy.io import loadmat, savemat
 from src.utils.croper import Croper

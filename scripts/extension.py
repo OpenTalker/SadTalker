@@ -35,7 +35,7 @@ def get_img_from_img2img(x):
 def install():
 
     kv = {
-        "face-alignment": "face-alignment==1.3.5",
+        "face-alignment": "face-alignment>1.3.5",
         "imageio": "imageio==2.19.3",
         "imageio-ffmpeg": "imageio-ffmpeg==0.4.7",
         "librosa":"librosa==0.8.0",
@@ -45,6 +45,7 @@ def install():
         "yacs":"yacs==0.1.8",
         "pyyaml": "pyyaml", 
         "dlib": "dlib-bin",
+        "huggingface_hub":"huggingface_hub==0.13.4",
         "gfpgan": "gfpgan",
     }
 
@@ -111,9 +112,10 @@ def on_ui_tabs():
                     with gr.TabItem('Settings'):
                         with gr.Column(variant='panel'):
                             preprocess_type = gr.Radio(['crop','resize','full'], value='crop', label='preprocess', info="How to handle input image?")
-                            is_still_mode = gr.Checkbox(label="w/ Still Mode (fewer hand motion, works with preprocess `full`)")
-                            enhancer = gr.Checkbox(label="w/ GFPGAN as Face enhancer")
+                            is_still_mode = gr.Checkbox(label="Remove head motion (works better with preprocess `full`)")
+                            enhancer = gr.Checkbox(label="Face enhancement")
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
+                            path_to_save = gr.Text(Path(paths.script_path) / "outputs/SadTalker/", visible=False)
 
                 with gr.Tabs(elem_id="sadtalker_genearted"):
                         gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
@@ -126,7 +128,9 @@ def on_ui_tabs():
                             driven_audio,
                             preprocess_type,
                             is_still_mode,
-                            enhancer], 
+                            enhancer,
+                            path_to_save
+                            ], 
                     outputs=[gen_video, ]
                     )
 
