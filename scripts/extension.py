@@ -35,7 +35,7 @@ def get_img_from_img2img(x):
 def install():
 
     kv = {
-        "face-alignment": "face-alignment>1.3.5",
+        "face-alignment": "face-alignment==1.3.5",
         "imageio": "imageio==2.19.3",
         "imageio-ffmpeg": "imageio-ffmpeg==0.4.7",
         "librosa":"librosa==0.8.0",
@@ -44,7 +44,7 @@ def install():
         "tqdm": "tqdm",
         "yacs":"yacs==0.1.8",
         "pyyaml": "pyyaml", 
-        "dlib": "dlib-bin",
+        "dlib": "dlib-bin", # => "dlib": "dlib",
         "huggingface_hub":"huggingface_hub==0.13.4",
         "gfpgan": "gfpgan",
     }
