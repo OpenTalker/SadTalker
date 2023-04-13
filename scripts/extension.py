@@ -45,19 +45,24 @@ def install():
         "yacs":"yacs==0.1.8",
         "pyyaml": "pyyaml", 
         "dlib": "dlib-bin",
-        "huggingface_hub":"huggingface_hub==0.13.2",
+        "huggingface_hub":"git+https://github.com/huggingface/huggingface_hub@main",
         "gfpgan": "gfpgan",
     }
 
     for k,v in kv.items():
-        print(k, launch.is_installed(k))
         if not launch.is_installed(k):
+            print(k, launch.is_installed(k))
             launch.run_pip("install "+ v, "requirements for SadTalker")
 
+    
 
     if os.getenv('SADTALKER_CHECKPOINTS'):
         print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
     else:
+        python = sys.executable
+
+        launch.run(f'"{python}" -m pip uninstall -y huggingface_hub', live=True)
+        launch.run(f'"{python}" -m pip install --upgrade git+https://github.com/huggingface/huggingface_hub@main', live=True)
         ### run the scripts to downlod models to correct localtion.
         # print('download models for SadTalker')
         # launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
