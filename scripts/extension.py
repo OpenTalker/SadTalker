@@ -45,7 +45,7 @@ def install():
         "yacs":"yacs==0.1.8",
         "pyyaml": "pyyaml", 
         "dlib": "dlib-bin",
-        "huggingface_hub":"huggingface_hub==0.13.4",
+        "huggingface_hub":"huggingface_hub==0.13.2",
         "gfpgan": "gfpgan",
     }
 
