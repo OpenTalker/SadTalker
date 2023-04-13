@@ -55,8 +55,8 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 
 - 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
 
-- 🔥 Happy to see our method is used in various talking or singing avatar, checkout these wonderful demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
-) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
+- 🔥 Happy to  see more community demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
+), [Youtube](https://www.youtube.com/results?search_query=sadtalker&sp=CAM%253D) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
@@ -111,12 +111,12 @@ pip install -r requirements.txt
 More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
 #### Sd-Webui-Extension:
-<details><summary>CLICK ME</summary>
 
 Installing the lastest version of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and install the sadtalker via `extension`.
 <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698519-267d1d1f-6e99-4dd4-81e1-7b889259efbd.png">
 
-Then, restarting the stable-diffusion-webui(The models will be downloaded automatically in the right place if you have a good speed network). Or (**Important**!) you need pre-download sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
+Then, restarting the stable-diffusion-webui(The models will be downloaded automatically in the right place if you have a good speed network). 
+(**Important**!) If you face any problem (eg, https://github.com/Winfredy/SadTalker/issues/123), you need pre-download sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
 
 ```bash
 # windows (webui_user.bat)
@@ -130,7 +130,6 @@ After installation, the SadTalker can be used in stable-diffusion-webui directly
 
 <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
 
-</details>
 
 
 #### Download Trained Models
