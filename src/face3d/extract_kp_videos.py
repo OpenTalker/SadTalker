@@ -14,7 +14,6 @@ from torch.multiprocessing import Pool, Process, set_start_method
 class KeypointExtractor():
     def __init__(self, device):
         self.detector = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, 
-                                                     face_detector_kwargs={"path_to_detector":"/root/.cache/torch/hub/checkpoints/s3fd-619a316812.pth"},
                                                      device=device)   
 
     def extract_keypoint(self, images, name=None, info=True):
