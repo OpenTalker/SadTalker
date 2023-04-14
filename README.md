@@ -78,13 +78,12 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
 - [x] Full body/image Generation.
+- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 </details>
 
-- [ ] training code of each componments.
-- [ ] Audio-driven Anime Avatar.
-- [ ] interpolate ChatGPT for a conversation demo 🤔
-- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 
+- [ ] Audio-driven Anime Avatar.
+- [ ] training code of each componments.
 
 ## ⚙️ Installation ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)|[日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) )
 
