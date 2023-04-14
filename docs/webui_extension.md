@@ -15,7 +15,11 @@
 
     For windows, you can download all the checkpoints from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or [百度云盘](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) 提取码: sadt.
 
-3. Set the path of `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
+3.1. options 1: put the checkpoint in `stable-diffusion-webui/models/SadTalker` or `stable-diffusion-webui/extensions/SadTalker/checkpoints/`, the checkpoints will be detected automatically.
+
+3.2. Options 2: Set the path of `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
+
+    > only works if you are directly starting webui from `webui_user.sh` or `webui_user.bat`.
 
     ```bash
     # windows (webui_user.bat)
@@ -25,7 +29,7 @@
     export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
     ```
 
-    Then, starting the webui via `webui.sh or webui_user.sh(linux)` or `webui_user.bat(windows)`, the SadTalker can be used in stable-diffusion-webui directly. 
+4. Then, starting the webui via `webui.sh or webui_user.sh(linux)` or `webui_user.bat(windows)` or any other methods, the SadTalker can be used in stable-diffusion-webui directly. 
     
     <img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
     
