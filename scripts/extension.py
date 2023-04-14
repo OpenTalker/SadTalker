@@ -9,6 +9,34 @@ import launch
 import glob
 from huggingface_hub import snapshot_download
 
+
+def check_all_files(current_dir):
+    kv = {
+        "auido2exp_00300-model.pth": "audio2exp",
+        "auido2pose_00140-model.pth": "audio2pose",
+        "epoch_20.pth": "face_recon",
+        "facevid2vid_00189-model.pth.tar": "face-render",
+        "mapping_00109-model.pth.tar" : "mapping-109" ,
+        "mapping_00229-model.pth.tar" : "mapping-229" ,
+        "wav2lip.pth": "wav2lip",
+        "shape_predictor_68_face_landmarks.dat": "dlib",
+    }
+
+    if not os.path.isdir(current_dir):
+        return False
+    
+    dirs = os.listdir(current_dir)
+
+    for f in dirs:
+        if f in kv.keys():
+            del kv[f]
+
+    return len(kv.keys()) == 0
+
+    
+
+
+
 def download_model(local_dir='./checkpoints'):
     REPO_ID = 'vinthony/SadTalker'
     snapshot_download(repo_id=REPO_ID, local_dir=local_dir, local_dir_use_symlinks=False)
@@ -32,6 +60,23 @@ def get_img_from_img2img(x):
     img_from_img_path = os.path.join(imgs_from_img_dir, imgs[-1])
     return img_from_img_path, img_from_img_path
  
+def get_default_checkpoint_path():
+    # check the path of models/checkpoints and extensions/
+    checkpoint_path = Path(paths.script_path) / "models"/ "SadTalker" 
+    extension_checkpoint_path = Path(paths.script_path) / "extensions"/ "SadTalker" / "checkpoints"
+
+    if check_all_files(checkpoint_path):
+        # print('founding sadtalker checkpoint in ' + str(checkpoint_path))
+        return checkpoint_path
+
+    if check_all_files(extension_checkpoint_path):
+        # print('founding sadtalker checkpoint in ' + str(extension_checkpoint_path))
+        return extension_checkpoint_path
+
+    return None
+
+
+
 def install():
 
     kv = {
@@ -56,6 +101,9 @@ def install():
 
     if os.getenv('SADTALKER_CHECKPOINTS'):
         print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
+
+    elif get_default_checkpoint_path() is not None:
+        os.environ['SADTALKER_CHECKPOINTS'] = str(get_default_checkpoint_path())
     else:
 
         print(
