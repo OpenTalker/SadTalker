@@ -63,9 +63,8 @@ def install():
             SadTalker will not support download all the files from hugging face, which will take a long time.
              
             please manually set the SADTALKER_CHECKPOINTS in `webui_user.bat`(windows) or `webui_user.sh`(linux)
-            """)
-        
-        exit()
+            """
+            )
         
         # python = sys.executable
 
