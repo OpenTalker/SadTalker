@@ -60,20 +60,22 @@ def install():
 
         print(
             """"
-            SadTalker are trying to downloaded all the files from hugging face, which will take a long time.
+            SadTalker will not support download all the files from hugging face, which will take a long time.
              
-            To avoid this, please manually set the SADTALKER_CHECKPOINTS in `webui_user.bat`(windows) or `webui_user.sh`(linux)
+            please manually set the SADTALKER_CHECKPOINTS in `webui_user.bat`(windows) or `webui_user.sh`(linux)
             """)
         
-        python = sys.executable
+        exit()
+        
+        # python = sys.executable
 
-        launch.run(f'"{python}" -m pip uninstall -y huggingface_hub', live=True)
-        launch.run(f'"{python}" -m pip install --upgrade git+https://github.com/huggingface/huggingface_hub@main', live=True)
-        ### run the scripts to downlod models to correct localtion.
-        # print('download models for SadTalker')
-        # launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
-        # print('SadTalker is successfully installed!')
-        download_model(paths.script_path+'/extensions/SadTalker/checkpoints')
+        # launch.run(f'"{python}" -m pip uninstall -y huggingface_hub', live=True)
+        # launch.run(f'"{python}" -m pip install --upgrade git+https://github.com/huggingface/huggingface_hub@main', live=True)
+        # ### run the scripts to downlod models to correct localtion.
+        # # print('download models for SadTalker')
+        # # launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)
+        # # print('SadTalker is successfully installed!')
+        # download_model(paths.script_path+'/extensions/SadTalker/checkpoints')
     
  
 def on_ui_tabs():
