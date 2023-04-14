@@ -90,14 +90,14 @@ class CropAndExtract():
 
         #### crop images as the 
         if crop_or_resize.lower() == 'crop': # default crop
-            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=pic_size)
+            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=512)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
             crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
         elif crop_or_resize.lower() == 'full':
-            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=pic_size)
+            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=512)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
