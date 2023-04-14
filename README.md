@@ -60,6 +60,8 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
+- __[2023.04.12]__: adding a more detailed sd-webui installation document, fixed reinstallation problem.
+
 - __[2023.04.12]__: Fixed the sd-webui safe issues becasue of the 3rd packages, optimize the output path in `sd-webui-extension`.
 
 - __[2023.04.08]__: ❗️❗️❗️ In v0.0.2, we add a logo watermark to the generated video to prevent abusing since it is very realistic.
@@ -76,13 +78,12 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - [x] Generating 4D free-view talking examples from audio and a single image.
 - [x] Gradio/Colab Demo.
 - [x] Full body/image Generation.
+- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 </details>
 
-- [ ] training code of each componments.
-- [ ] Audio-driven Anime Avatar.
-- [ ] interpolate ChatGPT for a conversation demo 🤔
-- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
 
+- [ ] Audio-driven Anime Avatar.
+- [ ] training code of each componments.
 
 ## ⚙️ Installation ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)|[日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) )
 
@@ -110,7 +111,7 @@ pip install -r requirements.txt
 
 More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-#### Installing in [Sd-Webui-Extension](docs/webui_extension.md).
+#### [Sd-Webui-Extension](docs/webui_extension.md).
 
 #### Download Trained Models
 <details><summary>CLICK ME</summary>
@@ -194,6 +195,13 @@ If you find our work useful in your research, please consider citing:
 ## 💗 Acknowledgements
 
 Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
+
+See also these wonderful 3rd libraries we use:
+
+- **Face Utils**: https://github.com/xinntao/facexlib
+- **Face Enhancement**: https://github.com/TencentARC/GFPGAN
+- **Image/Video Enhancement**:https://github.com/xinntao/Real-ESRGAN
+
 
 
 ## 🥂 Related Works
