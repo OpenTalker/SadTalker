@@ -112,7 +112,7 @@ pip install -r requirements.txt
 
 More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-#### Installing in [Sd-Webui-Extension](docs/webui_extension.md).
+#### [Sd-Webui-Extension](docs/webui_extension.md).
 
 #### Download Trained Models
 <details><summary>CLICK ME</summary>
