@@ -56,7 +56,7 @@ class CropAndExtract():
         self.lm3d_std = load_lm3d(dir_of_BFM_fitting)
         self.device = device
     
-    def generate(self, input_path, save_dir, crop_or_resize='crop'):
+    def generate(self, input_path, save_dir, crop_or_resize='crop', source_image_flag=False):
 
         pic_size = 256
         pic_name = os.path.splitext(os.path.split(input_path)[-1])[0]  
@@ -83,6 +83,8 @@ class CropAndExtract():
                     video_stream.release()
                     break 
                 full_frames.append(frame) 
+                if source_image_flag:
+                    break
 
         x_full_frames= [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  for frame in full_frames] 
 

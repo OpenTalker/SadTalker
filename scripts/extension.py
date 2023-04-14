@@ -35,29 +35,40 @@ def get_img_from_img2img(x):
 def install():
 
     kv = {
-        "face-alignment": "face-alignment==1.3.5",
+        "face_alignment": "face-alignment==1.3.5",
         "imageio": "imageio==2.19.3",
-        "imageio-ffmpeg": "imageio-ffmpeg==0.4.7",
+        "imageio_ffmpeg": "imageio-ffmpeg==0.4.7",
         "librosa":"librosa==0.8.0",
         "pydub":"pydub==0.25.1",
         "scipy":"scipy==1.8.1",
         "tqdm": "tqdm",
         "yacs":"yacs==0.1.8",
-        "pyyaml": "pyyaml", 
+        "PyYAML": "pyyaml", 
         "dlib": "dlib-bin", # => "dlib": "dlib",
-        "huggingface_hub":"huggingface_hub==0.13.4",
         "gfpgan": "gfpgan",
     }
 
     for k,v in kv.items():
-        print(k, launch.is_installed(k))
         if not launch.is_installed(k):
+            print(k, launch.is_installed(k))
             launch.run_pip("install "+ v, "requirements for SadTalker")
 
 
     if os.getenv('SADTALKER_CHECKPOINTS'):
         print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
     else:
+
+        print(
+            """"
+            SadTalker are trying to downloaded all the files from hugging face, which will take a long time.
+             
+            To avoid this, please manually set the SADTALKER_CHECKPOINTS in `webui_user.bat`(windows) or `webui_user.sh`(linux)
+            """)
+        
+        python = sys.executable
+
+        launch.run(f'"{python}" -m pip uninstall -y huggingface_hub', live=True)
+        launch.run(f'"{python}" -m pip install --upgrade git+https://github.com/huggingface/huggingface_hub@main', live=True)
         ### run the scripts to downlod models to correct localtion.
         # print('download models for SadTalker')
         # launch.run("cd " + paths.script_path+"/extensions/SadTalker && bash ./scripts/download_models.sh", live=True)

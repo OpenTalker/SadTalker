@@ -7,7 +7,23 @@ from src.utils.videoio import save_video_with_watermark
 
 def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path):
 
-    full_img = cv2.imread(pic_path)
+    if not os.path.isfile(pic_path):
+        raise ValueError('pic_path must be a valid path to video/image file')
+    elif pic_path.split('.')[-1] in ['jpg', 'png', 'jpeg']:
+        # loader for first frame
+        full_img = cv2.imread(pic_path)
+    else:
+        # loader for videos
+        video_stream = cv2.VideoCapture(pic_path)
+        fps = video_stream.get(cv2.CAP_PROP_FPS)
+        full_frames = [] 
+        while 1:
+            still_reading, frame = video_stream.read()
+            if not still_reading:
+                video_stream.release()
+                break 
+            break 
+        full_img = frame
     frame_h = full_img.shape[0]
     frame_w = full_img.shape[1]
 

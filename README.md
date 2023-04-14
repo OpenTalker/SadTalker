@@ -43,7 +43,7 @@
 
 ## 🔥 Highlight
 
-- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Just install it in `extensions -> install from URL -> https://github.com/Winfredy/SadTalker`, checkout more details [here](#sd-webui-extension).
+- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Checkout more details [here](docs/webui_extension.md).
 
 https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a519-6389917dac29.mp4
 
@@ -110,27 +110,7 @@ pip install -r requirements.txt
 
 More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
 
-#### Sd-Webui-Extension:
-
-Installing the lastest version of [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) and install the sadtalker via `extension`.
-<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698519-267d1d1f-6e99-4dd4-81e1-7b889259efbd.png">
-
-Then, restarting the stable-diffusion-webui(The models will be downloaded automatically in the right place if you have a good speed network). 
-(**Important**!) If you face any problem (eg, https://github.com/Winfredy/SadTalker/issues/123), you need pre-download sadtalker checkpoints to `SADTALKTER_CHECKPOINTS` in `webui_user.sh`(linux) or `webui_user.bat`(windows) by:
-
-```bash
-# windows (webui_user.bat)
-set SADTALKER_CHECKPOINTS=D:\SadTalker\checkpoints
-
-# linux (webui_user.sh)
-export SADTALKER_CHECKPOINTS=/path/to/SadTalker/checkpoints
-```
-
-After installation, the SadTalker can be used in stable-diffusion-webui directly. (Some [important discussion](https://github.com/Winfredy/SadTalker/issues/78) if you are unable to use `full` mode).
-
-<img width="726" alt="image" src="https://user-images.githubusercontent.com/4397546/230698614-58015182-2916-4240-b324-e69022ef75b3.png">
-
-
+#### Installing in [Sd-Webui-Extension](docs/webui_extension.md).
 
 #### Download Trained Models
 <details><summary>CLICK ME</summary>
