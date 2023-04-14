@@ -43,7 +43,7 @@ def install():
         "scipy":"scipy==1.8.1",
         "tqdm": "tqdm",
         "yacs":"yacs==0.1.8",
-        "PyYAML": "pyyaml", 
+        "yaml": "pyyaml", 
         "dlib": "dlib-bin", # => "dlib": "dlib",
         "gfpgan": "gfpgan",
     }
