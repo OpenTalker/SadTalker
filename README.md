@@ -197,6 +197,13 @@ If you find our work useful in your research, please consider citing:
 
 Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
 
+See also these wonderful 3rd libraries we use:
+
+- **Face Utils**: https://github.com/xinntao/facexlib
+- **Face Enhancement**: https://github.com/TencentARC/GFPGAN
+- **Image/Video Enhancement**:https://github.com/xinntao/Real-ESRGAN
+
+
 
 ## 🥂 Related Works
 - [StyleHEAT: One-Shot High-Resolution Editable Talking Face Generation via Pre-trained StyleGAN (ECCV 2022)](https://github.com/FeiiYin/StyleHEAT)
