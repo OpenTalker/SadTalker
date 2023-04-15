@@ -1,6 +1,6 @@
 # Best Practice and Tips for configuration
 
-> Notice that, our model is only works on REAL person or the portrait image similar to REAL person. The anime talking head genreation method will be released in future.
+> Our model only works on REAL person's photo or the portrait image similar to REAL person. The anime talking head genreation method will be released in future.
 
 Advanced confiurations for `inference.py`:
 
