@@ -12,6 +12,7 @@ try:
 except:
     import imageio
 
+import imageio
 import torch
 import torchvision
 
