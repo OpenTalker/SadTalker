@@ -9,6 +9,7 @@ warnings.filterwarnings('ignore')
 
 import imageio
 import torch
+import torchvision
 
 from src.facerender.modules.keypoint_detector import HEEstimator, KPDetector
 from src.facerender.modules.mapping import MappingNet
@@ -164,7 +165,7 @@ class AnimateFromCoeff():
         
         video_name = x['video_name']  + '.mp4'
         path = os.path.join(video_save_dir, 'temp_'+video_name)
-        imageio.mimsave(path, result, fps=float(25))
+        torchvision.io.write_video(path,  result, fps=float(25))
 
         av_path = os.path.join(video_save_dir, video_name)
         return_path = av_path 
@@ -200,7 +201,7 @@ class AnimateFromCoeff():
             av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer) 
             return_path = av_path_enhancer
             enhanced_images = face_enhancer(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
-            imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
+            torchvision.io.write_video(enhanced_path,  enhanced_images, fps=float(25))
             
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark= False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')

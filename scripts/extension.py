@@ -35,8 +35,6 @@ def check_all_files(current_dir):
 
     
 
-
-
 def download_model(local_dir='./checkpoints'):
     REPO_ID = 'vinthony/SadTalker'
     snapshot_download(repo_id=REPO_ID, local_dir=local_dir, local_dir_use_symlinks=False)
@@ -89,9 +87,14 @@ def install():
         "tqdm": "tqdm",
         "yacs":"yacs==0.1.8",
         "yaml": "pyyaml", 
-        "dlib": "dlib-bin", # => "dlib": "dlib",
+        "av":"av",
         "gfpgan": "gfpgan",
     }
+
+    if 'darwin' in sys.platform:
+        kv['dlib'] = "dlib"
+    else:
+        kv['dlib'] = 'dlib-bin'
 
     for k,v in kv.items():
         if not launch.is_installed(k):

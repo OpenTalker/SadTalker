@@ -11,6 +11,7 @@ from src.face3d.models import networks
 try:
     import webui
     from src.face3d.extract_kp_videos_safe import KeypointExtractor
+    assert torch.cuda.is_available() == True
 except:
     from src.face3d.extract_kp_videos import KeypointExtractor
 
