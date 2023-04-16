@@ -2,17 +2,13 @@ import os, sys
 import tempfile
 import gradio as gr
 from src.gradio_demo import SadTalker  
-from src.utils.text2speech import TTSTalker
 
 def get_source_image(image):   
         return image
 
-
-
 def sadtalker_demo():
 
     sad_talker = SadTalker(lazy_load=True)
-    tts_talker = TTSTalker()
 
     with gr.Blocks(analytics_enabled=False) as sadtalker_interface:
         gr.Markdown("<div align='center'> <h2> 😭 SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation (CVPR 2023) </span> </h2> \
@@ -31,12 +27,15 @@ def sadtalker_demo():
                     with gr.TabItem('Upload OR TTS'):
                         with gr.Column(variant='panel'):
                             driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
-                    
-                        with gr.Column(variant='panel'):
-                            input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
-                            tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
-                            tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
-                        
+
+                        if sys.platform != 'win32': 
+                            from src.utils.text2speech import TTSTalker
+                            tts_talker = TTSTalker()
+                            with gr.Column(variant='panel'):
+                                input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
+                                tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
+                                tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
+                            
 
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
