@@ -7,6 +7,8 @@ from tqdm import tqdm
 
 from src.utils.videoio import load_video_to_cv2
 
+import cv2
+
 
 
 def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
@@ -77,12 +79,16 @@ def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
     restored_img = [] 
     for idx in tqdm(range(len(images)), 'Face Enhancer:'):
         
+        img = cv2.cvtColor(images[idx], cv2.COLOR_RGB2BGR)
+        
         # restore faces and background if necessary
         cropped_faces, restored_faces, r_img = restorer.enhance(
-            images[idx],
+            img,
             has_aligned=False,
             only_center_face=False,
             paste_back=True)
+        
+        r_img = cv2.cvtColor(r_img, cv2.COLOR_BGR2RGB)
         
         restored_img += [r_img]
        
