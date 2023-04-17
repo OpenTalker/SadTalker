@@ -87,7 +87,7 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - [ ] Audio-driven Anime Avatar.
 - [ ] training code of each componments.
 
-## ⚙️ Installation 
+## ⚙️ 1. Installation.
 
 Tutorials from communities: [中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) 
 
@@ -127,7 +127,7 @@ Tutorials from communities: [中文windows教程](https://www.bilibili.com/video
 
 More tips about installnation on Macbook and the Docker file can be founded [here](docs/install.md)
 
-## Download Trained Models
+## 📥 2. Download Trained Models.
 
 You can run the following script to put all the models in the right place.
 
@@ -172,31 +172,35 @@ Model explains:
 
 </details>
 
-## 🔮 Quick Start ([Best Practice](docs/best_practice.md))
+## 🔮 3. Quick Start ([Best Practice](docs/best_practice.md)).
 
-### Online: WebUI Demos | [Huggingface](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
+### WebUI Demos:
 
-Local [Autiomatic1111 stable-diffusion webui](docs/webui_extension.md) installation
+**Online**: [Huggingface](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
 
-Local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+**Local Autiomatic1111 stable-diffusion webui extension**: please refer to [Autiomatic1111 stable-diffusion webui docs](docs/webui_extension.md).
+
+**Local gradio demo**: Similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
 
 ```bash
 ## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
 python app.py
 ```
 
+**Local windows gradio demo**: just double click `webui.bat`, the requirements will be installed automatically.
 
-### Animating Portrait Image from default config.
 
+### Manually usages:
+
+##### Animating a portrait image from default config:
 ```bash
-python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --enhancer gfpgan 
+python inference.py --driven_audio <audio.wav> \
+                    --source_image <video.mp4 or picture.png> \
+                    --enhancer gfpgan 
 ```
 The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 
-More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
-
-
-### Full body/image Generation
+##### Full body/image Generation:
 
 Using `--still` to generate a natural full body video. You can add `enhancer` to improve the quality of the generated video. 
 
@@ -209,6 +213,7 @@ python inference.py --driven_audio <audio.wav> \
                     --enhancer gfpgan 
 ```
 
+More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
 
 ## 🛎 Citation
 
