@@ -116,7 +116,6 @@ More tips about installnation on Windows and the Docker file can be founded [her
 #### [Sd-Webui-Extension](docs/webui_extension.md).
 
 #### Download Trained Models
-<details><summary>CLICK ME</summary>
 
 You can run the following script to put all the models in the right place.
 
@@ -124,10 +123,19 @@ You can run the following script to put all the models in the right place.
 bash scripts/download_models.sh
 ```
 
-OR download our pre-trained model from [google drive](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) or our [lastest github release page](https://github.com/Winfredy/SadTalker/releases), and then, put it in ./checkpoints.
+Other alternatives:
+> we also provide an offline patch (`gfpgan/`), thus, no model will be downloaded when generating.
 
-OR we provided the downloaded model in [百度云盘](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) 提取码: sadt.
+**Google Driver**: download our pre-trained model from [ this link (main checkpoints)](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and [ gfpgan (offline patch)](https://drive.google.com/file/d/19AIBsmfcHW6BRJmeqSFlG5fL445Xmsyi?usp=sharing)
 
+**Github Release Page**: download all the files from the [lastest github release page](https://github.com/Winfredy/SadTalker/releases), and then, put it in ./checkpoints.
+
+**百度云盘**: we provided the downloaded model in [checkpoints,  提取码: sadt.](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) And [gfpgan,  提取码: sadt.](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt)
+
+The final folder will be shown as:
+<img width="331" alt="image" src="https://user-images.githubusercontent.com/4397546/232511411-4ca75cbf-a434-48c5-9ae0-9009e8316484.png">
+
+<details><summary>Model Details</summary>
 | Model | Description
 | :--- | :----------
 |checkpoints/auido2exp_00300-model.pth | Pre-trained ExpNet in Sadtalker.
