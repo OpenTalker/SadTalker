@@ -25,7 +25,7 @@ def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
         channel_multiplier = 2
         model_name = 'RestoreFormer'
         url = 'https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/RestoreFormer.pth'
-    elif method == 'codeformer':
+    elif method == 'codeformer': # TODO:
         arch = 'CodeFormer'
         channel_multiplier = 2
         model_name = 'CodeFormer'

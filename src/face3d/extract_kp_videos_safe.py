@@ -3,7 +3,6 @@ import cv2
 import time
 import glob
 import argparse
-import face_alignment
 import numpy as np
 from PIL import Image
 import torch
@@ -14,25 +13,19 @@ from facexlib.detection import init_detection_model
 from torch.multiprocessing import Pool, Process, set_start_method
 
 
-# det_net = init_detection_model('retinaface_resnet50', half=False)
-# img = cv2.imread(input_img)
-# with torch.no_grad():
-#     bboxes = det_net.detect_faces(img, 0.97)
-#     # x0, y0, x1, y1, confidence_score, five points (x, y)
-# print(bboxes.shape)
-# bboxes = bboxes[3]
-
-# bboxes[0] -= 100
-# bboxes[1] -= 100
-# bboxes[2] += 100
-# bboxes[3] += 100
-# img = img[int(bboxes[1]):int(bboxes[3]), int(bboxes[0]):int(bboxes[2]), :]
-
-
 class KeypointExtractor():
     def __init__(self, device='cuda'):
-        self.detector = init_alignment_model('awing_fan',device=device)   
-        self.det_net = init_detection_model('retinaface_resnet50', half=False,device=device)
+
+        ### gfpgan/weights
+        try:
+            import webui  # in webui
+            root_path = 'extensions/SadTalker/gfpgan/weights' 
+
+        except:
+            root_path = 'gfpgan/weights'
+
+        self.detector = init_alignment_model('awing_fan',device=device, model_rootpath=root_path)   
+        self.det_net = init_detection_model('retinaface_resnet50', half=False,device=device, model_rootpath=root_path)
 
     def extract_keypoint(self, images, name=None, info=True):
         if isinstance(images, list):
