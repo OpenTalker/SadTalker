@@ -85,7 +85,7 @@ class Croper:
         eye_to_mouth = mouth_avg - eye_avg
 
         # Choose oriented crop rectangle.
-        x = eye_to_eye - np.flipud(eye_to_mouth) * [-1, 1]  # 双眼差与双嘴差相加
+        x = eye_to_eye - np.flipud(eye_to_mouth) * [-1, 1]  # Addition of binocular difference and double mouth difference
         x /= np.hypot(*x)   # hypot函数计算直角三角形的斜边长，用斜边长对三角形两条直边做归一化
         x *= max(np.hypot(*eye_to_eye) * 2.0, np.hypot(*eye_to_mouth) * 1.8)    # 双眼差和眼嘴差，选较大的作为基准尺度
         y = np.flipud(x) * [-1, 1]
@@ -101,6 +101,8 @@ class Croper:
             img = img.resize(rsize, Image.ANTIALIAS)
             quad /= shrink
             qsize /= shrink
+        else:
+            rsize = (int(np.rint(float(img.size[0]))), int(np.rint(float(img.size[1]))))
 
         # Crop.
         border = max(int(np.rint(qsize * 0.1)), 3)
@@ -142,7 +144,7 @@ class Croper:
         #     img = img.resize((output_size, output_size), Image.ANTIALIAS)
 
         # Save aligned image.
-        return crop, [lx, ly, rx, ry]
+        return rsize, crop, [lx, ly, rx, ry]
 
     # def crop(self, img_np_list):
     #     for _i in range(len(img_np_list)):
@@ -166,12 +168,13 @@ class Croper:
         lm = self.get_landmark(img_np)
         if lm is None:
             return None
-        crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
+        rsize, crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
         clx, cly, crx, cry = crop
         lx, ly, rx, ry = quad
         lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
         for _i in range(len(img_np_list)):
             _inp = img_np_list[_i]
+            _inp = cv2.resize(_inp, (rsize[0], rsize[1]))
             _inp = _inp[cly:cry, clx:crx]
             # cv2.imwrite('test1.jpg', _inp)
             if not still:
