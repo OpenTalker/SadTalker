@@ -87,35 +87,47 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - [ ] Audio-driven Anime Avatar.
 - [ ] training code of each componments.
 
-## ⚙️ Installation ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)|[日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) )
+## ⚙️ Installation 
 
-#### Installing Sadtalker on Linux:
+Tutorials from communities: [中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) 
 
-```bash
-git clone https://github.com/Winfredy/SadTalker.git
+### Linux:
 
-cd SadTalker 
+1. Installing [anaconda](https://www.anaconda.com/), python and git.
 
-conda create -n sadtalker python=3.8
+2. Creating the env and install the requirements.
+  ```bash
+  git clone https://github.com/Winfredy/SadTalker.git
 
-conda activate sadtalker
+  cd SadTalker 
 
-pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+  conda create -n sadtalker python=3.8
 
-conda install ffmpeg
+  conda activate sadtalker
 
-pip install -r requirements.txt
+  pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 
-### tts is optional for gradio demo. 
-### pip install TTS
+  conda install ffmpeg
 
-```  
+  pip install -r requirements.txt
 
-More tips about installnation on Windows and the Docker file can be founded [here](docs/install.md)
+  ### tts is optional for gradio demo. 
+  ### pip install TTS
 
-#### [Sd-Webui-Extension](docs/webui_extension.md).
+  ```  
+### Windows ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)):
 
-#### Download Trained Models
+1. Install [Python 3.10.6](https://www.python.org/downloads/windows/), checking "Add Python to PATH".
+2. Install [git](https://git-scm.com/download/win).
+3. Install `ffmpeg`, following [this instruction](https://www.wikihow.com/Install-FFmpeg-on-Windows).
+4. Download our SadTalker repository, for example by running `git clone https://github.com/Winfredy/SadTalker.git`.
+5. Run `start.bat` from Windows Explorer as normal, non-administrator, user, a gradio WebUI demo will be started.
+
+### Macbook:
+
+More tips about installnation on Macbook and the Docker file can be founded [here](docs/install.md)
+
+## Download Trained Models
 
 You can run the following script to put all the models in the right place.
 
@@ -132,10 +144,17 @@ Other alternatives:
 
 **百度云盘**: we provided the downloaded model in [checkpoints,  提取码: sadt.](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) And [gfpgan,  提取码: sadt.](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt)
 
-The final folder will be shown as:
-<img width="331" alt="image" src="https://user-images.githubusercontent.com/4397546/232511411-4ca75cbf-a434-48c5-9ae0-9009e8316484.png">
+
 
 <details><summary>Model Details</summary>
+
+The final folder will be shown as:
+
+<img width="331" alt="image" src="https://user-images.githubusercontent.com/4397546/232511411-4ca75cbf-a434-48c5-9ae0-9009e8316484.png">
+
+
+Model explains:
+
 | Model | Description
 | :--- | :----------
 |checkpoints/auido2exp_00300-model.pth | Pre-trained ExpNet in Sadtalker.
@@ -148,12 +167,26 @@ The final folder will be shown as:
 |checkpoints/shape_predictor_68_face_landmarks.dat | Face landmark model used in [dilb](http://dlib.net/). 
 |checkpoints/BFM | 3DMM library file.  
 |checkpoints/hub | Face detection models used in [face alignment](https://github.com/1adrianb/face-alignment).
+|gfpgan/weights | Face detection and enhanced models used in `facexlib` and `gfpgan`.
+
 
 </details>
 
 ## 🔮 Quick Start ([Best Practice](docs/best_practice.md))
 
-#### Animating Portrait Image from default config.
+### Online: WebUI Demos | [Huggingface](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
+
+Local [Autiomatic1111 stable-diffusion webui](docs/webui_extension.md) installation
+
+Local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+
+```bash
+## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
+python app.py
+```
+
+
+### Animating Portrait Image from default config.
 
 ```bash
 python inference.py --driven_audio <audio.wav> --source_image <video.mp4 or picture.png> --enhancer gfpgan 
@@ -163,7 +196,7 @@ The results will be saved in `results/$SOME_TIMESTAMP/*.mp4`.
 More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
 
 
-#### Full body/image Generation
+### Full body/image Generation
 
 Using `--still` to generate a natural full body video. You can add `enhancer` to improve the quality of the generated video. 
 
@@ -174,16 +207,6 @@ python inference.py --driven_audio <audio.wav> \
                     --still \
                     --preprocess full \
                     --enhancer gfpgan 
-```
-
-#### Local Gradio demo.
-A local gradio demo similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
-
-```bash
-
-## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
-
-python app.py
 ```
 
 
