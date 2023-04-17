@@ -35,4 +35,16 @@
     
 ## Questsions
 
+1. if you are running on CPU, you need to specific `--disable-safe-unpickle` in `webui_user.sh` or `webui_user.bat`.
+
+    ```bash
+    # windows (webui_user.bat)
+    set COMMANDLINE_ARGS="--disable-safe-unpickle"
+
+    # linux (webui_user.sh)
+    export COMMANDLINE_ARGS="--disable-safe-unpickle"
+    ```
+
+
+
 (Some [important discussion](https://github.com/Winfredy/SadTalker/issues/78) if you are unable to use `full` mode).
