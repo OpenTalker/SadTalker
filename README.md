@@ -87,6 +87,9 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - [ ] Audio-driven Anime Avatar.
 - [ ] training code of each componments.
 
+
+## If you have any problem, please view our [FAQ](docs/FAQ.md) before opening an issue.
+
 ## ⚙️ 1. Installation.
 
 Tutorials from communities: [中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) 
