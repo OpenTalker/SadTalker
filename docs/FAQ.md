@@ -19,7 +19,7 @@ please check the checkpoint's size of the `epoch_20.pth`. (https://github.com/Wi
 please reinstall the `dlib` by `pip install dlib` individually. (https://github.com/Winfredy/SadTalker/issues/129, https://github.com/Winfredy/SadTalker/issues/109)
 
 
-**Q: FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints\BFM_Fitting\similarity_Lm3D_all.mat'**
+**Q: FileNotFoundError: [Errno 2] No such file or directory: checkpoints\BFM_Fitting\similarity_Lm3D_all.mat**
 
 Make sure you have downloaded the checkpoints and gfpgan as [here](https://github.com/Winfredy/SadTalker#-2-download-trained-models) and placed them in the right place. 
 
