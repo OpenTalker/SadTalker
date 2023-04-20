@@ -243,7 +243,9 @@ See also these wonderful 3rd libraries we use:
 - **Face Enhancement**: https://github.com/TencentARC/GFPGAN
 - **Image/Video Enhancement**:https://github.com/xinntao/Real-ESRGAN
 
+## 🥂 Extensions:
 
+- [SadTalker-Video-Lip-Sync](https://github.com/Zz-ww/SadTalker-Video-Lip-Sync) from [@Zz-ww](https://github.com/Zz-ww): SadTalker for Video Lip Editing
 
 ## 🥂 Related Works
 - [StyleHEAT: One-Shot High-Resolution Editable Talking Face Generation via Pre-trained StyleGAN (ECCV 2022)](https://github.com/FeiiYin/StyleHEAT)
