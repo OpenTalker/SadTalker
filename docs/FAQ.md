@@ -26,3 +26,15 @@ Make sure you have downloaded the checkpoints and gfpgan as [here](https://githu
 **Q: RuntimeError: unexpected EOF, expected 237192 more bytes. The file might be corrupted.**
 
 The files are not automatically downloaded. Please update the code and download the gfpgan folders as [here](https://github.com/Winfredy/SadTalker#-2-download-trained-models).
+
+**Q: CUDA out of memory error**
+
+please refer to https://stackoverflow.com/questions/73747731/runtimeerror-cuda-out-of-memory-how-setting-max-split-size-mb
+
+``` 
+# windows
+set PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 python inference.py ...
+
+# linux
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 python inference.py ...
+```
