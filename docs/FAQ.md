@@ -40,3 +40,7 @@ python inference.py ...
 export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 
 python inference.py ...
 ```
+
+**Q: Error while decoding stream #0:0: Invalid data found when processing input [mp3float @ 0000015037628c00] Header missing**
+
+Our method only support wav or mp3 files as input, please make sure the feeded audios are in these formats.
