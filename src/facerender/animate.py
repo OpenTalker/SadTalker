@@ -177,7 +177,8 @@ class AnimateFromCoeff():
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
         new_audio_path = os.path.join(video_save_dir, audio_name+'.wav')
         start_time = 0
-        sound = AudioSegment.from_mp3(audio_path)
+        # cog will not keep the .mp3 filename
+        sound = AudioSegment.from_file(audio_path)
         frames = frame_num 
         end_time = start_time + frames*1/25*1000
         word1=sound.set_frame_rate(16000)
