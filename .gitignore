@@ -166,3 +166,6 @@ results/*
 Dockerfile
 start_docker.sh
 start.sh
+
+# Mac
+.DS_Store
