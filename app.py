@@ -144,6 +144,6 @@ def sadtalker_demo():
 if __name__ == "__main__":
 
     demo = sadtalker_demo()
-    demo.launch(share=True)
+    demo.queue().launch(share=True)
 
 
