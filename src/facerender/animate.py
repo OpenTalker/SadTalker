@@ -19,7 +19,7 @@ from src.facerender.modules.generator import OcclusionAwareGenerator, OcclusionA
 from src.facerender.modules.make_animation import make_animation 
 
 from pydub import AudioSegment 
-from src.utils.face_enhancer import enhancer as face_enhancer
+from src.utils.face_enhancer import enhancer_generator_with_len as face_enhancer
 from src.utils.paste_pic import paste_pic
 from src.utils.videoio import save_video_with_watermark
 
@@ -204,9 +204,9 @@ class AnimateFromCoeff():
             enhanced_path = os.path.join(video_save_dir, 'temp_'+video_name_enhancer)
             av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer) 
             return_path = av_path_enhancer
-            enhanced_images = face_enhancer(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
+            enhanced_images_gen_with_len = face_enhancer(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
 
-            imageio.mimsave(enhanced_path, enhanced_images, fps=float(25))
+            imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
             
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark= False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')
