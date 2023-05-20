@@ -117,7 +117,7 @@ class SadTalker():
         batch = get_data(first_coeff_path, audio_path, self.device, ref_eyeblink_coeff_path=None, still=still_mode) # longer audio?
         coeff_path = self.audio_to_coeff.generate(batch, save_dir, pose_style)
         #coeff2video
-        batch_size = 2
+        batch_size = 1.0
         data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode, preprocess=preprocess)
         return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None, preprocess=preprocess)
         video_name = data['video_name']
