@@ -178,6 +178,7 @@ def on_ui_tabs():
                             preprocess_type = gr.Radio(['crop','resize','full'], value='crop', label='preprocess', info="How to handle input image?")
                             is_still_mode = gr.Checkbox(label="Remove head motion (works better with preprocess `full`)")
                             enhancer = gr.Checkbox(label="Face enhancement")
+                            expression_scale = gr.Slider(minimum=0.0, maximum=2.0, value=1.0, step=0.1, label="Expression Scale")
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
                             path_to_save = gr.Text(Path(paths.script_path) / "outputs/SadTalker/", visible=False)
 
@@ -193,7 +194,8 @@ def on_ui_tabs():
                             preprocess_type,
                             is_still_mode,
                             enhancer,
-                            path_to_save
+                            path_to_save,
+                            expression_scale
                             ], 
                     outputs=[gen_video, ]
                     )

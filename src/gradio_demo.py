@@ -54,7 +54,7 @@ class SadTalker():
             print(self.path_of_lm_croper)
             self.preprocess_model = CropAndExtract(self.path_of_lm_croper, self.path_of_net_recon_model, self.dir_of_BFM_fitting, self.device)
 
-    def test(self, source_image, driven_audio, preprocess='crop', still_mode=False, use_enhancer=False, result_dir='./results/'):
+    def test(self, source_image, driven_audio, preprocess='crop', still_mode=False, use_enhancer=False, result_dir='./results/', batch_size=1.0):
 
         ### crop: only model,
 
@@ -117,7 +117,6 @@ class SadTalker():
         batch = get_data(first_coeff_path, audio_path, self.device, ref_eyeblink_coeff_path=None, still=still_mode) # longer audio?
         coeff_path = self.audio_to_coeff.generate(batch, save_dir, pose_style)
         #coeff2video
-        batch_size = 1.0
         data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode, preprocess=preprocess)
         return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None, preprocess=preprocess)
         video_name = data['video_name']
