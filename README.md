@@ -143,23 +143,30 @@ bash scripts/download_models.sh
 Other alternatives:
 > we also provide an offline patch (`gfpgan/`), thus, no model will be downloaded when generating.
 
-**Google Driver**: download our pre-trained model from [ this link (main checkpoints)](https://drive.google.com/drive/folders/1Wd88VDoLhVzYsQ30_qDVluQr_Xm46yHT?usp=sharing) and [ gfpgan (offline patch)](https://drive.google.com/file/d/19AIBsmfcHW6BRJmeqSFlG5fL445Xmsyi?usp=sharing)
+**Google Driver**: download our pre-trained model from [ this link (main checkpoints)](https://drive.google.com/file/d/1gwWh45pF7aelNP_P78uDJL8Sycep-K7j/view?usp=sharing) and [ gfpgan (offline patch)](https://drive.google.com/file/d/19AIBsmfcHW6BRJmeqSFlG5fL445Xmsyi?usp=sharing)
 
 **Github Release Page**: download all the files from the [lastest github release page](https://github.com/Winfredy/SadTalker/releases), and then, put it in ./checkpoints.
 
-**百度云盘**: we provided the downloaded model in [checkpoints,  提取码: sadt.](https://pan.baidu.com/s/1nXuVNd0exUl37ISwWqbFGA?pwd=sadt) And [gfpgan,  提取码: sadt.](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt)
+**百度云盘**: we provided the downloaded model in [checkpoints,  提取码: sadt.](https://pan.baidu.com/s/1P4fRgk9gaSutZnn8YW034Q?pwd=sadt) And [gfpgan,  提取码: sadt.](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt)
 
 
 
 <details><summary>Model Details</summary>
 
-The final folder will be shown as:
-
-<img width="331" alt="image" src="https://user-images.githubusercontent.com/4397546/232511411-4ca75cbf-a434-48c5-9ae0-9009e8316484.png">
-
 
 Model explains:
 
+##### New version 
+| Model | Description
+| :--- | :----------
+|checkpoints/mapping_00229-model.pth.tar | Pre-trained MappingNet in Sadtalker.
+|checkpoints/mapping_00109-model.pth.tar | Pre-trained MappingNet in Sadtalker.
+|checkpoints/SadTalker_V0.0.2_256.safetensors | packaged sadtalker checkpoints of old version, 256 face render).
+|checkpoints/SadTalker_V0.0.2_512.safetensors | packaged sadtalker checkpoints of old version, 512 face render).
+|gfpgan/weights | Face detection and enhanced models used in `facexlib` and `gfpgan`.
+  
+  
+##### Old version
 | Model | Description
 | :--- | :----------
 |checkpoints/auido2exp_00300-model.pth | Pre-trained ExpNet in Sadtalker.
@@ -173,6 +180,10 @@ Model explains:
 |checkpoints/BFM | 3DMM library file.  
 |checkpoints/hub | Face detection models used in [face alignment](https://github.com/1adrianb/face-alignment).
 |gfpgan/weights | Face detection and enhanced models used in `facexlib` and `gfpgan`.
+
+The final folder will be shown as:
+
+<img width="331" alt="image" src="https://user-images.githubusercontent.com/4397546/232511411-4ca75cbf-a434-48c5-9ae0-9009e8316484.png">
 
 
 </details>
