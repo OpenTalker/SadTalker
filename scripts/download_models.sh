@@ -14,10 +14,14 @@ mkdir ./checkpoints
 
 
 #### download the new links.
-wget -nc 
+wget -nc https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00109-model.pth.tar ./checkpoints/mapping_00109-model.pth.tar
+wget -nc https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00229-model.pth.tar ./checkpoints/mapping_00229-model.pth.tar
+wget -nc https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_256.safetensors ./checkpoints/SadTalker_V0.0.2_256.safetensors
+wget -nc https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_512.safetensors ./checkpoints/mapping_00109-model.safetensors
 
-wget -nc https://github.com/Winfredy/SadTalker/releases/download/v0.0.2/BFM_Fitting.zip -O ./checkpoints/BFM_Fitting.zip
-unzip -n ./checkpoints/BFM_Fitting.zip -d ./checkpoints/
+
+# wget -nc https://github.com/Winfredy/SadTalker/releases/download/v0.0.2/BFM_Fitting.zip -O ./checkpoints/BFM_Fitting.zip
+# unzip -n ./checkpoints/BFM_Fitting.zip -d ./checkpoints/
 
 ### enhancer 
 mkdir -p ./gfpgan/weights
