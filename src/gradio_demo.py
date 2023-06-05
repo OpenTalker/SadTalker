@@ -34,7 +34,7 @@ class SadTalker():
       
 
     def test(self, source_image, driven_audio, preprocess='crop', 
-        still_mode=False,  use_enhancer=False, batch_size=1, size=256, pose_style = 0,result_dir='./results/'):
+        still_mode=False,  use_enhancer=False, batch_size=1, size=256, pose_style = 0, exp_scale=1.0, result_dir='./results/'):
 
         self.sadtalker_paths = init_path(self.checkpoint_path, self.config_path, size, False, preprocess)
         print(self.sadtalker_paths)
@@ -81,7 +81,7 @@ class SadTalker():
         batch = get_data(first_coeff_path, audio_path, self.device, ref_eyeblink_coeff_path=None, still=still_mode) # longer audio?
         coeff_path = self.audio_to_coeff.generate(batch, save_dir, pose_style)
         #coeff2video
-        data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode, preprocess=preprocess, size=size)
+        data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, batch_size, still_mode=still_mode, preprocess=preprocess, size=size, expression_scale = exp_scale)
         return_path = self.animate_from_coeff.generate(data, save_dir,  pic_path, crop_info, enhancer='gfpgan' if use_enhancer else None, preprocess=preprocess, img_size=size)
         video_name = data['video_name']
         print(f'The generated video is named {video_name} in {save_dir}')
