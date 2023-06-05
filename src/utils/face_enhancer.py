@@ -10,10 +10,42 @@ from src.utils.videoio import load_video_to_cv2
 import cv2
 
 
+class GeneratorWithLen(object):
+    """ From https://stackoverflow.com/a/7460929 """
+
+    def __init__(self, gen, length):
+        self.gen = gen
+        self.length = length
+
+    def __len__(self):
+        return self.length
+
+    def __iter__(self):
+        return self.gen
 
 def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
-    print('face enhancer....')
+    gen = enhancer_generator_no_len(images, method=method, bg_upsampler=bg_upsampler)
+    return list(gen)
+
+def enhancer_generator_with_len(images, method='gfpgan', bg_upsampler='realesrgan'):
+    """ Provide a generator with a __len__ method so that it can passed to functions that
+    call len()"""
+
     if os.path.isfile(images): # handle video to images
+        # TODO: Create a generator version of load_video_to_cv2
+        images = load_video_to_cv2(images)
+
+    gen = enhancer_generator_no_len(images, method=method, bg_upsampler=bg_upsampler)
+    gen_with_len = GeneratorWithLen(gen, len(images))
+    return gen_with_len
+
+def enhancer_generator_no_len(images, method='gfpgan', bg_upsampler='realesrgan'):
+    """ Provide a generator function so that all of the enhanced images don't need
+    to be stored in memory at the same time. This can save tons of RAM compared to
+    the enhancer function. """
+
+    print('face enhancer....')
+    if not isinstance(images, list) and os.path.isfile(images): # handle video to images
         images = load_video_to_cv2(images)
 
     # ------------------------ set up GFPGAN restorer ------------------------
@@ -76,7 +108,6 @@ def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
         bg_upsampler=bg_upsampler)
 
     # ------------------------ restore ------------------------
-    restored_img = [] 
     for idx in tqdm(range(len(images)), 'Face Enhancer:'):
         
         img = cv2.cvtColor(images[idx], cv2.COLOR_RGB2BGR)
@@ -89,7 +120,4 @@ def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
             paste_back=True)
         
         r_img = cv2.cvtColor(r_img, cv2.COLOR_BGR2RGB)
-        
-        restored_img += [r_img]
-       
-    return restored_img
+        yield r_img
