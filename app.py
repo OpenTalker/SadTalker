@@ -100,13 +100,19 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
                         with gr.Column(variant='panel'):
                             # width = gr.Slider(minimum=64, elem_id="img2img_width", maximum=2048, step=8, label="Manually Crop Width", value=512) # img2img_width
                             # height = gr.Slider(minimum=64, elem_id="img2img_height", maximum=2048, step=8, label="Manually Crop Height", value=512) # img2img_width
-                            pose_style = gr.Slider(minimum=0, maximum=46, step=1, label="Pose style", value=0) #
-                            exp_weight = gr.Slider(minimum=0, maximum=3, step=0.1, label="expression scale", value=1) # 
-                            size_of_image = gr.Radio([256, 512], value=256, label='face model resolution', info="use 256/512 model?") # 
-                            preprocess_type = gr.Radio(['crop', 'resize','full', 'extcrop', 'extfull'], value='crop', label='preprocess', info="How to handle input image?")
-                            is_still_mode = gr.Checkbox(label="Still Mode (fewer hand motion, works with preprocess `full`)")
-                            batch_size = gr.Slider(label="batch size in generation", step=1, maximum=10, value=2)
-                            enhancer = gr.Checkbox(label="GFPGAN as Face enhancer")
+                            with gr.Row():
+                                pose_style = gr.Slider(minimum=0, maximum=46, step=1, label="Pose style", value=0) #
+                                exp_weight = gr.Slider(minimum=0, maximum=3, step=0.1, label="expression scale", value=1) # 
+
+                            with gr.Row():
+                                size_of_image = gr.Radio([256, 512], value=256, label='face model resolution', info="use 256/512 model?") # 
+                                preprocess_type = gr.Radio(['crop', 'resize','full', 'extcrop', 'extfull'], value='crop', label='preprocess', info="How to handle input image?")
+                            
+                            with gr.Row():
+                                is_still_mode = gr.Checkbox(label="Still Mode (fewer hand motion, works with preprocess `full`)")
+                                batch_size = gr.Slider(label="batch size in generation", step=1, maximum=10, value=2)
+                                enhancer = gr.Checkbox(label="GFPGAN as Face enhancer")
+                                
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
                             
 
