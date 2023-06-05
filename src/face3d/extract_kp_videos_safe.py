@@ -55,11 +55,6 @@ class KeypointExtractor():
                         bboxes = self.det_net.detect_faces(images, 0.97)
                         
                         bboxes = bboxes[0]
-
-                        # bboxes[0] -= 100
-                        # bboxes[1] -= 100
-                        # bboxes[2] += 100
-                        # bboxes[3] += 100
                         img = img[int(bboxes[1]):int(bboxes[3]), int(bboxes[0]):int(bboxes[2]), :]
 
                         keypoints = landmark_98_to_68(self.detector.get_landmarks(img)) # [0]

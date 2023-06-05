@@ -170,8 +170,8 @@ def run_extension_installer(extension_dir):
 def prepare_environment():
     global skip_install
 
-    torch_command = os.environ.get('TORCH_COMMAND', "pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
-    requirements_file = os.environ.get('REQS_FILE', "requirements.txt")
+    torch_command = os.environ.get('TORCH_COMMAND', "pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113")
+    requirements_file = os.environ.get('REQS_FILE', "req.txt")
 
     commit = commit_hash()
 
@@ -181,16 +181,18 @@ def prepare_environment():
     if not is_installed("torch") or not is_installed("torchvision"):
         run(f'"{python}" -m {torch_command}', "Installing torch and torchvision", "Couldn't install torch", live=True)
 
-    run_python("import torch; assert torch.cuda.is_available(), 'Torch is not able to use GPU; add --skip-torch-cuda-test to COMMANDLINE_ARGS variable to disable this check'")
-
     run_pip(f"install -r \"{requirements_file}\"", "requirements for SadTalker WebUI (may take longer time in first time)")
+
+    if sys.platform != 'win32' and not is_installed('tts'):
+        run_pip(f"install TTS", "install TTS individually in SadTalker, which might not work on windows.")
 
 
 def start():
     print(f"Launching SadTalker Web UI")
     from app import sadtalker_demo
     demo = sadtalker_demo()
-    demo.launch(share=True)
+    demo.queue()
+    demo.launch()
 
 if __name__ == "__main__":
     prepare_environment()

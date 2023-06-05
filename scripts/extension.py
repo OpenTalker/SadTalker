@@ -10,6 +10,26 @@ import glob
 from huggingface_hub import snapshot_download
 
 
+
+def check_all_files_safetensor(current_dir):
+    kv = {
+        "SadTalker_V0.0.2_256.safetensors": "sadtalker-256",
+        "SadTalker_V0.0.2_512.safetensors": "sadtalker-512",
+        "mapping_00109-model.pth.tar" : "mapping-109" ,
+        "mapping_00229-model.pth.tar" : "mapping-229" ,
+    }
+
+    if not os.path.isdir(current_dir):
+        return False
+    
+    dirs = os.listdir(current_dir)
+
+    for f in dirs:
+        if f in kv.keys():
+            del kv[f]
+
+    return len(kv.keys()) == 0
+
 def check_all_files(current_dir):
     kv = {
         "auido2exp_00300-model.pth": "audio2exp",
@@ -63,6 +83,14 @@ def get_default_checkpoint_path():
     checkpoint_path = Path(paths.script_path) / "models"/ "SadTalker" 
     extension_checkpoint_path = Path(paths.script_path) / "extensions"/ "SadTalker" / "checkpoints"
 
+    if check_all_files_safetensor(checkpoint_path):
+        # print('founding sadtalker checkpoint in ' + str(checkpoint_path))
+        return checkpoint_path
+
+    if check_all_files_safetensor(extension_checkpoint_path):
+        # print('founding sadtalker checkpoint in ' + str(extension_checkpoint_path))
+        return extension_checkpoint_path
+    
     if check_all_files(checkpoint_path):
         # print('founding sadtalker checkpoint in ' + str(checkpoint_path))
         return checkpoint_path
@@ -91,16 +119,16 @@ def install():
         "gfpgan": "gfpgan",
     }
 
-    if 'darwin' in sys.platform:
-        kv['dlib'] = "dlib"
-    else:
-        kv['dlib'] = 'dlib-bin'
+    # dlib is not necessary currently
+    # if 'darwin' in sys.platform:
+    #     kv['dlib'] = "dlib"
+    # else:
+    #     kv['dlib'] = 'dlib-bin'
 
     for k,v in kv.items():
         if not launch.is_installed(k):
             print(k, launch.is_installed(k))
             launch.run_pip("install "+ v, "requirements for SadTalker")
-
 
     if os.getenv('SADTALKER_CHECKPOINTS'):
         print('load Sadtalker Checkpoints from '+ os.getenv('SADTALKER_CHECKPOINTS'))
@@ -138,66 +166,15 @@ def on_ui_tabs():
     result_dir = opts.sadtalker_result_dir
     os.makedirs(result_dir, exist_ok=True)
 
-    from src.gradio_demo import SadTalker  
+    from app import sadtalker_demo  
 
     if  os.getenv('SADTALKER_CHECKPOINTS'):
         checkpoint_path = os.getenv('SADTALKER_CHECKPOINTS')
     else:
         checkpoint_path = repo_dir+'checkpoints/'
 
-    sad_talker = SadTalker(checkpoint_path=checkpoint_path, config_path=repo_dir+'src/config', lazy_load=True)
-    
-    with gr.Blocks(analytics_enabled=False) as audio_to_video:
-        with gr.Row().style(equal_height=False):
-            with gr.Column(variant='panel'):
-                with gr.Tabs(elem_id="sadtalker_source_image"):
-                    with gr.TabItem('Upload image'):
-                        with gr.Row():
-                            input_image = gr.Image(label="Source image", source="upload", type="filepath").style(height=256,width=256)
-                        
-                        with gr.Row():
-                            submit_image2 = gr.Button('load From txt2img', variant='primary')
-                            submit_image2.click(fn=get_img_from_txt2img, inputs=input_image, outputs=[input_image, input_image])
-                            
-                            submit_image3 = gr.Button('load from img2img', variant='primary')
-                            submit_image3.click(fn=get_img_from_img2img, inputs=input_image, outputs=[input_image, input_image])
-
-                with gr.Tabs(elem_id="sadtalker_driven_audio"):
-                    with gr.TabItem('Upload'):
-                        with gr.Column(variant='panel'):
-
-                            with gr.Row():
-                                driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
-                        
-
-            with gr.Column(variant='panel'): 
-                with gr.Tabs(elem_id="sadtalker_checkbox"):
-                    with gr.TabItem('Settings'):
-                        with gr.Column(variant='panel'):
-                            gr.Markdown("Please visit [**[here]**](https://github.com/Winfredy/SadTalker/blob/main/docs/best_practice.md) if you don't know how to choose these configurations.")
-                            preprocess_type = gr.Radio(['crop','resize','full'], value='crop', label='preprocess', info="How to handle input image?")
-                            is_still_mode = gr.Checkbox(label="Remove head motion (works better with preprocess `full`)")
-                            enhancer = gr.Checkbox(label="Face enhancement")
-                            submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
-                            path_to_save = gr.Text(Path(paths.script_path) / "outputs/SadTalker/", visible=False)
-
-                with gr.Tabs(elem_id="sadtalker_genearted"):
-                        gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
-
-
-        ### gradio gpu call will always return the html, 
-        submit.click(
-                    fn=wrap_queued_call(sad_talker.test), 
-                    inputs=[input_image,
-                            driven_audio,
-                            preprocess_type,
-                            is_still_mode,
-                            enhancer,
-                            path_to_save
-                            ], 
-                    outputs=[gen_video, ]
-                    )
-
+    audio_to_video = sadtalker_demo(checkpoint_path=checkpoint_path, config_path=repo_dir+'src/config', warpfn = wrap_queued_call)
+   
     return [(audio_to_video, "SadTalker", "extension")]
 
 def on_ui_settings():

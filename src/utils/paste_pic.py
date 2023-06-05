@@ -5,7 +5,7 @@ import uuid
 
 from src.utils.videoio import save_video_with_watermark 
 
-def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path):
+def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, extended_crop=False):
 
     if not os.path.isfile(pic_path):
         raise ValueError('pic_path must be a valid path to video/image file')
@@ -47,13 +47,16 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path):
         lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
         # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
         # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-        oy1, oy2, ox1, ox2 = cly, cry, clx, crx
 
+        if extended_crop:
+            oy1, oy2, ox1, ox2 = cly, cry, clx, crx
+        else:
+            oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
 
     tmp_path = str(uuid.uuid4())+'.mp4'
     out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
     for crop_frame in tqdm(crop_frames, 'seamlessClone:'):
-        p = cv2.resize(crop_frame.astype(np.uint8), (crx-clx, cry - cly)) 
+        p = cv2.resize(crop_frame.astype(np.uint8), (ox2-ox1, oy2 - oy1)) 
 
         mask = 255*np.ones(p.shape, p.dtype)
         location = ((ox1+ox2) // 2, (oy1+oy2) // 2)

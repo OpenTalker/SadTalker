@@ -7,7 +7,7 @@ import scipy.io as scio
 
 def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path, 
                         batch_size, input_yaw_list=None, input_pitch_list=None, input_roll_list=None, 
-                        expression_scale=1.0, still_mode = False, preprocess='crop'):
+                        expression_scale=1.0, still_mode = False, preprocess='crop', size = 256):
 
     semantic_radius = 13
     video_name = os.path.splitext(os.path.split(coeff_path)[-1])[0]
@@ -18,7 +18,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     img1 = Image.open(pic_path)
     source_image = np.array(img1)
     source_image = img_as_float32(source_image)
-    source_image = transform.resize(source_image, (256, 256, 3))
+    source_image = transform.resize(source_image, (size, size, 3))
     source_image = source_image.transpose((2, 0, 1))
     source_image_ts = torch.FloatTensor(source_image).unsqueeze(0)
     source_image_ts = source_image_ts.repeat(batch_size, 1, 1, 1)
@@ -26,7 +26,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
  
     source_semantics_dict = scio.loadmat(first_coeff_path)
 
-    if preprocess.lower() != 'full':
+    if 'full' not in preprocess.lower():
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:70]         #1 70
     else:
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:73]         #1 70
@@ -41,7 +41,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     generated_3dmm = generated_dict['coeff_3dmm']
     generated_3dmm[:, :64] = generated_3dmm[:, :64] * expression_scale
 
-    if preprocess.lower() == 'full':
+    if 'full' in preprocess.lower():
         generated_3dmm = np.concatenate([generated_3dmm, np.repeat(source_semantics[:,70:], generated_3dmm.shape[0], axis=0)], axis=1)
 
     if still_mode:

@@ -5,9 +5,13 @@ from scipy.io import savemat, loadmat
 from yacs.config import CfgNode as CN
 from scipy.signal import savgol_filter
 
+import safetensors
+import safetensors.torch 
+
 from src.audio2pose_models.audio2pose import Audio2Pose
 from src.audio2exp_models.networks import SimpleWrapperV2 
-from src.audio2exp_models.audio2exp import Audio2Exp  
+from src.audio2exp_models.audio2exp import Audio2Exp
+from src.utils.safetensor_helper import load_x_from_safetensor  
 
 def load_cpk(checkpoint_path, model=None, optimizer=None, device="cpu"):
     checkpoint = torch.load(checkpoint_path, map_location=torch.device(device))
@@ -20,25 +24,28 @@ def load_cpk(checkpoint_path, model=None, optimizer=None, device="cpu"):
 
 class Audio2Coeff():
 
-    def __init__(self, audio2pose_checkpoint, audio2pose_yaml_path, 
-                        audio2exp_checkpoint, audio2exp_yaml_path, 
-                        wav2lip_checkpoint, device):
+    def __init__(self, sadtalker_path, device):
         #load config
-        fcfg_pose = open(audio2pose_yaml_path)
+        fcfg_pose = open(sadtalker_path['audio2pose_yaml_path'])
         cfg_pose = CN.load_cfg(fcfg_pose)
         cfg_pose.freeze()
-        fcfg_exp = open(audio2exp_yaml_path)
+        fcfg_exp = open(sadtalker_path['audio2exp_yaml_path'])
         cfg_exp = CN.load_cfg(fcfg_exp)
         cfg_exp.freeze()
 
         # load audio2pose_model
-        self.audio2pose_model = Audio2Pose(cfg_pose, wav2lip_checkpoint, device=device)
+        self.audio2pose_model = Audio2Pose(cfg_pose, None, device=device)
         self.audio2pose_model = self.audio2pose_model.to(device)
         self.audio2pose_model.eval()
         for param in self.audio2pose_model.parameters():
             param.requires_grad = False 
+        
         try:
-            load_cpk(audio2pose_checkpoint, model=self.audio2pose_model, device=device)
+            if sadtalker_path['use_safetensor']:
+                checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
+                self.audio2pose_model.load_state_dict(load_x_from_safetensor(checkpoints, 'audio2pose'))
+            else:
+                load_cpk(sadtalker_path['audio2pose_checkpoint'], model=self.audio2pose_model, device=device)
         except:
             raise Exception("Failed in loading audio2pose_checkpoint")
 
@@ -49,7 +56,11 @@ class Audio2Coeff():
             netG.requires_grad = False
         netG.eval()
         try:
-            load_cpk(audio2exp_checkpoint, model=netG, device=device)
+            if sadtalker_path['use_safetensor']:
+                checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
+                netG.load_state_dict(load_x_from_safetensor(checkpoints, 'audio2exp'))
+            else:
+                load_cpk(sadtalker_path['audio2exp_checkpoint'], model=netG, device=device)
         except:
             raise Exception("Failed in loading audio2exp_checkpoint")
         self.audio2exp_model = Audio2Exp(netG, cfg_exp, device=device, prepare_training_loss=False)
@@ -106,7 +117,8 @@ class Audio2Coeff():
             refpose_coeff_list.append(refpose_coeff[:re, :])
             refpose_coeff = np.concatenate(refpose_coeff_list, axis=0)
 
-        coeffs_pred_numpy[:, 64:70] = refpose_coeff[:num_frames, :] 
+        #### relative head pose
+        coeffs_pred_numpy[:, 64:70] = coeffs_pred_numpy[:, 64:70] + ( refpose_coeff[:num_frames, :] - refpose_coeff[0:1, :] )
         return coeffs_pred_numpy
 
 

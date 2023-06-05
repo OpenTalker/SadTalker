@@ -19,3 +19,4 @@ trimesh==3.9.20
 dlib-bin
 gradio
 gfpgan
+safetensors

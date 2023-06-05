@@ -3,7 +3,6 @@ import tempfile
 from TTS.api import TTS
 
 
-
 class TTSTalker():
     def __init__(self) -> None:
         model_name = TTS.list_models()[0]

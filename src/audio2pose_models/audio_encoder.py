@@ -41,14 +41,14 @@ class AudioEncoder(nn.Module):
             Conv2d(256, 512, kernel_size=3, stride=1, padding=0),
             Conv2d(512, 512, kernel_size=1, stride=1, padding=0),)
 
-        #### load the pre-trained audio_encoder
-        wav2lip_state_dict = torch.load(wav2lip_checkpoint, map_location=torch.device(device))['state_dict']
-        state_dict = self.audio_encoder.state_dict()
+        #### load the pre-trained audio_encoder, we do not need to load wav2lip model here.
+        # wav2lip_state_dict = torch.load(wav2lip_checkpoint, map_location=torch.device(device))['state_dict']
+        # state_dict = self.audio_encoder.state_dict()
 
-        for k,v in wav2lip_state_dict.items():
-            if 'audio_encoder' in k:
-                state_dict[k.replace('module.audio_encoder.', '')] = v
-        self.audio_encoder.load_state_dict(state_dict)
+        # for k,v in wav2lip_state_dict.items():
+        #     if 'audio_encoder' in k:
+        #         state_dict[k.replace('module.audio_encoder.', '')] = v
+        # self.audio_encoder.load_state_dict(state_dict)
 
 
     def forward(self, audio_sequences):

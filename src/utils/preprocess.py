@@ -4,21 +4,19 @@ from tqdm import tqdm
 from PIL import Image 
 
 # 3dmm extraction
+import safetensors
+import safetensors.torch 
 from src.face3d.util.preprocess import align_img
 from src.face3d.util.load_mats import load_lm3d
 from src.face3d.models import networks
 
-try:
-    import webui
-    from src.face3d.extract_kp_videos_safe import KeypointExtractor
-    assert torch.cuda.is_available() == True
-except:
-    from src.face3d.extract_kp_videos import KeypointExtractor
-
 from scipy.io import loadmat, savemat
-from src.utils.croper import Croper
+from src.utils.croper import Preprocesser
 
-import warnings 
+
+import warnings
+
+from src.utils.safetensor_helper import load_x_from_safetensor 
 warnings.filterwarnings("ignore")
 
 def split_coeff(coeffs):
@@ -46,20 +44,24 @@ def split_coeff(coeffs):
 
 
 class CropAndExtract():
-    def __init__(self, path_of_lm_croper, path_of_net_recon_model, dir_of_BFM_fitting, device):
+    def __init__(self, sadtalker_path, device):
 
-        self.croper = Croper(path_of_lm_croper)
-        self.kp_extractor = KeypointExtractor(device)
+        self.propress = Preprocesser(device)
         self.net_recon = networks.define_net_recon(net_recon='resnet50', use_last_fc=False, init_path='').to(device)
-        checkpoint = torch.load(path_of_net_recon_model, map_location=torch.device(device))    
-        self.net_recon.load_state_dict(checkpoint['net_recon'])
+        
+        if sadtalker_path['use_safetensor']:
+            checkpoint = safetensors.torch.load_file(sadtalker_path['checkpoint'])    
+            self.net_recon.load_state_dict(load_x_from_safetensor(checkpoint, 'face_3drecon'))
+        else:
+            checkpoint = torch.load(sadtalker_path['path_of_net_recon_model'], map_location=torch.device(device))    
+            self.net_recon.load_state_dict(checkpoint['net_recon'])
+
         self.net_recon.eval()
-        self.lm3d_std = load_lm3d(dir_of_BFM_fitting)
+        self.lm3d_std = load_lm3d(sadtalker_path['dir_of_BFM_fitting'])
         self.device = device
     
-    def generate(self, input_path, save_dir, crop_or_resize='crop', source_image_flag=False):
+    def generate(self, input_path, save_dir, crop_or_resize='crop', source_image_flag=False, pic_size=256):
 
-        pic_size = 256
         pic_name = os.path.splitext(os.path.split(input_path)[-1])[0]  
 
         landmarks_path =  os.path.join(save_dir, pic_name+'_landmarks.txt') 
@@ -90,15 +92,15 @@ class CropAndExtract():
         x_full_frames= [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  for frame in full_frames] 
 
         #### crop images as the 
-        if crop_or_resize.lower() == 'crop': # default crop
-            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=512)
+        if 'crop' in crop_or_resize.lower(): # default crop
+            x_full_frames, crop, quad = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
             crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
-        elif crop_or_resize.lower() == 'full':
-            x_full_frames, crop, quad = self.croper.crop(x_full_frames, still=True, xsize=512)
+        elif 'full' in crop_or_resize.lower():
+            x_full_frames, crop, quad = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
             clx, cly, crx, cry = crop
             lx, ly, rx, ry = quad
             lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
@@ -119,7 +121,7 @@ class CropAndExtract():
 
         # 2. get the landmark according to the detected face. 
         if not os.path.isfile(landmarks_path): 
-            lm = self.kp_extractor.extract_keypoint(frames_pil, landmarks_path)
+            lm = self.propress.predictor.extract_keypoint(frames_pil, landmarks_path)
         else:
             print(' Using saved landmarks.')
             lm = np.loadtxt(landmarks_path).astype(np.float32)
