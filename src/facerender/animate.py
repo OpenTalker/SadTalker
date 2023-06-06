@@ -54,7 +54,7 @@ class AnimateFromCoeff():
             param.requires_grad = False
 
         if sadtalker_path is not None:
-            if 'safetensors' in sadtalker_path['checkpoint']:
+            if 'checkpoint' in sadtalker_path: # use safe tensor
                 self.load_cpk_facevid2vid_safetensor(sadtalker_path['checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=None)
             else:
                 self.load_cpk_facevid2vid(sadtalker_path['free_view_checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=he_estimator)
