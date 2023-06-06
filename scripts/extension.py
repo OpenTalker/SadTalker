@@ -119,11 +119,14 @@ def install():
         "gfpgan": "gfpgan",
     }
 
-    # dlib is not necessary currently
+    # # dlib is not necessary currently
     # if 'darwin' in sys.platform:
     #     kv['dlib'] = "dlib"
     # else:
     #     kv['dlib'] = 'dlib-bin'
+
+    # #### we need to have a newer version of imageio for our method.
+    # launch.run_pip("install imageio==2.19.3", "requirements for SadTalker")
 
     for k,v in kv.items():
         if not launch.is_installed(k):

@@ -23,7 +23,7 @@ class GeneratorWithLen(object):
     def __iter__(self):
         return self.gen
 
-def enhancer(images, method='gfpgan', bg_upsampler='realesrgan'):
+def enhancer_list(images, method='gfpgan', bg_upsampler='realesrgan'):
     gen = enhancer_generator_no_len(images, method=method, bg_upsampler=bg_upsampler)
     return list(gen)
 

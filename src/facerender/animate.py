@@ -20,10 +20,15 @@ from src.facerender.modules.generator import OcclusionAwareGenerator, OcclusionA
 from src.facerender.modules.make_animation import make_animation 
 
 from pydub import AudioSegment 
-from src.utils.face_enhancer import enhancer_generator_with_len as face_enhancer
+from src.utils.face_enhancer import enhancer_generator_with_len, enhancer_list
 from src.utils.paste_pic import paste_pic
 from src.utils.videoio import save_video_with_watermark
 
+try:
+    import webui  # in webui
+    in_webui = True
+except:
+    in_webui = False
 
 class AnimateFromCoeff():
 
@@ -54,7 +59,7 @@ class AnimateFromCoeff():
             param.requires_grad = False
 
         if sadtalker_path is not None:
-            if 'safetensors' in sadtalker_path['checkpoint']:
+            if 'checkpoint' in sadtalker_path:
                 self.load_cpk_facevid2vid_safetensor(sadtalker_path['checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=None)
             else:
                 self.load_cpk_facevid2vid(sadtalker_path['free_view_checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=he_estimator)
@@ -233,9 +238,13 @@ class AnimateFromCoeff():
             enhanced_path = os.path.join(video_save_dir, 'temp_'+video_name_enhancer)
             av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer) 
             return_path = av_path_enhancer
-            enhanced_images_gen_with_len = face_enhancer(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
 
-            imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+            try:
+                enhanced_images_gen_with_len = enhancer_generator_with_len(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
+                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+            except:
+                enhanced_images_gen_with_len = enhancer_list(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
+                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
             
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark= False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')
