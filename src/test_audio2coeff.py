@@ -96,7 +96,6 @@ class Audio2Coeff():
 
             coeffs_pred_numpy = coeffs_pred[0].clone().detach().cpu().numpy() 
 
-            
             if ref_pose_coeff_path is not None: 
                  coeffs_pred_numpy = self.using_refpose(coeffs_pred_numpy, ref_pose_coeff_path)
         
