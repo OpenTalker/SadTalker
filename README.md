@@ -75,6 +75,8 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 
 ## If you have any problem, please view our [FAQ](docs/FAQ.md) before opening an issue.
 
+
+
 ## ⚙️ 1. Installation.
 
 Tutorials from communities: [中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) 
@@ -180,14 +182,17 @@ The final folder will be shown as:
 
 **Local Autiomatic1111 stable-diffusion webui extension**: please refer to [Autiomatic1111 stable-diffusion webui docs](docs/webui_extension.md).
 
-**Local gradio demo**: Similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+**Local gradio demo(highly recommanded!)**: Similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
 
 ```bash
 ## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
 python app.py
 ```
 
-**Local windows gradio demo**: just double click `webui.bat`, the requirements will be installed automatically.
+**Local gradio demo(highly recommanded!)**: 
+
+- windows: just double click `webui.bat`, the requirements will be installed automatically.
+- Linux/Mac OS: run `bash webui.sh` to start the webui.
 
 
 ### Manually usages:
