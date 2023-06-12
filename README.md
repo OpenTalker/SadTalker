@@ -27,9 +27,6 @@
 <br>
 
 
-
-
-
 ![sadtalker](https://user-images.githubusercontent.com/4397546/222490039-b1f6156b-bf00-405b-9fda-0c9a9156f991.gif)
 
 <b>TL;DR: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; single portrait image 🙎‍♂️  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; audio 🎤  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; talking head video 🎞.</b>
@@ -74,22 +71,7 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 - __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
 
 
-## 🚧 TODO
-
-<details><summary> Previous TODOs </summary>
-
-- [x] Generating 2D face from a single Image.
-- [x] Generating 3D face from Audio.
-- [x] Generating 4D free-view talking examples from audio and a single image.
-- [x] Gradio/Colab Demo.
-- [x] Full body/image Generation.
-- [x] integrade with stable-diffusion-web-ui. (stay tunning!)
-</details>
-
-
-- [ ] Audio-driven Anime Avatar.
-- [ ] training code of each componments.
-
+## 🚧 TODO: See the Discussion https://github.com/OpenTalker/SadTalker/issues/280
 
 ## If you have any problem, please view our [FAQ](docs/FAQ.md) before opening an issue.
 
