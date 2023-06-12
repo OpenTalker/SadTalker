@@ -59,6 +59,8 @@ https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a
 
 ## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
 
+- __[2023.06.12]__: add more new features in WEBUI extension, see the discussion [here](https://github.com/OpenTalker/SadTalker/discussions/386).
+
 - __[2023.06.05]__: release a new 512 beta face model. Fixed some bugs and improve the performance.
 
 - __[2023.04.15]__: Adding automatic1111 colab by @camenduru, thanks for this awesome colab: [![sd webui-colab](https://img.shields.io/badge/Automatic1111-Colab-green)](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb).
