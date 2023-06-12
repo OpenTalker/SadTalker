@@ -25,11 +25,15 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     data['source_image'] = source_image_ts
  
     source_semantics_dict = scio.loadmat(first_coeff_path)
+    generated_dict = scio.loadmat(coeff_path)
 
     if 'full' not in preprocess.lower():
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:70]         #1 70
+        generated_3dmm = generated_dict['coeff_3dmm'][:,:70]
+
     else:
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:73]         #1 70
+        generated_3dmm = generated_dict['coeff_3dmm'][:,:70]
 
     source_semantics_new = transform_semantic_1(source_semantics, semantic_radius)
     source_semantics_ts = torch.FloatTensor(source_semantics_new).unsqueeze(0)
@@ -37,8 +41,6 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     data['source_semantics'] = source_semantics_ts
 
     # target 
-    generated_dict = scio.loadmat(coeff_path)
-    generated_3dmm = generated_dict['coeff_3dmm']
     generated_3dmm[:, :64] = generated_3dmm[:, :64] * expression_scale
 
     if 'full' in preprocess.lower():
