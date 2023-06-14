@@ -22,7 +22,7 @@ def ref_video_fn(path_of_ref_video):
     else:
         return gr.update(value=False)
 
-def sadtalker_demo(checkpoint_path='checkpoint', config_path='src/config', warpfn=None):
+def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warpfn=None):
 
     sad_talker = SadTalker(checkpoint_path, config_path, lazy_load=True)
 
