@@ -168,5 +168,7 @@ Dockerfile
 start_docker.sh
 start.sh
 
+checkpoints
+
 # Mac
 .DS_Store

@@ -169,7 +169,7 @@ def on_ui_tabs():
     result_dir = opts.sadtalker_result_dir
     os.makedirs(result_dir, exist_ok=True)
 
-    from app import sadtalker_demo  
+    from app_sadtalker import sadtalker_demo  
 
     if  os.getenv('SADTALKER_CHECKPOINTS'):
         checkpoint_path = os.getenv('SADTALKER_CHECKPOINTS')
