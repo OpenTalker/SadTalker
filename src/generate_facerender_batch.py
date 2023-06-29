@@ -7,7 +7,7 @@ import scipy.io as scio
 
 def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path, 
                         batch_size, input_yaw_list=None, input_pitch_list=None, input_roll_list=None, 
-                        expression_scale=1.0, still_mode = False, preprocess='crop', size = 256):
+                        expression_scale=1.0, still_mode = False, preprocess='crop', size = 256, facemodel='facevid2vid'):
 
     semantic_radius = 13
     video_name = os.path.splitext(os.path.split(coeff_path)[-1])[0]
@@ -27,10 +27,9 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     source_semantics_dict = scio.loadmat(first_coeff_path)
     generated_dict = scio.loadmat(coeff_path)
 
-    if 'full' not in preprocess.lower():
+    if 'full' not in preprocess.lower() and facemodel != 'pirender':
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:70]         #1 70
         generated_3dmm = generated_dict['coeff_3dmm'][:,:70]
-
     else:
         source_semantics = source_semantics_dict['coeff_3dmm'][:1,:73]         #1 70
         generated_3dmm = generated_dict['coeff_3dmm'][:,:70]
@@ -43,7 +42,7 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
     # target 
     generated_3dmm[:, :64] = generated_3dmm[:, :64] * expression_scale
 
-    if 'full' in preprocess.lower():
+    if 'full' in preprocess.lower() or facemodel == 'pirender':
         generated_3dmm = np.concatenate([generated_3dmm, np.repeat(source_semantics[:,70:], generated_3dmm.shape[0], axis=0)], axis=1)
 
     if still_mode:

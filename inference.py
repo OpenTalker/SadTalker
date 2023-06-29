@@ -4,10 +4,12 @@ import torch
 from time import  strftime
 import os, sys, time
 from argparse import ArgumentParser
+import platform
 
 from src.utils.preprocess import CropAndExtract
 from src.test_audio2coeff import Audio2Coeff  
 from src.facerender.animate import AnimateFromCoeff
+from src.facerender.pirender_animate import AnimateFromCoeff_PIRender
 from src.generate_batch import get_data
 from src.generate_facerender_batch import get_facerender_data
 from src.utils.init_path import init_path
@@ -37,7 +39,12 @@ def main(args):
 
     audio_to_coeff = Audio2Coeff(sadtalker_paths,  device)
     
-    animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
+    if args.facerender == 'facevid2vid':
+        animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
+    elif args.facerender == 'pirender':
+        animate_from_coeff = AnimateFromCoeff_PIRender(sadtalker_paths, device)
+    else:
+        raise(RuntimeError('Unknown model: {}'.format(args.facerender)))
 
     #crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
@@ -82,7 +89,7 @@ def main(args):
     #coeff2video
     data = get_facerender_data(coeff_path, crop_pic_path, first_coeff_path, audio_path, 
                                 batch_size, input_yaw_list, input_pitch_list, input_roll_list,
-                                expression_scale=args.expression_scale, still_mode=args.still, preprocess=args.preprocess, size=args.size)
+                                expression_scale=args.expression_scale, still_mode=args.still, preprocess=args.preprocess, size=args.size, facemodel=args.facerender)
     
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
                                 enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size)
@@ -118,7 +125,8 @@ if __name__ == '__main__':
     parser.add_argument("--preprocess", default='crop', choices=['crop', 'extcrop', 'resize', 'full', 'extfull'], help="how to preprocess the images" ) 
     parser.add_argument("--verbose",action="store_true", help="saving the intermedia output or not" ) 
     parser.add_argument("--old_version",action="store_true", help="use the pth other than safetensor version" ) 
-
+    parser.add_argument("--facerender", default='facevid2vid', choices=['pirender', 'facevid2vid'] ) 
+    
 
     # net structure and parameters
     parser.add_argument('--net_recon', type=str, default='resnet50', choices=['resnet18', 'resnet34', 'resnet50'], help='useless')
@@ -138,6 +146,8 @@ if __name__ == '__main__':
 
     if torch.cuda.is_available() and not args.cpu:
         args.device = "cuda"
+    elif platform.system() == 'Darwin' and args.facerender == 'pirender': # macos 
+        args.device = "mps"
     else:
         args.device = "cpu"
 
