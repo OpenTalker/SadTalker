@@ -14,7 +14,7 @@ from facexlib.alignment import landmark_98_to_68
 from facexlib.detection import init_detection_model
 
 from facexlib.utils import load_file_from_url
-from facexlib.alignment.awing_arch import FAN
+from src.face3d.util.my_awing_arch import FAN
 
 def init_alignment_model(model_name, half=False, device='cuda', model_rootpath=None):
     if model_name == 'awing_fan':
