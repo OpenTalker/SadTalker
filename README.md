@@ -186,7 +186,7 @@ The final folder will be shown as:
 
 ```bash
 ## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
-python app.py
+python app_sadtalker.py
 ```
 
 **Local gradio demo(highly recommanded!)**: 
