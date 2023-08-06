@@ -1,0 +1,83 @@
+# How often do you want to log the training stats.
+# network_list: 
+#     gen: gen_optimizer
+#     dis: dis_optimizer
+
+distributed: False
+image_to_tensorboard: True
+snapshot_save_iter: 40000
+snapshot_save_epoch: 20
+snapshot_save_start_iter: 20000
+snapshot_save_start_epoch: 10
+image_save_iter: 1000
+max_epoch: 200
+logging_iter: 100
+results_dir: ./eval_results
+
+gen_optimizer:
+    type: adam
+    lr: 0.0001
+    adam_beta1: 0.5
+    adam_beta2: 0.999
+    lr_policy:
+        iteration_mode: True
+        type: step
+        step_size: 300000
+        gamma: 0.2
+
+trainer:
+    type: trainers.face_trainer::FaceTrainer
+    pretrain_warp_iteration: 200000
+    loss_weight:
+      weight_perceptual_warp: 2.5
+      weight_perceptual_final: 4
+    vgg_param_warp:
+      network: vgg19
+      layers: ['relu_1_1', 'relu_2_1', 'relu_3_1', 'relu_4_1', 'relu_5_1']
+      use_style_loss: False
+      num_scales: 4
+    vgg_param_final:
+      network: vgg19
+      layers: ['relu_1_1', 'relu_2_1', 'relu_3_1', 'relu_4_1', 'relu_5_1']
+      use_style_loss: True
+      num_scales: 4      
+      style_to_perceptual: 250
+    init:
+      type: 'normal'
+      gain: 0.02
+gen:
+    type: generators.face_model::FaceGenerator
+    param:
+      mapping_net:
+        coeff_nc: 73
+        descriptor_nc: 256
+        layer: 3
+      warpping_net:
+        encoder_layer: 5
+        decoder_layer: 3
+        base_nc: 32
+      editing_net:
+        layer: 3
+        num_res_blocks: 2
+        base_nc: 64
+      common:
+        image_nc: 3
+        descriptor_nc: 256
+        max_nc: 256
+        use_spect: False
+                
+
+# Data options.
+data:
+    type: data.vox_dataset::VoxDataset
+    path: ./dataset/vox_lmdb
+    resolution: 256
+    semantic_radius: 13
+    train:
+      batch_size: 5
+      distributed: True
+    val:
+      batch_size: 8
+      distributed: True
+
+
