@@ -59,7 +59,9 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
         p = cv2.resize(crop_frame.astype(np.uint8), (ox2-ox1, oy2 - oy1)) 
 
         mask = 255*np.ones(p.shape, p.dtype)
-        location = ((ox1+ox2) // 2, (oy1+oy2) // 2)
+        # location = ((ox1+ox2) // 2, (oy1+oy2) // 2)
+        location = (min((ox1 + ox2 ) // 2, frame_w - (ox2 - ox1 ) // 2), min((oy1 + oy2) // 2, frame_h - (oy2 - oy1) // 2))
+
         gen_img = cv2.seamlessClone(p, full_img, mask, location, cv2.NORMAL_CLONE)
         out_tmp.write(gen_img)
 
