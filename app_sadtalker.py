@@ -62,7 +62,7 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
                             pose_style = gr.Slider(minimum=0, maximum=46, step=1, label="Pose style", value=0) # 
                             size_of_image = gr.Radio([256, 512], value=256, label='face model resolution', info="use 256/512 model?") # 
                             preprocess_type = gr.Radio(['crop', 'resize','full', 'extcrop', 'extfull'], value='crop', label='preprocess', info="How to handle input image?")
-                            is_still_mode = gr.Checkbox(label="Still Mode (fewer hand motion, works with preprocess `full`)")
+                            is_still_mode = gr.Checkbox(label="Still Mode (fewer head motion, works with preprocess `full`)")
                             batch_size = gr.Slider(label="batch size in generation", step=1, maximum=10, value=2)
                             enhancer = gr.Checkbox(label="GFPGAN as Face enhancer")
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
