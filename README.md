@@ -39,6 +39,7 @@
 
 ## 🔥 Highlight
 
+- 🔥 Update LICENSE to Apache 2.0, remove non-commercial restrictation.
 - 🔥 **SadTalker has been officially integrated into [![Discord](https://dcbadge.vercel.app/api/server/rrayYqZ4tf?style=flat)](https://discord.gg/rrayYqZ4tf), where you can use sadtalker in discord server `free!!!` by simple drop and also you can generate high-quality videos from text prompt.**
 
 - 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Checkout more details [here](docs/webui_extension.md).
