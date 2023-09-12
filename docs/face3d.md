@@ -1,11 +1,11 @@
-## 3D Face visualization
+## 3D Face Visualization
 
-We use pytorch3d to visualize the produced 3d face from a single image.
+We use `pytorch3d` to visualize the 3D faces from a single image.
 
-Since it is not easy to install, we produce a new install guidence here:
+The requirements for 3D visualization are difficult to install, so here's a tutorial:
 
 ```bash
-git clone https://github.com/Winfredy/SadTalker.git
+git clone https://github.com/OpenTalker/SadTalker.git
 cd SadTalker 
 conda create -n sadtalker3d python=3.8
 source activate sadtalker3d
@@ -28,10 +28,9 @@ pip install git+https://github.com/TencentARC/GFPGAN
 ### when occurs gcc version problem `from pytorch import _C` from pytorch3d, add the anaconda path to LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/$YOUR_ANACONDA_PATH/lib/
 
-```  
+``` 
 
-
-Then, generating the result via:
+Then, generate the result via:
 
 ```bash
 
@@ -43,6 +42,6 @@ python inference.py --driven_audio <audio.wav> \
 
 ```
 
-Then, the results will be given in the folders with the file name of `face3d.mp4`.
+The results will appear, named `face3d.mp4`.
 
-More applications about 3d face will be released.
+More applications about 3D face rendering will be released soon.
