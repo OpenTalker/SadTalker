@@ -123,7 +123,11 @@ A video tutorial in chinese is available [here](https://www.bilibili.com/video/B
 
 ### macOS
 
-A tutorial on installing SadTalker on macOS with Docker can be found [here](docs/install.md).
+A tutorial on installing SadTalker on macOS can be found [here](docs/install.md).
+
+### Docker, WSL, etc
+
+Please check out additional tutorials [here](docs/install.md).
 
 ## 2. Download Models
 
