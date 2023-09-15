@@ -37,60 +37,62 @@
 
 
 
-## 🔥 Highlight
+## Highlights
 
-- 🔥 Update LICENSE to Apache 2.0, remove non-commercial restrictation.
-- 🔥 **SadTalker has been officially integrated into [![Discord](https://dcbadge.vercel.app/api/server/rrayYqZ4tf?style=flat)](https://discord.gg/rrayYqZ4tf), where you can use sadtalker in discord server `free!!!` by simple drop and also you can generate high-quality videos from text prompt.**
+- The license has been updated to Apache 2.0, and we've removed the non-commercial restriction
+- **SadTalker has now officially been integrated into Discord, where you can use it for free by sending files. You can also generate high-quailty videos from text prompts. Join: [![Discord](https://dcbadge.vercel.app/api/server/rrayYqZ4tf?style=flat)](https://discord.gg/rrayYqZ4tf)**
 
-- 🔥 The extension of the [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) is online. Checkout more details [here](docs/webui_extension.md).
+- We've published a [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) extension. Check out more details [here](docs/webui_extension.md). [Demo Video](https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a519-6389917dac29.mp4)
 
-https://user-images.githubusercontent.com/4397546/231495639-5d4bb925-ea64-4a36-a519-6389917dac29.mp4
-
-- 🔥 `full image mode` is online! checkout [here](https://github.com/Winfredy/SadTalker#full-bodyimage-generation) for more details.
+- Full image mode is now available! [More details...](https://github.com/OpenTalker/SadTalker#full-bodyimage-generation)
 
 | still+enhancer in v0.0.1                 | still + enhancer   in v0.0.2       |   [input image @bagbag1815](https://twitter.com/bagbag1815/status/1642754319094108161) |
 |:--------------------: |:--------------------: | :----: |
 | <video  src="https://user-images.githubusercontent.com/48216707/229484996-5d7be64f-2553-4c9e-a452-c5cf0b8ebafe.mp4" type="video/mp4"> </video> | <video  src="https://user-images.githubusercontent.com/4397546/230717873-355b7bf3-d3de-49f9-a439-9220e623fce7.mp4" type="video/mp4"> </video>  | <img src='./examples/source_image/full_body_2.png' width='380'> 
 
-- 🔥 Several new mode, eg, `still mode`, `reference mode`, `resize mode` are online for better and custom applications.
+- Several new modes (Still, reference, and resize modes) are now available!
 
-- 🔥 Happy to  see more community demos at [bilibili](https://search.bilibili.com/all?keyword=sadtalker&from_source=webtop_search&spm_id_from=333.1007&search_source=3
-), [Youtube](https://www.youtube.com/results?search_query=sadtalker&sp=CAM%253D) and [twitter #sadtalker](https://twitter.com/search?q=%23sadtalker&src=typed_query).
+- We're happy to see more community demos on [bilibili](https://search.bilibili.com/all?keyword=sadtalker), [YouTube](https://www.youtube.com/results?search_query=sadtalker) and [X (#sadtalker)](https://twitter.com/search?q=%23sadtalker&src).
 
-## 📋 Changelog (Previous changelog can be founded [here](docs/changlelog.md))
+## Changelog 
 
-- __[2023.06.12]__: add more new features in WEBUI extension, see the discussion [here](https://github.com/OpenTalker/SadTalker/discussions/386).
+The previous changelog can be found [here](docs/changlelog.md).
 
-- __[2023.06.05]__: release a new 512 beta face model. Fixed some bugs and improve the performance.
+- __[2023.06.12]__: Added more new features in WebUI extension, see the discussion [here](https://github.com/OpenTalker/SadTalker/discussions/386).
 
-- __[2023.04.15]__: Adding automatic1111 colab by @camenduru, thanks for this awesome colab: [![sd webui-colab](https://img.shields.io/badge/Automatic1111-Colab-green)](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb).
+- __[2023.06.05]__: Released a new 512x512px (beta) face model. Fixed some bugs and improve the performance.
 
-- __[2023.04.12]__: adding a more detailed sd-webui installation document, fixed reinstallation problem.
+- __[2023.04.15]__: Added a WebUI Colab notebook by [@camenduru](https://github.com/camenduru/): [![sd webui-colab](https://img.shields.io/badge/Automatic1111-Colab-green)](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb)
 
-- __[2023.04.12]__: Fixed the sd-webui safe issues becasue of the 3rd packages, optimize the output path in `sd-webui-extension`.
+- __[2023.04.12]__: Added a more detailed WebUI installation document and fixed a problem when reinstalling.
 
-- __[2023.04.08]__: ❗️❗️❗️ In v0.0.2, we add a logo watermark to the generated video to prevent abusing since it is very realistic.
+- __[2023.04.12]__: Fixed the WebUI safe issues becasue of 3rd-party packages, and optimized the output path in `sd-webui-extension`.
 
-- __[2023.04.08]__: v0.0.2, full image animation, adding baidu driver for download checkpoints. Optimizing the logic about enhancer.
+- __[2023.04.08]__: In v0.0.2, we added a logo watermark to the generated video to prevent abuse. _This watermark has since been removed in a later release._
+
+- __[2023.04.08]__: In v0.0.2, we added features for full image animation and a link to download checkpoints from Baidu. We also optimized the enhancer logic.
+
+## To-Do
+
+We're tracking new updates in [issue #280](https://github.com/OpenTalker/SadTalker/issues/280).
+
+## Troubleshooting
+
+If you have any problems, please read our [FAQs](docs/FAQ.md) before opening an issue.
 
 
-## 🚧 TODO: See the Discussion https://github.com/OpenTalker/SadTalker/issues/280
 
-## If you have any problem, please view our [FAQ](docs/FAQ.md) before opening an issue.
+## 1. Installation.
 
+Community tutorials: [中文Windows教程 (Chinese Windows tutorial)](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース (Japanese tutorial)](https://br-d.fanbox.cc/posts/5685086).
 
+### Linux/Unix
 
-## ⚙️ 1. Installation.
-
-Tutorials from communities: [中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース](https://br-d.fanbox.cc/posts/5685086?utm_campaign=manage_post_page&utm_medium=share&utm_source=twitter) 
-
-### Linux:
-
-1. Installing [anaconda](https://www.anaconda.com/), python and git.
+1. Install [Anaconda](https://www.anaconda.com/), Python and `git`.
 
 2. Creating the env and install the requirements.
   ```bash
-  git clone https://github.com/Winfredy/SadTalker.git
+  git clone https://github.com/OpenTalker/SadTalker.git
 
   cd SadTalker 
 
@@ -104,40 +106,54 @@ Tutorials from communities: [中文windows教程](https://www.bilibili.com/video
 
   pip install -r requirements.txt
 
-  ### tts is optional for gradio demo. 
+  ### Coqui TTS is optional for gradio demo. 
   ### pip install TTS
 
   ```  
-### Windows ([中文windows教程](https://www.bilibili.com/video/BV1Dc411W7V6/)):
+### Windows
 
-1. Install [Python 3.10.6](https://www.python.org/downloads/windows/), checking "Add Python to PATH".
-2. Install [git](https://git-scm.com/download/win) manually (OR `scoop install git` via [scoop](https://scoop.sh/)).
-3. Install `ffmpeg`, following [this instruction](https://www.wikihow.com/Install-FFmpeg-on-Windows) (OR using `scoop install ffmpeg` via [scoop](https://scoop.sh/)).
-4. Download our SadTalker repository, for example by running `git clone https://github.com/Winfredy/SadTalker.git`.
-5. Download the `checkpoint` and `gfpgan` [below↓](https://github.com/Winfredy/SadTalker#-2-download-trained-models).
-5. Run `start.bat` from Windows Explorer as normal, non-administrator, user, a gradio WebUI demo will be started.
+A video tutorial in chinese is available [here](https://www.bilibili.com/video/BV1Dc411W7V6/). You can also follow the following instructions:
 
-### Macbook:
+1. Install [Python 3.8](https://www.python.org/downloads/windows/) and check "Add Python to PATH".
+2. Install [git](https://git-scm.com/download/win) manually or using [Scoop](https://scoop.sh/): `scoop install git`.
+3. Install `ffmpeg`, following [this tutorial](https://www.wikihow.com/Install-FFmpeg-on-Windows) or using [scoop](https://scoop.sh/): `scoop install ffmpeg`.
+4. Download the SadTalker repository by running `git clone https://github.com/Winfredy/SadTalker.git`.
+5. Download the checkpoints and gfpgan models in the [downloads section](#2-download-models).
+6. Run `start.bat` from Windows Explorer as normal, non-administrator, user, and a Gradio-powered WebUI demo will be started.
 
-More tips about installnation on Macbook and the Docker file can be founded [here](docs/install.md)
+### macOS
 
-## 📥 2. Download Trained Models.
+A tutorial on installing SadTalker on macOS can be found [here](docs/install.md).
 
-You can run the following script to put all the models in the right place.
+### Docker, WSL, etc
+
+Please check out additional tutorials [here](docs/install.md).
+
+## 2. Download Models
+
+You can run the following script on Linux/macOS to automatically download all the models:
 
 ```bash
 bash scripts/download_models.sh
 ```
 
-Other alternatives:
-> we also provide an offline patch (`gfpgan/`), thus, no model will be downloaded when generating.
+We also provide an offline patch (`gfpgan/`), so no model will be downloaded when generating.
 
-**Google Driver**: download our pre-trained model from [ this link (main checkpoints)](https://drive.google.com/file/d/1gwWh45pF7aelNP_P78uDJL8Sycep-K7j/view?usp=sharing) and [ gfpgan (offline patch)](https://drive.google.com/file/d/19AIBsmfcHW6BRJmeqSFlG5fL445Xmsyi?usp=sharing)
+### Pre-Trained Models
 
-**Github Release Page**: download all the files from the [lastest github release page](https://github.com/Winfredy/SadTalker/releases), and then, put it in ./checkpoints.
+* [Google Drive](https://drive.google.com/file/d/1gwWh45pF7aelNP_P78uDJL8Sycep-K7j/view?usp=sharing)
+* [GitHub Releases](https://github.com/OpenTalker/SadTalker/releases)
+* [Baidu (百度云盘)](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt) (Password: `sadt`)
 
-**百度云盘**: we provided the downloaded model in [checkpoints,  提取码: sadt.](https://pan.baidu.com/s/1P4fRgk9gaSutZnn8YW034Q?pwd=sadt) And [gfpgan,  提取码: sadt.](https://pan.baidu.com/s/1kb1BCPaLOWX1JJb9Czbn6w?pwd=sadt)
+<!-- TODO add Hugging Face links -->
 
+### GFPGAN Offline Patch
+
+* [Google Drive](https://drive.google.com/file/d/19AIBsmfcHW6BRJmeqSFlG5fL445Xmsyi?usp=sharing)
+* [GitHub Releases](https://github.com/OpenTalker/SadTalker/releases)
+* [Baidu (百度云盘)](https://pan.baidu.com/s/1P4fRgk9gaSutZnn8YW034Q?pwd=sadt) (Password: `sadt`)
+
+<!-- TODO add Hugging Face links -->
 
 
 <details><summary>Model Details</summary>
@@ -177,28 +193,30 @@ The final folder will be shown as:
 
 </details>
 
-## 🔮 3. Quick Start ([Best Practice](docs/best_practice.md)).
+## 3. Quick Start
 
-### WebUI Demos:
+Please read our document on [best practices and configuration tips](docs/best_practice.md)
 
-**Online**: [Huggingface](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
+### WebUI Demos
 
-**Local Autiomatic1111 stable-diffusion webui extension**: please refer to [Autiomatic1111 stable-diffusion webui docs](docs/webui_extension.md).
+**Online Demo**: [HuggingFace](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
 
-**Local gradio demo(highly recommanded!)**: Similar to our [hugging-face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run by:
+**Local WebUI extension**: Please refer to [WebUI docs](docs/webui_extension.md).
+
+**Local gradio demo (recommanded)**: A Gradio instance similar to our [Hugging Face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run locally:
 
 ```bash
 ## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
 python app_sadtalker.py
 ```
 
-**Local gradio demo(highly recommanded!)**: 
+You can also start it more easily:
 
 - windows: just double click `webui.bat`, the requirements will be installed automatically.
 - Linux/Mac OS: run `bash webui.sh` to start the webui.
 
 
-### Manually usages:
+### CLI usage
 
 ##### Animating a portrait image from default config:
 ```bash
@@ -223,7 +241,7 @@ python inference.py --driven_audio <audio.wav> \
 
 More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
 
-## 🛎 Citation
+## Citation
 
 If you find our work useful in your research, please consider citing:
 
@@ -236,23 +254,21 @@ If you find our work useful in your research, please consider citing:
 }
 ```
 
+## Acknowledgements
 
+Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, we also used the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
 
-## 💗 Acknowledgements
-
-Facerender code borrows heavily from [zhanglonghao's reproduction of face-vid2vid](https://github.com/zhanglonghao1992/One-Shot_Free-View_Neural_Talking_Head_Synthesis) and [PIRender](https://github.com/RenYurui/PIRender). We thank the authors for sharing their wonderful code. In training process, We also use the model from [Deep3DFaceReconstruction](https://github.com/microsoft/Deep3DFaceReconstruction) and [Wav2lip](https://github.com/Rudrabha/Wav2Lip). We thank for their wonderful work.
-
-See also these wonderful 3rd libraries we use:
+We also use the following 3rd-party libraries:
 
 - **Face Utils**: https://github.com/xinntao/facexlib
 - **Face Enhancement**: https://github.com/TencentARC/GFPGAN
 - **Image/Video Enhancement**:https://github.com/xinntao/Real-ESRGAN
 
-## 🥂 Extensions:
+## Extensions:
 
 - [SadTalker-Video-Lip-Sync](https://github.com/Zz-ww/SadTalker-Video-Lip-Sync) from [@Zz-ww](https://github.com/Zz-ww): SadTalker for Video Lip Editing
 
-## 🥂 Related Works
+## Related Works
 - [StyleHEAT: One-Shot High-Resolution Editable Talking Face Generation via Pre-trained StyleGAN (ECCV 2022)](https://github.com/FeiiYin/StyleHEAT)
 - [CodeTalker: Speech-Driven 3D Facial Animation with Discrete Motion Prior (CVPR 2023)](https://github.com/Doubiiu/CodeTalker)
 - [VideoReTalking: Audio-based Lip Synchronization for Talking Head Video Editing In the Wild (SIGGRAPH Asia 2022)](https://github.com/vinthony/video-retalking)
@@ -260,7 +276,7 @@ See also these wonderful 3rd libraries we use:
 - [3D GAN Inversion with Facial Symmetry Prior (CVPR 2023)](https://github.com/FeiiYin/SPI/)
 - [T2M-GPT: Generating Human Motion from Textual Descriptions with Discrete Representations (CVPR 2023)](https://github.com/Mael-zys/T2M-GPT)
 
-## 📢 Disclaimer
+## Disclaimer
 
 This is not an official product of Tencent. 
 
@@ -273,8 +289,10 @@ This is not an official product of Tencent.
 6. It is prohibited to use this open-source code for activities that harm the legitimate rights and interests of others (including but not limited to fraud, deception, infringement of others' portrait rights, reputation rights, etc.), or other behaviors that violate applicable laws and regulations or go against social ethics and good customs (including providing incorrect or false information, spreading pornographic, terrorist, and violent information, etc.). Otherwise, you may be liable for legal responsibilities.
 ```
 
-LOGO: color and font suggestion: [ChatGPT](ai.com), logo font：[Montserrat Alternates
+LOGO: color and font suggestion: [ChatGPT](https://chat.openai.com), logo font: [Montserrat Alternates
 ](https://fonts.google.com/specimen/Montserrat+Alternates?preview.text=SadTalker&preview.text_type=custom&query=mont).
 
-All the copyrights of the demo images and audio are from community users or the generation from stable diffusion. Feel free to contact us if you feel uncomfortable.
+All the copyrights of the demo images and audio are from community users or the generation from stable diffusion. Feel free to contact us if you would like use to remove them.
 
+
+<!-- Spelling fixed on Tuesday, September 12, 2023 by @fakerybakery (https://github.com/fakerybakery). These changes are licensed under the Apache 2.0 license. -->
