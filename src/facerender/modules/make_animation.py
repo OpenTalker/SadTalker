@@ -167,7 +167,9 @@ def make_animation(
 ):
     # speedup on ampere gpu
     if hasattr(torch, "channels_last"):
-        generator = generator.eval().to(memory_format=torch.channels_last)
+        for param in generator.parameters():
+            if param.data.dim() == 4:
+                param.data = param.data.contiguous(memory_format=torch.channels_last)
         source_image = source_image.contiguous(memory_format=torch.channels_last)
     infer_mode = torch.no_grad
     if hasattr(torch, "inference_mode"):  # for torch >=2.*
