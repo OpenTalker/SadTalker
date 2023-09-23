@@ -172,3 +172,5 @@ checkpoints
 
 # Mac
 .DS_Store
+
+tmp/

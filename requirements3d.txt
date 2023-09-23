@@ -19,3 +19,4 @@ trimesh==3.9.20
 gradio
 gfpgan
 safetensors
+tensordict
