@@ -3,7 +3,6 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 from tqdm import tqdm
-from tensordict import MemmapTensor, tensorclass
 import os
 import shutil
 import cv2

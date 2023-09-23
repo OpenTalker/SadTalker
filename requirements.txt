@@ -19,4 +19,3 @@ gradio
 gfpgan
 av
 safetensors
-tensordict
