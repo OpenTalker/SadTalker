@@ -6,6 +6,8 @@ from tqdm import tqdm
 from tensordict import MemmapTensor, tensorclass
 import os
 import shutil
+import cv2
+import torchvision.transforms.functional as TF
 
 
 def normalize_kp(
@@ -160,7 +162,9 @@ def make_animation(
     pitch_c_seq=None,
     roll_c_seq=None,
     use_exp=True,
-    use_half=True,  # half precision reduces plenty of memory usage
+    use_half=False,
+    frame_num=-1,
+    dst_path=None,
 ):
     # speedup on ampere gpu
     generator = generator.eval().to(memory_format=torch.contiguous_format)
@@ -168,13 +172,15 @@ def make_animation(
     infer_mode = torch.no_grad
     if hasattr(torch, "inference_mode"):  # for torch >=2.*
         infer_mode = torch.inference_mode
+    writer = cv2.VideoWriter(dst_path, cv2.VideoWriter_fourcc(*"mp4v"), 25, (256, 256))
+    # write frames on the fly, instead of loading all frames into memory
     with infer_mode(), torch.autocast("cuda", torch.float16, enabled=use_half):
         # predictions = []
 
         kp_canonical = kp_detector(source_image)
         he_source = mapping(source_semantics)
         kp_source = keypoint_transformation(kp_canonical, he_source)
-        predictions = None
+        frame_count = 0
         for frame_idx in tqdm(range(target_semantics.shape[1]), "Face Renderer:"):
             # still check the dimension
             # print(target_semantics.shape, source_semantics.shape)
@@ -201,24 +207,15 @@ def make_animation(
             """
 
             # offload computed predictions to disk, instead of occupying GPU memory
-            if predictions is None:
-                shutil.rmtree("./tmp", ignore_errors=True)
-                os.makedirs("./tmp", exist_ok=True)
-
-                predictions = MemmapTensor(
-                    out["prediction"].shape[0] * target_semantics.shape[1],
-                    *out["prediction"].shape[1:],
-                    filename="./tmp/face_render_prediction.pt",
-                    dtype=torch.uint8,
-                )
-            predictions[
-                frame_idx
-                * out["prediction"].shape[0] : (frame_idx + 1)
-                * out["prediction"].shape[0]
-            ] = ((out["prediction"] * 255).to(torch.uint8).cpu())
-            # predictions.append(out["prediction"].to("cpu", non_blocking=True))
-        # predictions_ts = torch.stack(predictions, dim=1)
-    return predictions
+            out["prediction"] = out["prediction"].cpu()
+            for frame in out["prediction"]:
+                if frame_count >= frame_num:
+                    break
+                frame = TF.to_pil_image(frame)
+                frame = cv2.cvtColor(np.asarray(frame), cv2.COLOR_BGR2RGB)
+                writer.write(frame)
+                frame_count += 1
+    writer.release()
 
 
 class AnimateModel(torch.nn.Module):

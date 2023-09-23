@@ -9,7 +9,6 @@ import safetensors.torch
 
 warnings.filterwarnings("ignore")
 from tqdm.auto import tqdm
-import cv2
 import imageio
 import torch
 import torchvision
@@ -253,8 +252,9 @@ class AnimateFromCoeff:
             roll_c_seq = None
 
         frame_num = x["frame_num"]
-
-        predictions_video = make_animation(
+        video_name = x["video_name"] + ".mp4"
+        path = os.path.join(video_save_dir, "temp_" + video_name)
+        make_animation(
             source_image,
             source_semantics,
             target_semantics,
@@ -266,9 +266,10 @@ class AnimateFromCoeff:
             pitch_c_seq,
             roll_c_seq,
             use_exp=True,
-            use_half=True,
+            use_half=False,
+            frame_num=frame_num,
+            dst_path=path,
         )
-        predictions_video = predictions_video[:frame_num]
 
         # video = []
         # for idx in tqdm(range(predictions_video.shape[0]), desc="Writing Video"):
@@ -288,15 +289,8 @@ class AnimateFromCoeff:
         #        for result_i in result
         #    ]
         #
-        video_name = x["video_name"] + ".mp4"
-        path = os.path.join(video_save_dir, "temp_" + video_name)
         #
         # imageio.mimsave(path, result, fps=float(25))
-        self.write_video(predictions_video, path)
-        try:
-            os.remove("./tmp/face_render_prediction.pt")
-        except Exception:
-            pass
         av_path = os.path.join(video_save_dir, video_name)
         return_path = av_path
 
