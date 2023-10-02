@@ -1,7 +1,7 @@
 face_alignment==1.4.1
 imageio==2.31.5
 imageio-ffmpeg==0.4.9
-librosa==0.10.1 #LibRosa requires numba and so then numpy, so don't specify requirements.
+librosa>=0.10.1 #LibRosa requires numba and so then numpy, so don't specify requirements.
 resampy==0.4.2
 pydub==0.25.1 
 scipy==1.11.3
