@@ -3,6 +3,8 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 from tqdm import tqdm
+import time
+from src.utils.process_log import record_process_log
 
 
 def normalize_kp(kp_source, kp_driving, kp_driving_initial, adapt_movement_scale=False,
@@ -112,7 +114,7 @@ def make_animation(source_image, source_semantics, target_semantics,
         kp_canonical = kp_detector(source_image)
         he_source = mapping(source_semantics)
         kp_source = keypoint_transformation(kp_canonical, he_source)
-
+        t = time.time()
         for frame_idx in tqdm(range(target_semantics.shape[1]), 'Face Renderer:'):
             # still check the dimension
             # print(target_semantics.shape, source_semantics.shape)
@@ -139,6 +141,7 @@ def make_animation(source_image, source_semantics, target_semantics,
             '''
             predictions.append(out['prediction'])
         predictions_ts = torch.stack(predictions, dim=1)
+        record_process_log("make_animation", "Face Renderer", time.time()-t)
     return predictions_ts
 
 

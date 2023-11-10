@@ -12,6 +12,8 @@ from src.audio2pose_models.audio2pose import Audio2Pose
 from src.audio2exp_models.networks import SimpleWrapperV2
 from src.audio2exp_models.audio2exp import Audio2Exp
 from src.utils.safetensor_helper import load_x_from_safetensor
+from src.utils.process_log import record_process_log
+import time
 
 
 def load_cpk(checkpoint_path, model=None, optimizer=None, device="cpu"):
@@ -35,22 +37,31 @@ class Audio2Coeff():
         cfg_exp = CN.load_cfg(fcfg_exp)
         cfg_exp.freeze()
 
+        t = time.time()
+
         # load audio2pose_model
         self.audio2pose_model = Audio2Pose(cfg_pose, None, device=device)
+
+        record_process_log(self.__class__.__name__, "Audio2Pose", time.time()-t, "self.audio2pose_model")
+
         self.audio2pose_model = self.audio2pose_model.to(device)
         self.audio2pose_model.eval()
         for param in self.audio2pose_model.parameters():
             param.requires_grad = False
 
+        t = time.time()
         try:
             if sadtalker_path['use_safetensor']:
                 checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
                 self.audio2pose_model.load_state_dict(load_x_from_safetensor(checkpoints, 'audio2pose'))
+                record_process_log(self.__class__.__name__, "self.audio2pose_model.load_state_dict", time.time()-t)
             else:
                 load_cpk(sadtalker_path['audio2pose_checkpoint'], model=self.audio2pose_model, device=device)
+                record_process_log(self.__class__.__name__, "load_cpk", time.time() - t)
         except:
             raise Exception("Failed in loading audio2pose_checkpoint")
 
+        t = time.time()
         # load audio2exp_model
         netG = SimpleWrapperV2()
         netG = netG.to(device)
@@ -65,11 +76,16 @@ class Audio2Coeff():
                 load_cpk(sadtalker_path['audio2exp_checkpoint'], model=netG, device=device)
         except:
             raise Exception("Failed in loading audio2exp_checkpoint")
+
+        record_process_log(self.__class__.__name__, "load audio2exp_model", time.time() - t, "checkpoints")
+
+        t = time.time()
         self.audio2exp_model = Audio2Exp(netG, cfg_exp, device=device, prepare_training_loss=False)
         self.audio2exp_model = self.audio2exp_model.to(device)
         for param in self.audio2exp_model.parameters():
             param.requires_grad = False
         self.audio2exp_model.eval()
+        record_process_log(self.__class__.__name__, "Audio2Exp", time.time() - t, "self.audio2exp_model")
 
         self.device = device
 

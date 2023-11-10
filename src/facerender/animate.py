@@ -39,14 +39,22 @@ class AnimateFromCoeff():
 
         with open(sadtalker_path['facerender_yaml']) as f:
             config = yaml.safe_load(f)
-
+        t = time.time()
         generator = OcclusionAwareSPADEGenerator(**config['model_params']['generator_params'],
                                                  **config['model_params']['common_params'])
+        record_process_log(self.__class__.__name__, "OcclusionAwareSPADEGenerator", time.time()-t)
+        t = time.time()
         kp_extractor = KPDetector(**config['model_params']['kp_detector_params'],
                                   **config['model_params']['common_params'])
+        record_process_log(self.__class__.__name__, "KPDetector", time.time() - t)
+
+        t = time.time()
         he_estimator = HEEstimator(**config['model_params']['he_estimator_params'],
                                    **config['model_params']['common_params'])
+        record_process_log(self.__class__.__name__, "HEEstimator", time.time() - t)
+        t = time.time()
         mapping = MappingNet(**config['model_params']['mapping_params'])
+        record_process_log(self.__class__.__name__, "HEEstimator", time.time() - t)
 
         generator.to(device)
         kp_extractor.to(device)
