@@ -105,6 +105,7 @@ def make_animation(source_image, source_semantics, target_semantics,
                             use_exp=True, use_half=False):
     with torch.no_grad():
         predictions = []
+        generator = generator.half() if use_half else generator
 
         kp_canonical = kp_detector(source_image)
         he_source = mapping(source_semantics)
@@ -125,6 +126,10 @@ def make_animation(source_image, source_semantics, target_semantics,
             kp_driving = keypoint_transformation(kp_canonical, he_driving)
                 
             kp_norm = kp_driving
+            if use_half:
+                source_image = source_image.half()
+                kp_source = {k: v.half() for k, v in kp_source.items()}
+                kp_norm = {k: v.half() for k, v in kp_norm.items()}
             out = generator(source_image, kp_source=kp_source, kp_driving=kp_norm)
             '''
             source_image_new = out['prediction'].squeeze(1)

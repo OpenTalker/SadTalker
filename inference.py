@@ -37,7 +37,7 @@ def main(args):
 
     audio_to_coeff = Audio2Coeff(sadtalker_paths,  device)
     
-    animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
+    animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device, args.half)
 
     #crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
@@ -118,6 +118,7 @@ if __name__ == '__main__':
     parser.add_argument("--preprocess", default='crop', choices=['crop', 'extcrop', 'resize', 'full', 'extfull'], help="how to preprocess the images" ) 
     parser.add_argument("--verbose",action="store_true", help="saving the intermedia output or not" ) 
     parser.add_argument("--old_version",action="store_true", help="use the pth other than safetensor version" ) 
+    parser.add_argument("--half", action="store_true", help="use half precision or not" )
 
 
     # net structure and parameters

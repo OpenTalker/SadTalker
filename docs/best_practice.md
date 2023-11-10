@@ -16,6 +16,7 @@ Advanced confiuration options for `inference.py`:
 | ref Mode (pose) | `--ref_pose` | None | A video path, where we borrow the pose from the head reference video. 
 | 3D Mode | `--face3dvis` | False | Need additional installation. More details to generate the 3d face can be founded [here](docs/face3d.md). 
 | free-view Mode | `--input_yaw`,<br> `--input_pitch`,<br> `--input_roll` | None | Genearting novel view or free-view 4D talking head from a single image. More details can be founded [here](https://github.com/Winfredy/SadTalker#generating-4d-free-view-talking-examples-from-audio-and-a-single-image).
+| half precision | `--half` | False | Using half precision to speed up the inference on the face renderer.
 
 
 ### About `--preprocess`
