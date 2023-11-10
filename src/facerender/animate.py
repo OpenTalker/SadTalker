@@ -32,7 +32,7 @@ except:
 
 class AnimateFromCoeff():
 
-    def __init__(self, sadtalker_path, device):
+    def __init__(self, sadtalker_path, device, half=False):
 
         with open(sadtalker_path['facerender_yaml']) as f:
             config = yaml.safe_load(f)
@@ -82,6 +82,7 @@ class AnimateFromCoeff():
         self.mapping.eval()
          
         self.device = device
+        self.half = half
     
     def load_cpk_facevid2vid_safetensor(self, checkpoint_path, generator=None, 
                         kp_detector=None, he_estimator=None,  
@@ -182,7 +183,7 @@ class AnimateFromCoeff():
 
         predictions_video = make_animation(source_image, source_semantics, target_semantics,
                                         self.generator, self.kp_extractor, self.he_estimator, self.mapping, 
-                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True)
+                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, use_half=self.half)
 
         predictions_video = predictions_video.reshape((-1,)+predictions_video.shape[2:])
         predictions_video = predictions_video[:frame_num]
