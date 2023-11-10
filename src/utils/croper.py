@@ -16,6 +16,7 @@ from facexlib.alignment import landmark_98_to_68
 import numpy as np
 from PIL import Image
 
+
 class Preprocesser:
     def __init__(self, device='cuda'):
         self.predictor = KeypointExtractor(device)
@@ -32,11 +33,11 @@ class Preprocesser:
         det = dets[0]
 
         img = img_np[int(det[1]):int(det[3]), int(det[0]):int(det[2]), :]
-        lm = landmark_98_to_68(self.predictor.detector.get_landmarks(img)) # [0]
+        lm = landmark_98_to_68(self.predictor.detector.get_landmarks(img))  # [0]
 
         #### keypoints to the original location
-        lm[:,0] += int(det[0])
-        lm[:,1] += int(det[1])
+        lm[:, 0] += int(det[0])
+        lm[:, 1] += int(det[1])
 
         return lm
 
@@ -66,13 +67,14 @@ class Preprocesser:
         eye_to_mouth = mouth_avg - eye_avg
 
         # Choose oriented crop rectangle.
-        x = eye_to_eye - np.flipud(eye_to_mouth) * [-1, 1]  # Addition of binocular difference and double mouth difference
-        x /= np.hypot(*x)   # hypot函数计算直角三角形的斜边长，用斜边长对三角形两条直边做归一化
-        x *= max(np.hypot(*eye_to_eye) * 2.0, np.hypot(*eye_to_mouth) * 1.8)    # 双眼差和眼嘴差，选较大的作为基准尺度
+        x = eye_to_eye - np.flipud(eye_to_mouth) * [-1,
+                                                    1]  # Addition of binocular difference and double mouth difference
+        x /= np.hypot(*x)  # hypot函数计算直角三角形的斜边长，用斜边长对三角形两条直边做归一化
+        x *= max(np.hypot(*eye_to_eye) * 2.0, np.hypot(*eye_to_mouth) * 1.8)  # 双眼差和眼嘴差，选较大的作为基准尺度
         y = np.flipud(x) * [-1, 1]
         c = eye_avg + eye_to_mouth * 0.1
-        quad = np.stack([c - x - y, c - x + y, c + x + y, c + x - y])   # 定义四边形，以面部基准位置为中心上下左右平移得到四个顶点
-        qsize = np.hypot(*x) * 2    # 定义四边形的大小（边长），为基准尺度的2倍
+        quad = np.stack([c - x - y, c - x + y, c + x + y, c + x - y])  # 定义四边形，以面部基准位置为中心上下左右平移得到四个顶点
+        qsize = np.hypot(*x) * 2  # 定义四边形的大小（边长），为基准尺度的2倍
 
         # Shrink.
         # 如果计算出的四边形太大了，就按比例缩小它
@@ -122,8 +124,8 @@ class Preprocesser:
 
         # Save aligned image.
         return rsize, crop, [lx, ly, rx, ry]
-    
-    def crop(self, img_np_list, still=False, xsize=512):    # first frame for all video
+
+    def crop(self, img_np_list, still=False, xsize=512):  # first frame for all video
         img_np = img_np_list[0]
         lm = self.get_landmark(img_np)
 
@@ -141,4 +143,3 @@ class Preprocesser:
                 _inp = _inp[ly:ry, lx:rx]
             img_np_list[_i] = _inp
         return img_np_list, crop, quad
-
