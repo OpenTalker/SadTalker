@@ -34,7 +34,7 @@ class SadTalker():
       
 
     def test(self, source_image, driven_audio, preprocess='crop', 
-        still_mode=False,  use_enhancer=False, batch_size=1, size=256, 
+        still_mode=False,  use_enhancer=False, use_half=False, batch_size=1, size=256, 
         pose_style = 0, exp_scale=1.0, 
         use_ref_video = False,
         ref_video = None,
@@ -48,7 +48,7 @@ class SadTalker():
             
         self.audio_to_coeff = Audio2Coeff(self.sadtalker_paths, self.device)
         self.preprocess_model = CropAndExtract(self.sadtalker_paths, self.device)
-        self.animate_from_coeff = AnimateFromCoeff(self.sadtalker_paths, self.device)
+        self.animate_from_coeff = AnimateFromCoeff(self.sadtalker_paths, self.device, use_half)
 
         time_tag = str(uuid.uuid4())
         save_dir = os.path.join(result_dir, time_tag)
