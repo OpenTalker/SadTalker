@@ -3,7 +3,10 @@ import numpy as np
 from tqdm import tqdm
 import uuid
 
-from src.utils.videoio import save_video_with_watermark 
+from src.utils.videoio import save_video_with_watermark
+import time
+from src.utils.process_log import record_process_log
+
 
 def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, extended_crop=False):
 
@@ -55,6 +58,7 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
 
     tmp_path = str(uuid.uuid4())+'.mp4'
     out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
+    t = time.time()
     for crop_frame in tqdm(crop_frames, 'seamlessClone:'):
         p = cv2.resize(crop_frame.astype(np.uint8), (ox2-ox1, oy2 - oy1)) 
 
@@ -64,6 +68,7 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
         out_tmp.write(gen_img)
 
     out_tmp.release()
+    record_process_log("paste_pic", "seamlessClone", time.time()-t, "crop_frames")
 
     save_video_with_watermark(tmp_path, new_audio_path, full_video_path, watermark=False)
     os.remove(tmp_path)
