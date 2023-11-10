@@ -176,3 +176,4 @@ if __name__ == '__main__':
         args.device = "cpu"
 
     main(args)
+    record_process_log(__name__, "Total Time", time.time() - t)
