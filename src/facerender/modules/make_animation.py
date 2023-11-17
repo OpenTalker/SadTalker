@@ -118,6 +118,7 @@ def make_animation(source_image, source_semantics, target_semantics,
         for frame_idx in tqdm(range(target_semantics.shape[1]), 'Face Renderer:'):
             # still check the dimension
             # print(target_semantics.shape, source_semantics.shape)
+            for_loop_t = time.time()
             target_semantics_frame = target_semantics[:, frame_idx]
             he_driving = mapping(target_semantics_frame)
             if yaw_c_seq is not None:
@@ -128,9 +129,15 @@ def make_animation(source_image, source_semantics, target_semantics,
                 he_driving['roll_in'] = roll_c_seq[:, frame_idx]
 
             kp_driving = keypoint_transformation(kp_canonical, he_driving)
-
+            record_process_log("make_animation", "Face Renderer for loop: keypoint_transformation",
+                               time.time() - for_loop_t,
+                               f"frame_idx:{frame_idx}")
             kp_norm = kp_driving
+            gt = time.time()
             out = generator(source_image, kp_source=kp_source, kp_driving=kp_norm)
+            record_process_log("make_animation", "Face Renderer for loop: generator",
+                               time.time() - gt,
+                               f"frame_idx:{frame_idx}")
             '''
             source_image_new = out['prediction'].squeeze(1)
             kp_canonical_new =  kp_detector(source_image_new)
@@ -140,6 +147,9 @@ def make_animation(source_image, source_semantics, target_semantics,
             out = generator(source_image_new, kp_source=kp_source_new, kp_driving=kp_driving_new)
             '''
             predictions.append(out['prediction'])
+
+            record_process_log("make_animation", "Face Renderer for loop", time.time() - for_loop_t, f"frame_idx:{frame_idx}")
+
         predictions_ts = torch.stack(predictions, dim=1)
         record_process_log("make_animation", "Face Renderer", time.time()-t)
     return predictions_ts
