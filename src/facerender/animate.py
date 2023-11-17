@@ -272,13 +272,22 @@ class AnimateFromCoeff():
 
             t = time.time()
             try:
+                et = time.time()
                 enhanced_images_gen_with_len = enhancer_generator_with_len(full_video_path, method=enhancer,
                                                                            bg_upsampler=background_enhancer)
+                record_process_log(self.__class__.__name__, "generate", time.time() - et, "enhancer_generator_with_len")
+                it = time.time()
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+                record_process_log(self.__class__.__name__, "generate", time.time() - it, "enhancer_generator_with_len.imageio.mimsave")
+
             except:
+                _t = time.time()
                 enhanced_images_gen_with_len = enhancer_list(full_video_path, method=enhancer,
                                                              bg_upsampler=background_enhancer)
+                record_process_log(self.__class__.__name__, "generate", time.time() - _t, "enhancer_list")
+                it = time.time()
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+                record_process_log(self.__class__.__name__, "generate", time.time() - it, "enhancer_list.imageio.mimsave")
 
             record_process_log(self.__class__.__name__, "generate", time.time() - t, "enhanced_images_gen_with_len")
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark=False)
