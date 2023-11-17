@@ -169,7 +169,7 @@ class AnimateFromCoeff():
 
     def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None,
                  preprocess='crop', img_size=256):
-
+        t = time.time()
         source_image = x['source_image'].type(torch.FloatTensor)
         source_semantics = x['source_semantics'].type(torch.FloatTensor)
         target_semantics = x['target_semantics_list'].type(torch.FloatTensor)
@@ -192,6 +192,8 @@ class AnimateFromCoeff():
         else:
             roll_c_seq = None
 
+        record_process_log(self.__class__.__name__, "generate", time.time()-t, "source_image")
+
         frame_num = x['frame_num']
         t = time.time()
         predictions_video = make_animation(source_image, source_semantics, target_semantics,
@@ -199,26 +201,35 @@ class AnimateFromCoeff():
                                            yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp=True)
         record_process_log(self.__class__.__name__, "generate", time.time()-t, "make_animation")
 
+        t = time.time()
         predictions_video = predictions_video.reshape((-1,) + predictions_video.shape[2:])
         predictions_video = predictions_video[:frame_num]
+        record_process_log(self.__class__.__name__, "generate", time.time()-t, "predictions_video")
 
         video = []
+        t = time.time()
         for idx in range(predictions_video.shape[0]):
             image = predictions_video[idx]
             image = np.transpose(image.data.cpu().numpy(), [1, 2, 0]).astype(np.float32)
             video.append(image)
-        result = img_as_ubyte(video)
+        record_process_log(self.__class__.__name__, "generate", time.time()-t, "range(predictions_video.shape[0])")
 
+        t = time.time()
+        result = img_as_ubyte(video)
         ### the generated video is 256x256, so we keep the aspect ratio, 
         original_size = crop_info[0]
         if original_size:
             result = [cv2.resize(result_i, (img_size, int(img_size * original_size[1] / original_size[0]))) for result_i
                       in result]
+        record_process_log(self.__class__.__name__, "generate", time.time()-t, "original_size")
 
         video_name = x['video_name'] + '.mp4'
         path = os.path.join(video_save_dir, 'temp_' + video_name)
 
+        t = time.time()
+
         imageio.mimsave(path, result, fps=float(25))
+        record_process_log(self.__class__.__name__, "generate", time.time()-t, "imageio.mimsave")
 
         av_path = os.path.join(video_save_dir, video_name)
         return_path = av_path
@@ -238,6 +249,7 @@ class AnimateFromCoeff():
         save_video_with_watermark(path, new_audio_path, av_path, watermark=False)
         print(f'The generated video is named {video_save_dir}/{video_name}')
 
+        t = time.time()
         if 'full' in preprocess.lower():
             # only add watermark to the full image.
             video_name_full = x['video_name'] + '_full.mp4'
@@ -245,6 +257,8 @@ class AnimateFromCoeff():
             return_path = full_video_path
             paste_pic(path, pic_path, crop_info, new_audio_path, full_video_path,
                       extended_crop=True if 'ext' in preprocess.lower() else False)
+
+            record_process_log(self.__class__.__name__, "generate", time.time() - t, "paste_pic")
             print(f'The generated video is named {video_save_dir}/{video_name_full}')
         else:
             full_video_path = av_path
@@ -256,6 +270,7 @@ class AnimateFromCoeff():
             av_path_enhancer = os.path.join(video_save_dir, video_name_enhancer)
             return_path = av_path_enhancer
 
+            t = time.time()
             try:
                 enhanced_images_gen_with_len = enhancer_generator_with_len(full_video_path, method=enhancer,
                                                                            bg_upsampler=background_enhancer)
@@ -265,6 +280,7 @@ class AnimateFromCoeff():
                                                              bg_upsampler=background_enhancer)
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
 
+            record_process_log(self.__class__.__name__, "generate", time.time() - t, "enhanced_images_gen_with_len")
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark=False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')
             os.remove(enhanced_path)
