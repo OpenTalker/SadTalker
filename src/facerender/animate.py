@@ -292,6 +292,7 @@ class AnimateFromCoeff():
             record_process_log(self.__class__.__name__, "generate", time.time() - t, "enhanced_images_gen_with_len")
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark=False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')
+            record_process_log(self.__class__.__name__, "generate", 0, f"av_path_enhancer:{get_file_size(av_path_enhancer)}")
 
             record_process_log(self.__class__.__name__, "generate", 0, f"enhanced_path:{get_file_size(enhanced_path)}")
             os.remove(enhanced_path)
