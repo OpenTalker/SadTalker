@@ -23,7 +23,7 @@ from src.utils.face_enhancer import enhancer_generator_with_len, enhancer_list
 from src.utils.paste_pic import paste_pic
 from src.utils.videoio import save_video_with_watermark
 import time
-from src.utils.process_log import record_process_log
+from src.utils.process_log import record_process_log, get_file_size
 
 try:
     import webui  # in webui
@@ -292,9 +292,12 @@ class AnimateFromCoeff():
             record_process_log(self.__class__.__name__, "generate", time.time() - t, "enhanced_images_gen_with_len")
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark=False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')
+
+            record_process_log(self.__class__.__name__, "generate", 0, f"enhanced_path:{get_file_size(enhanced_path)}")
             os.remove(enhanced_path)
+        record_process_log(self.__class__.__name__, "generate", 0,
+                           f"new_audio_path:{get_file_size(new_audio_path)}")
 
         os.remove(path)
         os.remove(new_audio_path)
-
         return return_path
