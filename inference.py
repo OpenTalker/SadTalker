@@ -11,7 +11,7 @@ from src.facerender.animate import AnimateFromCoeff
 from src.generate_batch import get_data
 from src.generate_facerender_batch import get_facerender_data
 from src.utils.init_path import init_path
-from src.utils.process_log import record_process_log
+from src.utils.process_log import record_process_log, get_file_size
 
 
 def main(args):
@@ -119,6 +119,8 @@ def main(args):
 
     shutil.move(result, save_dir + '.mp4')
     print('The generated video is named:', save_dir + '.mp4')
+
+    record_process_log("main", "result mp4 file", get_file_size(f"{save_dir}.mp4"))
 
     if not args.verbose:
         shutil.rmtree(save_dir)
