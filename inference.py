@@ -42,7 +42,7 @@ def main(args):
 
     t = time.time()
     audio_to_coeff = Audio2Coeff(sadtalker_paths, device)
-    record_process_log("main", "CropAndExtract", time.time() - t)
+    record_process_log("main", "Audio2Coeff", time.time() - t)
 
     t = time.time()
     animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
