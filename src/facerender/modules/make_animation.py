@@ -151,6 +151,7 @@ def make_animation(source_image, source_semantics, target_semantics,
             # record_process_log("make_animation", "Face Renderer for loop", time.time() - for_loop_t, f"frame_idx:{frame_idx}")
 
         predictions_ts = torch.stack(predictions, dim=1)
+        # Face Renderer 总消耗时长：16.83923388，可以使用并行处理for loop
         record_process_log("make_animation", "Face Renderer", time.time()-t)
     return predictions_ts
 

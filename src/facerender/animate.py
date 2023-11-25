@@ -199,6 +199,7 @@ class AnimateFromCoeff():
         predictions_video = make_animation(source_image, source_semantics, target_semantics,
                                            self.generator, self.kp_extractor, self.he_estimator, self.mapping,
                                            yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp=True)
+        # call make_animation v100 消耗时长：16.85565281
         record_process_log(self.__class__.__name__, "generate", time.time()-t, "make_animation")
 
         t = time.time()
@@ -278,6 +279,7 @@ class AnimateFromCoeff():
                 record_process_log(self.__class__.__name__, "generate", time.time() - et, "enhancer_generator_with_len")
                 it = time.time()
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+                # enhancer_generator_with_len.imageio.mimsave 消耗时长：50.53366041
                 record_process_log(self.__class__.__name__, "generate", time.time() - it, "enhancer_generator_with_len.imageio.mimsave")
 
             except:
@@ -289,6 +291,7 @@ class AnimateFromCoeff():
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
                 record_process_log(self.__class__.__name__, "generate", time.time() - it, "enhancer_list.imageio.mimsave")
 
+            # enhanced_images_gen_with_len，支持try except 这部分block 整体时间：50.68383718，99%的时间都是消耗在 enhancer_generator_with_len.imageio.mimsave
             record_process_log(self.__class__.__name__, "generate", time.time() - t, "enhanced_images_gen_with_len")
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark=False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')

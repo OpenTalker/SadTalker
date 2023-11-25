@@ -38,14 +38,17 @@ def main(args):
     # init model
     t = time.time()
     preprocess_model = CropAndExtract(sadtalker_paths, device)
+    # 初始化 CropAndExtract, V100 消耗时间：3.572038889
     record_process_log("main", "CropAndExtract", time.time() - t)
 
     t = time.time()
     audio_to_coeff = Audio2Coeff(sadtalker_paths, device)
+    # 初始化 Audio2Coeff, V100 消耗时间：0.297198772
     record_process_log("main", "Audio2Coeff", time.time() - t)
 
     t = time.time()
     animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
+    # 初始化 AnimateFromCoeff, V100 消耗时间：2.004800558
     record_process_log("main", "AnimateFromCoeff", time.time() - t)
 
     # crop image and extract 3dmm from image
@@ -56,6 +59,7 @@ def main(args):
     first_coeff_path, crop_pic_path, crop_info = preprocess_model.generate(
         pic_path, first_frame_dir, args.preprocess,
         source_image_flag=True, pic_size=args.size)
+    # call preprocess_model.generate，消耗时间：1.483717203
     record_process_log("main", "preprocess_model.generate", time.time() - t, "first_coeff_path")
     if first_coeff_path is None:
         print("Can't get the coeffs of the input")
@@ -91,6 +95,7 @@ def main(args):
     t = time.time()
     # audio2ceoff
     batch = get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=args.still)
+    # call get_data, 消耗时间：0.853573322
     record_process_log("main", "get_data", time.time() - t)
     coeff_path = audio_to_coeff.generate(batch, save_dir, pose_style, ref_pose_coeff_path)
     t = time.time()
@@ -115,6 +120,7 @@ def main(args):
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
                                          enhancer=args.enhancer, background_enhancer=args.background_enhancer,
                                          preprocess=args.preprocess, img_size=args.size)
+    # AnimateFromCoeff generate 消耗的总时间：79.29866314
     record_process_log("main", "animate_from_coeff.generate", time.time() - t)
 
     shutil.move(result, save_dir + '.mp4')
