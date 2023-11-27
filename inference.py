@@ -39,6 +39,7 @@ def main(args):
     t = time.time()
     preprocess_model = CropAndExtract(sadtalker_paths, device)
     # 初始化 CropAndExtract, V100 消耗时间：3.572038889
+    # TODO(qingyuan): this is loading check points, try to just load once
     record_process_log("main", "CropAndExtract", time.time() - t)
 
     t = time.time()
@@ -49,6 +50,7 @@ def main(args):
     t = time.time()
     animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
     # 初始化 AnimateFromCoeff, V100 消耗时间：2.004800558
+    # TODO(qingyuan): this is loading check points and models, try to just load once
     record_process_log("main", "AnimateFromCoeff", time.time() - t)
 
     # crop image and extract 3dmm from image
@@ -60,6 +62,7 @@ def main(args):
         pic_path, first_frame_dir, args.preprocess,
         source_image_flag=True, pic_size=args.size)
     # call preprocess_model.generate，消耗时间：1.483717203
+    # TODO(qingyuan): add logging and check where the time is spent
     record_process_log("main", "preprocess_model.generate", time.time() - t, "first_coeff_path")
     if first_coeff_path is None:
         print("Can't get the coeffs of the input")

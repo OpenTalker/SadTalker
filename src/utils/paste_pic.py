@@ -69,6 +69,7 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
 
     out_tmp.release()
     # crop_frames for loop，v100 消耗时长：9.087732077
+    # TODO(qingyuan): change forloop to parallel. Avoid disk i/o, use memory
     record_process_log("paste_pic", "seamlessClone", time.time()-t, "crop_frames")
 
     save_video_with_watermark(tmp_path, new_audio_path, full_video_path, watermark=False)

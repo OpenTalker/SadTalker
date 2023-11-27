@@ -152,6 +152,7 @@ def make_animation(source_image, source_semantics, target_semantics,
 
         predictions_ts = torch.stack(predictions, dim=1)
         # Face Renderer 总消耗时长：16.83923388，可以使用并行处理for loop
+        # TODO(qingyuan): change forloop to parallel processing
         record_process_log("make_animation", "Face Renderer", time.time()-t)
     return predictions_ts
 

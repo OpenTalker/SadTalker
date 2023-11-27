@@ -256,6 +256,7 @@ class AnimateFromCoeff():
             video_name_full = x['video_name'] + '_full.mp4'
             full_video_path = os.path.join(video_save_dir, video_name_full)
             return_path = full_video_path
+            # TODO (qingyuan): paste_pic takes 9s. Check the comments inside the function on how to optimize it
             paste_pic(path, pic_path, crop_info, new_audio_path, full_video_path,
                       extended_crop=True if 'ext' in preprocess.lower() else False)
 
@@ -280,6 +281,9 @@ class AnimateFromCoeff():
                 it = time.time()
                 imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
                 # enhancer_generator_with_len.imageio.mimsave 消耗时长：50.53366041
+                # TODO (qingyuan): mimsave is an alias for mimwrite. The source code is here:
+                #  https://github.com/imageio/imageio/blob/dac86e36696d4afbd2b6588d8fd119107cdfaf3f/imageio/v2.py#L469
+                #  All the time is spent on disk i/o. We may send the video back directly without writing to disk.
                 record_process_log(self.__class__.__name__, "generate", time.time() - it, "enhancer_generator_with_len.imageio.mimsave")
 
             except:
