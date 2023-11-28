@@ -9,7 +9,7 @@
 
     cd SOMEWHERE_YOU_LIKE
 
-    bash <(wget -qO- https://raw.githubusercontent.com/Winfredy/OpenTalker/main/scripts/download_models.sh)
+    bash <(wget -qO- https://raw.githubusercontent.com/OpenTalker/SadTalker/main/scripts/download_models.sh)
     ```
 
     For Windows, you can download all the checkpoints [here](https://github.com/OpenTalker/SadTalker/tree/main#2-download-models).
