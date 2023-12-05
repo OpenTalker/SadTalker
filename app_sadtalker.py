@@ -50,7 +50,7 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
                             with gr.Column(variant='panel'):
                                 input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
                                 tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
-                                tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
+                                tts.click(fn=tts_talker.test, inputs=[input_text, driven_audio], outputs=[driven_audio])
                             
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
