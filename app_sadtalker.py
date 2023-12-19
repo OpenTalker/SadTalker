@@ -8,6 +8,7 @@ try:
     in_webui = True
 except:
     in_webui = False
+print("in_webui=", in_webui)
 
 
 def toggle_audio_file(choice):
@@ -22,6 +23,8 @@ def ref_video_fn(path_of_ref_video):
     else:
         return gr.update(value=False)
 
+
+
 def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warpfn=None):
 
     sad_talker = SadTalker(checkpoint_path, config_path, lazy_load=True)
@@ -32,28 +35,38 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
                     <a style='font-size:18px;color: #efefef' href='https://sadtalker.github.io'>Homepage</a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
                      <a style='font-size:18px;color: #efefef' href='https://github.com/Winfredy/SadTalker'> Github </div>")
         
-        with gr.Row(equal_height=False): 
+        # with gr.Row().style(equal_height=False):
+        with gr.Row(equal_height=False): # gradio 4.10.0
             with gr.Column(variant='panel'):
                 with gr.Tabs(elem_id="sadtalker_source_image"):
                     with gr.TabItem('Upload image'):
                         with gr.Row():
                             source_image = gr.Image(label="Source image", 
+                                                    # source="upload", 
                                                     type="filepath", 
+                                                    # elem_id="img2img_image").style(width=512)
                                                     elem_id="img2img_image", width=512)
 
                 with gr.Tabs(elem_id="sadtalker_driven_audio"):
                     with gr.TabItem('Upload OR TTS'):
                         with gr.Column(variant='panel'):
                             driven_audio = gr.Audio(label="Input audio", 
+                                                    # source="upload", 
                                                     type="filepath")
 
-                        if sys.platform != 'win32' and not in_webui: 
-                            from src.utils.text2speech import TTSTalker
-                            tts_talker = TTSTalker()
-                            with gr.Column(variant='panel'):
-                                input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
-                                tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
-                                tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
+                        # if sys.platform != 'win32' and not in_webui: 
+                        # if True: 
+                        #     from src.utils.text2speech import TTSTalker
+                        #     tts_talker = TTSTalker()
+                        #     with gr.Column(variant='panel'):
+                        #         input_text = gr.Textbox(label="Generating audio from text", 
+                        #             lines=5, 
+                        #             placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
+                        #         tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
+                        #         tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
+                        from tts_ui import make_tts_ui
+                        with gr.Column(variant='panel'):
+                            make_tts_ui(driven_audio)
                             
             with gr.Column(variant='panel'): 
                 with gr.Tabs(elem_id="sadtalker_checkbox"):
@@ -71,7 +84,9 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
                             submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
                             
                 with gr.Tabs(elem_id="sadtalker_genearted"):
-                        gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
+                        gen_video = gr.Video(label="Generated video", 
+                                            #  format="mp4", 
+                                             width=256)
 
         if warpfn:
             submit.click(
@@ -104,11 +119,12 @@ def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warp
 
     return sadtalker_interface
  
+demo = None
 
 if __name__ == "__main__":
 
     demo = sadtalker_demo()
     demo.queue()
-    demo.launch()
+    demo.launch(server_port=10201, share=True)
 
 
