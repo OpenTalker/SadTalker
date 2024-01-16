@@ -24,18 +24,3 @@ def save_video_with_watermark(video, audio, save_path, watermark=False):
 
     if watermark is False:
         shutil.move(temp_file, save_path)
-    else:
-        # watermark
-        try:
-            ##### check if stable-diffusion-webui
-            import webui
-            from modules import paths
-            watarmark_path = paths.script_path+"/extensions/SadTalker/docs/sadtalker_logo.png"
-        except:
-            # get the root path of sadtalker.
-            dir_path = os.path.dirname(os.path.realpath(__file__))
-            watarmark_path = dir_path+"/../../docs/sadtalker_logo.png"
-
-        cmd = r'ffmpeg -y -hide_banner -loglevel error -i "%s" -i "%s" -filter_complex "[1]scale=100:-1[wm];[0][wm]overlay=(main_w-overlay_w)-10:10" "%s"' % (temp_file, watarmark_path, save_path)
-        os.system(cmd)
-        os.remove(temp_file)

@@ -60,7 +60,7 @@ class CropAndExtract():
         self.lm3d_std = load_lm3d(sadtalker_path['dir_of_BFM_fitting'])
         self.device = device
     
-    def generate(self, input_path, save_dir, crop_or_resize='crop', source_image_flag=False, pic_size=256):
+    def generate(self, input_path, save_dir, crop_or_resize='full', source_image_flag=False, pic_size=256):
 
         pic_name = os.path.splitext(os.path.split(input_path)[-1])[0]  
 
