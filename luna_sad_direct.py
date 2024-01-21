@@ -44,6 +44,7 @@ args = dict(
         driven_audio=None, preprocess='crop', 
         still_mode=True,  use_enhancer=False, 
         # batch_size=2, 
+        # batch_size=4, 
         batch_size=8, 
         size=crop_size, 
         pose_style = 0, 
@@ -158,12 +159,16 @@ def play_video():
     try:
         while True:
             # 找到要播放什么
-            is_not_idle = (len(video_list) > 0)
+            # is_not_idle = (len(video_list) > 0)
+            is_not_idle = not video_list.empty()
             if is_not_idle:
-                video_path = video_list[0].get("video")
-                audio_path = video_list[0].get("audio")
+                # item = video_list[0]
+                # video_list.pop(0)
+                item = video_list.get()[1] # (priority, item) 
+
+                video_path = item.get("video")
+                audio_path = item.get("audio")
                 cap = cv2.VideoCapture(video_path)  # 打开视频文件
-                video_list.pop(0)
             else:
                 audio_path = None
                 # cap = None
@@ -179,7 +184,8 @@ def play_video():
                 threading.Thread(target=play_audio, args=[audio_path]).start()  # play audio
             # 循环播放视频帧
             while True:
-                if not is_not_idle and (len(video_list) > 0):
+                # if not is_not_idle and (len(video_list) > 0):
+                if not is_not_idle and not video_list.empty():
                     break # 跳出待机动画的循环
                 if cap:
                     ret, frame = cap.read()
@@ -233,23 +239,42 @@ def start_fastapi_server():
 
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-executor = ThreadPoolExecutor(max_workers=2)
+# executor = ThreadPoolExecutor(max_workers=2)
+executor = ThreadPoolExecutor(max_workers=1)
 # asyncio.get_event_loop().set_default_executor(executor)
 # app.state.executor = executor
     
 # 3. 全局状态
-video_list: list[
-    dict[str, str]
-] = []  # 是 {"video": str, "audio": str} 的列表, 表示已经生成过的视频在哪里
+# video_list: list[
+#     dict[str, str]
+# ] = []  # 是 {"video": str, "audio": str} 的列表, 表示已经生成过的视频在哪里
+import queue
+video_list = queue.PriorityQueue()
+
 
 # fay_ws = None
 video_cache: dict[str, str] = {}  # 是 {"audio_hash": "video_path"} 的字典，根据md5推算出来的视频在哪里
 
+tasks = []
 @app.get("/audio_to_video/")
 async def audio_to_video_async(file_path: str):
-    return await asyncio.get_event_loop().run_in_executor(executor, audio_to_video, (file_path, ))
+    # return await asyncio.get_event_loop().run_in_executor(executor, audio_to_video, file_path)
+    last_future = tasks[-1] if len(tasks) > 0 else None
+    # print("last_future=", last_future)
+    future = executor.submit(audio_to_video, file_path, last_future)
+    # print("future=", future)
+    tasks.append(future)
+    # print("tasks=", tasks)
+    return {"code": 200}
 
-def audio_to_video(file_path: str):
+# http 无状态，fastapi理应同时处理多个请求
+
+# 应该是Luna AI 存在时序，需要收到200后才能发下一个请求
+
+# 我们可以通过play video按照时间顺序，来保证时序
+
+# def audio_to_video(file_path: str):
+def audio_to_video(file_path: str, last_future=None):
     
     print("file_path=", file_path)
     aud_dir = file_path
@@ -267,7 +292,13 @@ def audio_to_video(file_path: str):
     convert_mp3_to_wav(old_path, new_path)
     audio_hash = hash_file_md5(new_path)
     if audio_hash in video_cache:
-        video_list.append({"video": video_cache[audio_hash], "audio": new_path})
+        # video_list.append({"video": video_cache[audio_hash], "audio": new_path})
+
+        while not last_future.done():
+            print("Task is not yet completed")
+            time.sleep(0.5)
+            
+        video_list.put((num, {"video": video_cache[audio_hash], "audio": new_path}))
         print("视频已存在，直接播放。")
     else:
         audio_path = new_path
@@ -281,7 +312,15 @@ def audio_to_video(file_path: str):
         # output_path = await generate_video(audio_path, output_path)
         output_path = generate_video(audio_path, output_path)
     
-        video_list.append({"video": output_path, "audio": new_path})
+        # video_list.append({"video": output_path, "audio": new_path})
+        # if last_future is not None:
+        #     last_future.result()
+        while not last_future.done():
+            print("Task is not yet completed")
+            time.sleep(0.5)
+            # 为了确保时序，等待上家生成完毕
+        video_list.put((num, {"video": output_path, "audio": new_path}))
+        
         video_cache[audio_hash] = output_path
 
     return {"code": 200}
