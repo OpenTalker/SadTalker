@@ -258,14 +258,14 @@ video_cache: dict[str, str] = {}  # 是 {"audio_hash": "video_path"} 的字典�
 tasks = []
 @app.get("/audio_to_video/")
 async def audio_to_video_async(file_path: str):
-    # return await asyncio.get_event_loop().run_in_executor(executor, audio_to_video, file_path)
-    last_future = tasks[-1] if len(tasks) > 0 else None
-    # print("last_future=", last_future)
-    future = executor.submit(audio_to_video, file_path, last_future)
-    # print("future=", future)
-    tasks.append(future)
-    # print("tasks=", tasks)
-    return {"code": 200}
+    return await asyncio.get_event_loop().run_in_executor(executor, audio_to_video, file_path)
+    # last_future = tasks[-1] if len(tasks) > 0 else None
+    # # print("last_future=", last_future)
+    # future = executor.submit(audio_to_video, file_path, last_future)
+    # # print("future=", future)
+    # tasks.append(future)
+    # # print("tasks=", tasks)
+    # return {"code": 200}
 
 # http 无状态，fastapi理应同时处理多个请求
 
@@ -273,8 +273,8 @@ async def audio_to_video_async(file_path: str):
 
 # 我们可以通过play video按照时间顺序，来保证时序
 
-# def audio_to_video(file_path: str):
-def audio_to_video(file_path: str, last_future=None):
+def audio_to_video(file_path: str):
+# def audio_to_video(file_path: str, last_future=None):
     
     print("file_path=", file_path)
     aud_dir = file_path
@@ -294,9 +294,9 @@ def audio_to_video(file_path: str, last_future=None):
     if audio_hash in video_cache:
         # video_list.append({"video": video_cache[audio_hash], "audio": new_path})
 
-        while not last_future.done():
-            print("Task is not yet completed")
-            time.sleep(0.5)
+        # while not last_future.done():
+        #     print("Task is not yet completed")
+        #     time.sleep(0.5)
             
         video_list.put((num, {"video": video_cache[audio_hash], "audio": new_path}))
         print("视频已存在，直接播放。")
@@ -315,9 +315,9 @@ def audio_to_video(file_path: str, last_future=None):
         # video_list.append({"video": output_path, "audio": new_path})
         # if last_future is not None:
         #     last_future.result()
-        while not last_future.done():
-            print("Task is not yet completed")
-            time.sleep(0.5)
+        # while not last_future.done():
+        #     print("Task is not yet completed")
+        #     time.sleep(0.5)
             # 为了确保时序，等待上家生成完毕
         video_list.put((num, {"video": output_path, "audio": new_path}))
         
