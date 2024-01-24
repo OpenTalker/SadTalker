@@ -203,7 +203,7 @@ def play_video():
 
 
 from contextlib import asynccontextmanager
-
+import orjson, aiofiles
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Setup code
@@ -222,13 +222,26 @@ async def lifespan(app: FastAPI):
                 time.sleep(1)
     threading.Thread(target=play_background,  
                      daemon=True).start()
+    global video_cache, video_cache_path
+    try:
+        async with aiofiles.open(video_cache_path, "rb") as f:
+            video_cache = orjson.loads(await f.read())
+        print("Video cache is loaded. ")
+    except Exception as e:
+        print("Cannot read video_cache.json, create a new one.")
+        video_cache = dict() 
+    
     
     print("FastAPI application is starting. ")
-    yield
+    yield # 这里的yield和async await是两个系统，返回generator的时候自然会发现生命周期的不同。
     print("FastAPI application is shutting down. ")
 
     # Teardown code
     # t1.join() # daemon=True 那就不用join了
+    async with aiofiles.open(video_cache_path, "wb+") as f:
+        bytes_json = orjson.dumps(video_cache)
+        await f.write(bytes_json)
+    print("Video cache is saved. ")
     
 # 2. FastAPI 有关功能
 # https://fastapi.tiangolo.com/advanced/events/#alternative-events-deprecated
@@ -253,7 +266,8 @@ video_list = queue.PriorityQueue()
 
 
 # fay_ws = None
-video_cache: dict[str, str] = {}  # 是 {"audio_hash": "video_path"} 的字典，根据md5推算出来的视频在哪里
+video_cache: dict[str, str] | None = None  # 是 {"audio_hash": "video_path"} 的字典，根据md5推算出来的视频在哪里
+video_cache_path = "video_cache.json"
 
 tasks = []
 @app.get("/audio_to_video/")
@@ -270,6 +284,7 @@ async def audio_to_video_async(file_path: str):
 # http 无状态，fastapi理应同时处理多个请求
 
 # 应该是Luna AI 存在时序，需要收到200后才能发下一个请求
+# 是的，Luna AI的代码中，await self.xuniren_api(audio_path)，也就是这一段需要等待200发送到了，才会处理文字流（也就是音频流）的下一段。
 
 # 我们可以通过play video按照时间顺序，来保证时序
 
