@@ -7,6 +7,7 @@ class TTSTalker():
     def __init__(self) -> None:
         model_name = TTS().list_models()[0]
         self.tts = TTS(model_name)
+        self.tts = TTS(model_surename)
 
     def test(self, text, language='en'):
 
