@@ -154,7 +154,7 @@ class AnimateFromCoeff():
 
         return checkpoint['epoch']
 
-    def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256):
+    def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256, fps=25):
 
         source_image=x['source_image'].type(torch.FloatTensor)
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
@@ -202,7 +202,7 @@ class AnimateFromCoeff():
         video_name = x['video_name']  + '.mp4'
         path = os.path.join(video_save_dir, 'temp_'+video_name)
         
-        imageio.mimsave(path, result,  fps=float(25))
+        imageio.mimsave(path, result,  fps=float(fps))
 
         av_path = os.path.join(video_save_dir, video_name)
         return_path = av_path 
@@ -214,7 +214,7 @@ class AnimateFromCoeff():
         # cog will not keep the .mp3 filename
         sound = AudioSegment.from_file(audio_path)
         frames = frame_num 
-        end_time = start_time + frames*1/25*1000
+        end_time = start_time + frames*1/fps*1000
         word1=sound.set_frame_rate(16000)
         word = word1[start_time:end_time]
         word.export(new_audio_path, format="wav")
@@ -241,10 +241,10 @@ class AnimateFromCoeff():
 
             try:
                 enhanced_images_gen_with_len = enhancer_generator_with_len(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
-                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(fps))
             except:
                 enhanced_images_gen_with_len = enhancer_list(full_video_path, method=enhancer, bg_upsampler=background_enhancer)
-                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(25))
+                imageio.mimsave(enhanced_path, enhanced_images_gen_with_len, fps=float(fps))
             
             save_video_with_watermark(enhanced_path, new_audio_path, av_path_enhancer, watermark= False)
             print(f'The generated video is named {video_save_dir}/{video_name_enhancer}')

@@ -48,35 +48,31 @@ def generate_blink_seq_randomly(num_frames):
             break
     return ratio
 
-def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=False, idlemode=False, length_of_audio=False, use_blink=True):
+def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=False, idlemode=False, length_of_audio=False, use_blink=True, fps=25):
 
-    syncnet_mel_step_size = 16
-    fps = 25
+    syncnet_mel_step_size = 16  # This remains constant
 
-    pic_name = os.path.splitext(os.path.split(first_coeff_path)[-1])[0]
-    audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
-
-    
+    audio_sr = 16000
     if idlemode:
-        num_frames = int(length_of_audio * 25)
-        indiv_mels = np.zeros((num_frames, 80, 16))
+        num_frames = int(length_of_audio * fps) 
+        indiv_mels = np.zeros((num_frames, 80, 16))  
     else:
-        wav = audio.load_wav(audio_path, 16000) 
-        wav_length, num_frames = parse_audio_length(len(wav), 16000, 25)
+        wav = audio.load_wav(audio_path, audio_sr)
+        wav_length, num_frames = parse_audio_length(len(wav), audio_sr, fps) 
         wav = crop_pad_audio(wav, wav_length)
-        orig_mel = audio.melspectrogram(wav).T
-        spec = orig_mel.copy()         # nframes 80
+        orig_mel = audio.melspectrogram(wav).T  # Assuming mel spectrogram parameters are constant
+        spec = orig_mel.copy()  # nframes 80
         indiv_mels = []
 
         for i in tqdm(range(num_frames), 'mel:'):
-            start_frame_num = i-2
-            start_idx = int(80. * (start_frame_num / float(fps)))
+            start_frame_num = i - 2
+            start_idx = int(80. * (start_frame_num / float(fps)))  
             end_idx = start_idx + syncnet_mel_step_size
             seq = list(range(start_idx, end_idx))
-            seq = [ min(max(item, 0), orig_mel.shape[0]-1) for item in seq ]
+            seq = [min(max(item, 0), orig_mel.shape[0] - 1) for item in seq]  
             m = spec[seq, :]
             indiv_mels.append(m.T)
-        indiv_mels = np.asarray(indiv_mels)         # T 80 16
+    indiv_mels = np.asarray(indiv_mels)  # T 80 16
 
     ratio = generate_blink_seq_randomly(num_frames)      # T
     source_semantics_path = first_coeff_path
@@ -116,5 +112,5 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
             'ref': ref_coeff, 
             'num_frames': num_frames, 
             'ratio_gt': ratio,
-            'audio_name': audio_name, 'pic_name': pic_name}
+            'audio_name': audio_path, 'pic_name': pic_name}
 

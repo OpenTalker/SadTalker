@@ -43,7 +43,7 @@ def main(args):
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')
     os.makedirs(first_frame_dir, exist_ok=True)
     print('3DMM Extraction for source image')
-    first_coeff_path, crop_pic_path, crop_info =  preprocess_model.generate(pic_path, first_frame_dir, args.preprocess,\
+    first_coeff_path, crop_pic_path, crop_info, fps =  preprocess_model.generate(pic_path, first_frame_dir, args.preprocess,\
                                                                              source_image_flag=args.first_frame_only, pic_size=args.size)
     if first_coeff_path is None:
         print("Can't get the coeffs of the input")
@@ -71,7 +71,7 @@ def main(args):
         ref_pose_coeff_path=None
 
     #audio2ceoff
-    batch = get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=args.still)
+    batch = get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=args.still, fps=fps)
     coeff_path = audio_to_coeff.generate(batch, save_dir, pose_style, ref_pose_coeff_path)
 
     # 3dface render
@@ -85,7 +85,7 @@ def main(args):
                                 expression_scale=args.expression_scale, still_mode=args.still, preprocess=args.preprocess, size=args.size)
     
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
-                                enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size)
+                                enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size, fps=fps)
     
     shutil.move(result, save_dir+'.mp4')
     print('The generated video is named:', save_dir+'.mp4')
@@ -97,6 +97,7 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
+    parser.add_argument("--force-fps", type=int, default=None)
     parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used")
     parser.add_argument("--driven_audio", help="path to driven audio", default="./data/audio_en-1s.wav")
     parser.add_argument("--source_image", help="path to source image", default="./data/60fps-1s.mp4")
@@ -116,7 +117,7 @@ if __name__ == '__main__':
     parser.add_argument("--cpu", dest="cpu", action="store_true") 
     parser.add_argument("--face3dvis", action="store_true", help="generate 3d face and 3d landmarks") 
     parser.add_argument("--still", action="store_true", help="can crop back to the original videos for the full body aniamtion") 
-    parser.add_argument("--preprocess", default='full', choices=['crop', 'extcrop', 'resize', 'full', 'extfull'], help="how to preprocess the images" ) 
+    parser.add_argument("--preprocess", default='extfull', choices=['crop', 'extcrop', 'resize', 'full', 'extfull'], help="how to preprocess the images" ) 
     parser.add_argument("--verbose",action="store_true", help="saving the intermedia output or not" ) 
     parser.add_argument("--old_version",action="store_true", help="use the pth other than safetensor version" ) 
 
