@@ -215,7 +215,7 @@ class AnimateFromCoeff():
         sound = AudioSegment.from_file(audio_path)
         frames = frame_num 
         end_time = start_time + frames*1/fps*1000
-        word1=sound.set_frame_rate(16000)
+        word1 = sound.set_frame_rate(16000)
         word = word1[start_time:end_time]
         word.export(new_audio_path, format="wav")
 

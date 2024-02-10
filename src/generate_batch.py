@@ -50,6 +50,9 @@ def generate_blink_seq_randomly(num_frames):
 
 def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=False, idlemode=False, length_of_audio=False, use_blink=True, fps=25):
 
+    pic_name = os.path.splitext(os.path.split(first_coeff_path)[-1])[0]
+    audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
+
     syncnet_mel_step_size = 16  # This remains constant
 
     audio_sr = 16000
@@ -112,5 +115,5 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
             'ref': ref_coeff, 
             'num_frames': num_frames, 
             'ratio_gt': ratio,
-            'audio_name': audio_path, 'pic_name': pic_name}
+            'audio_name': audio_name, 'pic_name': pic_name}
 
