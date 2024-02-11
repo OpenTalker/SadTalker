@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     parser = ArgumentParser()  
     parser.add_argument("--realign-crop-per-frame", default=False, action="store_true", help="If specified, uses the crop info of each frame instead of the first one")
-    parser.add_argument("--restore-eyes", default=False, action="store_true", help="If specified pastes back the eyes from the original image(s) to the generated one")
+    parser.add_argument("--restore-eyes", default=True, action="store_true", help="If specified pastes back the eyes from the original image(s) to the generated one")
     parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used, similar to original sadtalker")
     parser.add_argument("--driven_audio", help="path to driven audio", default="./data/audio_en-2s.wav")
     parser.add_argument("--source_image", help="path to source image", default="./data/60fps-1s.mp4")

@@ -102,18 +102,63 @@ def keypoint_transformation(kp_canonical, he, wo_exp=False):
 
 
 
+def polar_to_cartesian(r, theta, origin=(0, 0)):
+    """Convert polar coordinates to Cartesian coordinates."""
+    # Convert theta from degrees to radians
+    theta_rad = np.radians(theta)
+    
+    # Calculate Cartesian coordinates
+    x = r * np.cos(theta_rad) + origin[0]
+    y = r * np.sin(theta_rad) + origin[1]
+    
+    return int(x), int(y)
 
-def extract_eye_region(eye_landmarks, source_np):
-    min_x = min(landmark[0] for landmark in eye_landmarks)
-    max_x = max(landmark[0] for landmark in eye_landmarks)
-    min_y = min(landmark[1] for landmark in eye_landmarks)
-    max_y = max(landmark[1] for landmark in eye_landmarks)
-    return source_np[int(min_y):int(max_y), int(min_x):int(max_x)]
+def extract_eye_regions(landmark_polar, origin, image):
+    """Extract eye regions from the image using polar eye landmarks."""
+    landmark_cartesian = np.zeros_like(landmark_polar)
+    
+    # Convert all polar landmarks to Cartesian coordinates
+    for i, (r, theta) in enumerate(landmark_polar):
+        landmark_cartesian[i] = polar_to_cartesian(r, theta, origin)
+    
+    # Define eye regions using Cartesian coordinates
+    eyes = {}
+    eyes['left'] = landmark_cartesian[36:42]  # Left eye landmarks
+    eyes['right'] = landmark_cartesian[42:48]  # Right eye landmarks
+    
+    eye_regions = {}
+    for eye, landmarks in eyes.items():
+        min_x = int(np.min(landmarks[:, 0]))
+        max_x = int(np.max(landmarks[:, 0]))
+        min_y = int(np.min(landmarks[:, 1]))
+        max_y = int(np.max(landmarks[:, 1]))
+        
+        # Extract the eye region from the image
+        eye_regions[eye] = image[min_y:max_y, min_x:max_x]
+    
+    return eye_regions, landmark_cartesian
 
 def paste_eye_region(generated_img, eye_region, top_left_corner):
+    """Paste an eye region onto the generated image at the specified top-left corner."""
     y, x = top_left_corner
-    h, w, _ = eye_region.shape
+    h, w = eye_region.shape[:2]
+    
+    
     generated_img[int(y):int(y+h), int(x):int(x+w)] = eye_region
+    return generated_img
+
+def paste_eyes_on_generated_image(generated_img, eye_regions, landmarks_cartesian):
+    """Paste both left and right eye regions onto the generated image using Cartesian landmarks."""
+    # Calculate top-left corners for left and right eyes based on landmarks
+    left_eye_top_left = (np.min(landmarks_cartesian[36:42, 1]), np.min(landmarks_cartesian[36:42, 0]))
+    right_eye_top_left = (np.min(landmarks_cartesian[42:48, 1]), np.min(landmarks_cartesian[42:48, 0]))
+    
+    # Paste left eye
+    generated_img = paste_eye_region(generated_img, eye_regions['left'], left_eye_top_left)
+    
+    # Paste right eye
+    generated_img = paste_eye_region(generated_img, eye_regions['right'], right_eye_top_left)
+    
     return generated_img
 
 
@@ -169,6 +214,7 @@ def make_animation(landmarks, save_dir, pic_name, source_semantics, target_seman
 
             kp_norm = kp_driving
             out = generator(source_image_for_inference, kp_source=kp_source, kp_driving=kp_norm)
+
             '''
             source_image_new = out['prediction'].squeeze(1)
             kp_canonical_new =  kp_detector(source_image_new)
@@ -185,7 +231,6 @@ def make_animation(landmarks, save_dir, pic_name, source_semantics, target_seman
             
             # else: restore eyes
             pred_img_np = pred_img.cpu().detach().numpy().transpose(1, 2, 0)  
-            pred_img_np = (pred_img_np * 255).astype(np.uint8)
 
             landmarks_for_img = landmarks[frame_idx]
             
@@ -197,21 +242,13 @@ def make_animation(landmarks, save_dir, pic_name, source_semantics, target_seman
             # - running face landmark detection again on the generated image, and use those
             # in combindation with the original source landmarks to do the paste
 
-            # facexlib landmark indices
-            left_eye_indices = [36, 37, 38, 39, 40, 41]
-            right_eye_indices = [42, 43, 44, 45, 46, 47]
+            origin = (size//2, size//2)
 
-            left_eye_landmarks = [landmarks_for_img[i] for i in left_eye_indices]
-            right_eye_landmarks = [landmarks_for_img[i] for i in right_eye_indices]
-            left_eye_region = extract_eye_region(left_eye_landmarks, source_image_np)
-            right_eye_region = extract_eye_region(right_eye_landmarks, source_image_np)
+            eye_regions, landmark_cartesian = extract_eye_regions(landmarks_for_img, origin, source_image_np)
 
-            left_eye_top_left = (left_eye_landmarks[0][0], left_eye_landmarks[0][1]) 
-            right_eye_top_left = (right_eye_landmarks[0][0], right_eye_landmarks[0][1]) 
-            pred_img_with_eyes = paste_eye_region(pred_img_np, left_eye_region, left_eye_top_left)
-            pred_img_with_eyes = paste_eye_region(pred_img_with_eyes, right_eye_region, right_eye_top_left)
+            pred_img_np_with_eyes = paste_eyes_on_generated_image(pred_img_np, eye_regions, landmark_cartesian)
 
-            final_pred_img = torch.from_numpy(pred_img_with_eyes.transpose(2, 0, 1)) / 255.0
+            final_pred_img = torch.from_numpy(pred_img_np_with_eyes.transpose(2, 0, 1))
             predictions.append(final_pred_img)
         
         predictions_ts = torch.stack(predictions)
