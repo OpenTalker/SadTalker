@@ -97,8 +97,7 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
-    parser.add_argument("--force-fps", type=int, default=None)
-    parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used")
+    parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used, similar to original sadtalker")
     parser.add_argument("--driven_audio", help="path to driven audio", default="./data/audio_en-2s.wav")
     parser.add_argument("--source_image", help="path to source image", default="./data/60fps-1s.mp4")
     parser.add_argument("--ref_eyeblink", default=None, help="path to reference video providing eye blinking")

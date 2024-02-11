@@ -120,6 +120,9 @@ class CropAndExtract():
             if idx == 0:
                 cv2.imwrite(png_path, cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR))
 
+            # we need to iterate each original frame to:
+            # - do video inference
+            # - cut out and preserve original eyes
             cv2.imwrite(os.path.join(save_dir, pic_name + f'-{idx}.png') , cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR))
 
 

@@ -1,4 +1,7 @@
+# oxolo sample artifacts
 data/
+
+# results directory (also stores intermediate artifacts between steps)
 results/
 
 # Byte-compiled / optimized / DLL files

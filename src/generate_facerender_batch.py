@@ -26,6 +26,8 @@ def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path,
         generated_3dmm = generated_dict['coeff_3dmm'][:,:70]
 
     # note: can be batched in the future, but is fast as is too
+    # we switch from processing 1 (the first) semantic
+    # to processing each one corresponding to 1 video frame individually
     source_semantics_new = [transform_semantic_1(np.expand_dims(source_semantics[i], axis=0), semantic_radius) for i in range(source_semantics.shape[0])]
     source_semantics_ts = torch.FloatTensor(source_semantics_new)
     data['source_semantics'] = source_semantics_ts

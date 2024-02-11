@@ -54,6 +54,8 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
         else:
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
 
+    # instead of doing seamlessClone on the first image,
+    # we iterate the frames and paste on each individual
     tmp_path = str(uuid.uuid4())+'.mp4'
     out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
     for idx, crop_frame in tqdm(enumerate(crop_frames), 'seamlessClone:'):

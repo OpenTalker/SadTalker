@@ -106,6 +106,15 @@ def make_animation(save_dir, pic_name, source_semantics, target_semantics,
                             generator, kp_detector, he_estimator, mapping, 
                             yaw_c_seq=None, pitch_c_seq=None, roll_c_seq=None,
                             use_exp=True, use_half=False, size=256, device='cpu'):
+    
+    ### original sadtalker performed inference for:
+    # 1st frame
+    # 1st landmarks
+    # for each audio2coeff predicted landmark -> output 1 frame
+    ### we change it to iterate frames and landmarks along with each audio2coeff
+    # Nth frame
+    # Nth landmark
+    # Nth audio2coeff predicted landmark -> output Nth frame
     with torch.no_grad():
         predictions = []
 

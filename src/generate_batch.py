@@ -50,6 +50,10 @@ def generate_blink_seq_randomly(num_frames):
 
 def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, still=False, idlemode=False, length_of_audio=False, use_blink=True, fps=25):
 
+    # we change this to support all fps, instead of the hardcoded 25
+    # some values such as the pre-trained syncnet mel step size can not be changed
+    # the default audio sample rate is still 16k
+    # extra care when aligning individual mel features to indices corresponding to video frames
     pic_name = os.path.splitext(os.path.split(first_coeff_path)[-1])[0]
     audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
 
@@ -63,7 +67,7 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
         wav = audio.load_wav(audio_path, audio_sr)
         wav_length, num_frames = parse_audio_length(len(wav), audio_sr, fps) 
         wav = crop_pad_audio(wav, wav_length)
-        orig_mel = audio.melspectrogram(wav).T  # Assuming mel spectrogram parameters are constant
+        orig_mel = audio.melspectrogram(wav).T 
         spec = orig_mel.copy()  # nframes 80
         indiv_mels = []
 
@@ -80,11 +84,10 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
     ratio = generate_blink_seq_randomly(num_frames)      # T
     source_semantics_path = first_coeff_path
     source_semantics_dict = scio.loadmat(source_semantics_path)
+    # dimension 0 will be N of input video frames
     ref_coeff = source_semantics_dict['coeff_3dmm'][:,:70]         #1 70
-    #ref_coeff = np.repeat(ref_coeff, num_frames, axis=0)
 
     num_video_frames = ref_coeff.shape[0]
-        
 
     if ref_eyeblink_coeff_path is not None:
         ratio[:num_frames] = 0
@@ -114,6 +117,9 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
     ratio = ratio.to(device)
     ref_coeff = ref_coeff.to(device)
 
+    # this only works with the assumption that audio frames >= video frames
+    # so for this to not crash, we can just add 1s of silence/zeros to the input audio
+    # and this is going to be trimmed to match the video duration
     return {'indiv_mels': indiv_mels[:, :num_video_frames, :, :, :],  
             'ref': ref_coeff, 
             'num_frames': num_video_frames, 
