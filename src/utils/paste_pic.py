@@ -38,23 +38,30 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
             break
         crop_frames.append(frame)
 
+    # for complete video inference, we also need to look up crop_info[idx]
+    # to get crop info for each frame, instead of using only the first one
+    # however, the result is too noisy (too shaky)
+    # as a research experiment, we could get the moving average of the crop offsets
+    # to get a smoother result and allow motion, but this is outside of the scope of
+    # this assignment (we just use the first)
+    crop_idx = 0
+    r_w, r_h = crop_info[crop_idx][0]
+    clx, cly, crx, cry = crop_info[crop_idx][1]
+    lx, ly, rx, ry = crop_info[crop_idx][2]
+    lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+    # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+    # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+
+    if extended_crop:
+        oy1, oy2, ox1, ox2 = cly, cry, clx, crx
+    else:
+        oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+
     # instead of doing seamlessClone on the first image,
     # we iterate the frames and paste on each individually
     tmp_path = str(uuid.uuid4())+'.mp4'
     out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
     for idx, crop_frame in tqdm(enumerate(crop_frames), 'seamlessClone:'):
-        r_w, r_h = crop_info[idx][0]
-        clx, cly, crx, cry = crop_info[idx][1]
-        lx, ly, rx, ry = crop_info[idx][2]
-        lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-        # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-        # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-
-        if extended_crop:
-            oy1, oy2, ox1, ox2 = cly, cry, clx, crx
-        else:
-            oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-
         p = cv2.resize(crop_frame.astype(np.uint8), (ox2-ox1, oy2 - oy1)) 
 
         mask = 255*np.ones(p.shape, p.dtype)
