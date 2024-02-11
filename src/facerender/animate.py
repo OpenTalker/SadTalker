@@ -180,7 +180,7 @@ class AnimateFromCoeff():
 
         predictions_video = make_animation(landmarks, video_save_dir, pic_path, source_semantics, target_semantics,
                                         self.generator, self.kp_extractor, self.he_estimator, self.mapping, 
-                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, size=img_size, device=self.device, restore_eyes=restore_eyes)
+                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, size=img_size, device=self.device, restore_eyes=restore_eyes, only_first_semantic=True, only_first_image=True)
 
 
         video = []

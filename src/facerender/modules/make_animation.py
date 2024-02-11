@@ -120,7 +120,7 @@ def paste_eye_region(generated_img, eye_region, top_left_corner):
 def make_animation(landmarks, save_dir, pic_name, source_semantics, target_semantics,
                             generator, kp_detector, he_estimator, mapping, 
                             yaw_c_seq=None, pitch_c_seq=None, roll_c_seq=None,
-                            use_exp=True, use_half=False, size=256, device='cpu', restore_eyes=False):
+                            use_exp=True, use_half=False, size=256, device='cpu', restore_eyes=False, only_first_semantic=True, only_first_image=True):
     
     ### original sadtalker performed inference for:
     # 1st frame
@@ -140,15 +140,19 @@ def make_animation(landmarks, save_dir, pic_name, source_semantics, target_seman
             png_path = os.path.join(save_dir, 'first_frame_dir', os.path.basename(pic_name).split('.')[0] + f'-{frame_idx}.png')
             if not os.path.isfile(png_path):
                 break
-
+            
             source_image_np = img_as_float32(np.array(Image.open(png_path)))
-
             source_image = transform.resize(source_image_np, (size, size, 3)).transpose((2, 0, 1))
             source_image = torch.FloatTensor(source_image).unsqueeze(0).to(device) # 1, 3, 256, 256
-            kp_canonical = kp_detector(source_image)
 
-            he_source = mapping(source_semantics[frame_idx].unsqueeze(0)) # each.shape=[1, 45]
-            kp_source = keypoint_transformation(kp_canonical, he_source) # 2, 15, 3
+            if frame_idx == 0 or (not only_first_image):
+                source_image_for_inference = source_image
+
+            if frame_idx == 0 or (not only_first_semantic):
+                kp_canonical = kp_detector(source_image)
+
+                he_source = mapping(source_semantics[frame_idx].unsqueeze(0)) # each.shape=[1, 45]
+                kp_source = keypoint_transformation(kp_canonical, he_source) # 2, 15, 3
 
             # still check the dimension
             # print(target_semantics.shape, source_semantics.shape)
@@ -164,7 +168,7 @@ def make_animation(landmarks, save_dir, pic_name, source_semantics, target_seman
             kp_driving = keypoint_transformation(kp_canonical, he_driving)
 
             kp_norm = kp_driving
-            out = generator(source_image, kp_source=kp_source, kp_driving=kp_norm)
+            out = generator(source_image_for_inference, kp_source=kp_source, kp_driving=kp_norm)
             '''
             source_image_new = out['prediction'].squeeze(1)
             kp_canonical_new =  kp_detector(source_image_new)

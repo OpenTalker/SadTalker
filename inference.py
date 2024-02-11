@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     parser = ArgumentParser()  
     parser.add_argument("--realign-crop-per-frame", default=False, action="store_true", help="If specified, uses the crop info of each frame instead of the first one")
-    parser.add_argument("--restore-eyes", default=True, action="store_true", help="If specified pastes back the eyes from the original image(s) to the generated one")
+    parser.add_argument("--restore-eyes", default=False, action="store_true", help="If specified pastes back the eyes from the original image(s) to the generated one")
     parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used, similar to original sadtalker")
     parser.add_argument("--driven_audio", help="path to driven audio", default="./data/audio_en-2s.wav")
     parser.add_argument("--source_image", help="path to source image", default="./data/60fps-1s.mp4")
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     parser.add_argument('--background_enhancer',  type=str, default=None, help="background enhancer, [realesrgan]")
     parser.add_argument("--cpu", dest="cpu", action="store_true") 
     parser.add_argument("--face3dvis", action="store_true", help="generate 3d face and 3d landmarks") 
-    parser.add_argument("--still", default=True, action="store_true", help="can crop back to the original videos for the full body aniamtion") 
+    parser.add_argument("--still", default=False, action="store_true", help="can crop back to the original videos for the full body aniamtion") 
     parser.add_argument("--preprocess", default='full', choices=['crop', 'extcrop', 'resize', 'full', 'extfull'], help="how to preprocess the images" ) 
     parser.add_argument("--verbose",action="store_true", help="saving the intermedia output or not" ) 
     parser.add_argument("--old_version",action="store_true", help="use the pth other than safetensor version" ) 
