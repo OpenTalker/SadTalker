@@ -68,7 +68,7 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
         indiv_mels = []
 
         for i in tqdm(range(num_frames), 'mel:'):
-            start_frame_num = i - 2
+            start_frame_num = i - 1
             start_idx = int(80. * (start_frame_num / float(fps)))  
             end_idx = start_idx + syncnet_mel_step_size
             seq = list(range(start_idx, end_idx))
@@ -80,8 +80,11 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
     ratio = generate_blink_seq_randomly(num_frames)      # T
     source_semantics_path = first_coeff_path
     source_semantics_dict = scio.loadmat(source_semantics_path)
-    ref_coeff = source_semantics_dict['coeff_3dmm'][:1,:70]         #1 70
-    ref_coeff = np.repeat(ref_coeff, num_frames, axis=0)
+    ref_coeff = source_semantics_dict['coeff_3dmm'][:,:70]         #1 70
+    #ref_coeff = np.repeat(ref_coeff, num_frames, axis=0)
+
+    num_video_frames = ref_coeff.shape[0]
+        
 
     if ref_eyeblink_coeff_path is not None:
         ratio[:num_frames] = 0
@@ -111,9 +114,9 @@ def get_data(first_coeff_path, audio_path, device, ref_eyeblink_coeff_path, stil
     ratio = ratio.to(device)
     ref_coeff = ref_coeff.to(device)
 
-    return {'indiv_mels': indiv_mels,  
+    return {'indiv_mels': indiv_mels[:, :num_video_frames, :, :, :],  
             'ref': ref_coeff, 
-            'num_frames': num_frames, 
-            'ratio_gt': ratio,
+            'num_frames': num_video_frames, 
+            'ratio_gt': ratio[:, :num_video_frames, :],
             'audio_name': audio_name, 'pic_name': pic_name}
 

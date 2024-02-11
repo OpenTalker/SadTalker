@@ -3,6 +3,9 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 from tqdm import tqdm 
+from PIL import Image
+from skimage import io, img_as_float32, transform
+import os
 
 def normalize_kp(kp_source, kp_driving, kp_driving_initial, adapt_movement_scale=False,
                  use_relative_movement=False, use_relative_jacobian=False):
@@ -99,21 +102,32 @@ def keypoint_transformation(kp_canonical, he, wo_exp=False):
 
 
 
-def make_animation(source_image, source_semantics, target_semantics,
+def make_animation(save_dir, pic_name, source_semantics, target_semantics,
                             generator, kp_detector, he_estimator, mapping, 
                             yaw_c_seq=None, pitch_c_seq=None, roll_c_seq=None,
-                            use_exp=True, use_half=False):
+                            use_exp=True, use_half=False, size=256, device='cpu'):
     with torch.no_grad():
         predictions = []
 
-        kp_canonical = kp_detector(source_image)
-        he_source = mapping(source_semantics)
-        kp_source = keypoint_transformation(kp_canonical, he_source)
-    
-        for frame_idx in tqdm(range(target_semantics.shape[1]), 'Face Renderer:'):
+        n_total_frames = target_semantics.shape[1]
+
+        # note: can be batched
+        for frame_idx in tqdm(range(n_total_frames), 'Face Renderer:'):
+            png_path = os.path.join(save_dir, 'first_frame_dir', os.path.basename(pic_name).split('.')[0] + f'-{frame_idx}.png')
+            if not os.path.isfile(png_path):
+                break
+
+            source_image = img_as_float32(np.array(Image.open(png_path)))
+            source_image = transform.resize(source_image, (size, size, 3)).transpose((2, 0, 1))
+            source_image = torch.FloatTensor(source_image).unsqueeze(0).to(device) # 1, 3, 256, 256
+            kp_canonical = kp_detector(source_image)
+
+            he_source = mapping(source_semantics[frame_idx].unsqueeze(0)) # each.shape=[1, 45]
+            kp_source = keypoint_transformation(kp_canonical, he_source) # 2, 15, 3
+
             # still check the dimension
             # print(target_semantics.shape, source_semantics.shape)
-            target_semantics_frame = target_semantics[:, frame_idx]
+            target_semantics_frame = target_semantics[frame_idx].unsqueeze(0)
             he_driving = mapping(target_semantics_frame)
             if yaw_c_seq is not None:
                 he_driving['yaw_in'] = yaw_c_seq[:, frame_idx]
@@ -123,7 +137,7 @@ def make_animation(source_image, source_semantics, target_semantics,
                 he_driving['roll_in'] = roll_c_seq[:, frame_idx] 
             
             kp_driving = keypoint_transformation(kp_canonical, he_driving)
-                
+
             kp_norm = kp_driving
             out = generator(source_image, kp_source=kp_source, kp_driving=kp_norm)
             '''

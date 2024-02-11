@@ -116,8 +116,12 @@ class CropAndExtract():
             return None, None
 
         # save crop info
-        for frame in frames_pil:
-            cv2.imwrite(png_path, cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR))
+        for idx, frame in enumerate(frames_pil):
+            if idx == 0:
+                cv2.imwrite(png_path, cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR))
+
+            cv2.imwrite(os.path.join(save_dir, pic_name + f'-{idx}.png') , cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR))
+
 
         # 2. get the landmark according to the detected face. 
         if not os.path.isfile(landmarks_path): 

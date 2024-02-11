@@ -156,10 +156,8 @@ class AnimateFromCoeff():
 
     def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256, fps=25):
 
-        source_image=x['source_image'].type(torch.FloatTensor)
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
         target_semantics=x['target_semantics_list'].type(torch.FloatTensor) 
-        source_image=source_image.to(self.device)
         source_semantics=source_semantics.to(self.device)
         target_semantics=target_semantics.to(self.device)
         if 'yaw_c_seq' in x:
@@ -180,9 +178,9 @@ class AnimateFromCoeff():
 
         frame_num = x['frame_num']
 
-        predictions_video = make_animation(source_image, source_semantics, target_semantics,
+        predictions_video = make_animation(video_save_dir, pic_path, source_semantics, target_semantics,
                                         self.generator, self.kp_extractor, self.he_estimator, self.mapping, 
-                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True)
+                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, size=img_size, device=self.device)
 
         predictions_video = predictions_video.reshape((-1,)+predictions_video.shape[2:])
         predictions_video = predictions_video[:frame_num]
