@@ -154,7 +154,7 @@ class AnimateFromCoeff():
 
         return checkpoint['epoch']
 
-    def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256, fps=25):
+    def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256, fps=25, restore_eyes=False):
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
         target_semantics=x['target_semantics_list'].type(torch.FloatTensor) 
         source_semantics=source_semantics.to(self.device)
@@ -175,14 +175,13 @@ class AnimateFromCoeff():
         else:
             roll_c_seq = None
 
+        landmarks = x['landmarks']
         frame_num = x['frame_num']
 
-        predictions_video = make_animation(video_save_dir, pic_path, source_semantics, target_semantics,
+        predictions_video = make_animation(landmarks, video_save_dir, pic_path, source_semantics, target_semantics,
                                         self.generator, self.kp_extractor, self.he_estimator, self.mapping, 
-                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, size=img_size, device=self.device)
+                                        yaw_c_seq, pitch_c_seq, roll_c_seq, use_exp = True, size=img_size, device=self.device, restore_eyes=restore_eyes)
 
-        predictions_video = predictions_video.reshape((-1,)+predictions_video.shape[2:])
-        predictions_video = predictions_video[:frame_num]
 
         video = []
         for idx in range(predictions_video.shape[0]):
@@ -192,7 +191,8 @@ class AnimateFromCoeff():
         result = img_as_ubyte(video)
 
         ### the generated video is 256x256, so we keep the aspect ratio, 
-        original_size = crop_info[0][0]
+        first_frame_crop_idx = 0 
+        original_size = crop_info[first_frame_crop_idx][0]
         if original_size:
             result = [ cv2.resize(result_i,(img_size, int(img_size * original_size[1]/original_size[0]) )) for result_i in result ]
         

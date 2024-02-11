@@ -102,10 +102,25 @@ def keypoint_transformation(kp_canonical, he, wo_exp=False):
 
 
 
-def make_animation(save_dir, pic_name, source_semantics, target_semantics,
+
+def extract_eye_region(eye_landmarks, source_np):
+    min_x = min(landmark[0] for landmark in eye_landmarks)
+    max_x = max(landmark[0] for landmark in eye_landmarks)
+    min_y = min(landmark[1] for landmark in eye_landmarks)
+    max_y = max(landmark[1] for landmark in eye_landmarks)
+    return source_np[int(min_y):int(max_y), int(min_x):int(max_x)]
+
+def paste_eye_region(generated_img, eye_region, top_left_corner):
+    y, x = top_left_corner
+    h, w, _ = eye_region.shape
+    generated_img[int(y):int(y+h), int(x):int(x+w)] = eye_region
+    return generated_img
+
+
+def make_animation(landmarks, save_dir, pic_name, source_semantics, target_semantics,
                             generator, kp_detector, he_estimator, mapping, 
                             yaw_c_seq=None, pitch_c_seq=None, roll_c_seq=None,
-                            use_exp=True, use_half=False, size=256, device='cpu'):
+                            use_exp=True, use_half=False, size=256, device='cpu', restore_eyes=False):
     
     ### original sadtalker performed inference for:
     # 1st frame
@@ -126,8 +141,9 @@ def make_animation(save_dir, pic_name, source_semantics, target_semantics,
             if not os.path.isfile(png_path):
                 break
 
-            source_image = img_as_float32(np.array(Image.open(png_path)))
-            source_image = transform.resize(source_image, (size, size, 3)).transpose((2, 0, 1))
+            source_image_np = img_as_float32(np.array(Image.open(png_path)))
+
+            source_image = transform.resize(source_image_np, (size, size, 3)).transpose((2, 0, 1))
             source_image = torch.FloatTensor(source_image).unsqueeze(0).to(device) # 1, 3, 256, 256
             kp_canonical = kp_detector(source_image)
 
@@ -157,8 +173,44 @@ def make_animation(save_dir, pic_name, source_semantics, target_semantics,
             kp_driving_new = keypoint_transformation(kp_canonical_new, he_driving, wo_exp=True)
             out = generator(source_image_new, kp_source=kp_source_new, kp_driving=kp_driving_new)
             '''
-            predictions.append(out['prediction'])
-        predictions_ts = torch.stack(predictions, dim=1)
+
+            pred_img = out['prediction'].squeeze() # 3, 256, 256
+            if not restore_eyes:
+                predictions.append(pred_img)
+                continue
+            
+            # else: restore eyes
+            pred_img_np = pred_img.cpu().detach().numpy().transpose(1, 2, 0)  
+            pred_img_np = (pred_img_np * 255).astype(np.uint8)
+
+            landmarks_for_img = landmarks[frame_idx]
+            
+            # note: this just does 2 square crops and pastes back
+            # this can be made alternative ways for better results, but needs more research,
+            # which is out of scope for this assignment. Some things to try out
+            # - seameless paste onto the final image
+            # - calculating an oval around the eye location and using those to paste
+            # - running face landmark detection again on the generated image, and use those
+            # in combindation with the original source landmarks to do the paste
+
+            # facexlib landmark indices
+            left_eye_indices = [36, 37, 38, 39, 40, 41]
+            right_eye_indices = [42, 43, 44, 45, 46, 47]
+
+            left_eye_landmarks = [landmarks_for_img[i] for i in left_eye_indices]
+            right_eye_landmarks = [landmarks_for_img[i] for i in right_eye_indices]
+            left_eye_region = extract_eye_region(left_eye_landmarks, source_image_np)
+            right_eye_region = extract_eye_region(right_eye_landmarks, source_image_np)
+
+            left_eye_top_left = (left_eye_landmarks[0][0], left_eye_landmarks[0][1]) 
+            right_eye_top_left = (right_eye_landmarks[0][0], right_eye_landmarks[0][1]) 
+            pred_img_with_eyes = paste_eye_region(pred_img_np, left_eye_region, left_eye_top_left)
+            pred_img_with_eyes = paste_eye_region(pred_img_with_eyes, right_eye_region, right_eye_top_left)
+
+            final_pred_img = torch.from_numpy(pred_img_with_eyes.transpose(2, 0, 1)) / 255.0
+            predictions.append(final_pred_img)
+        
+        predictions_ts = torch.stack(predictions)
     return predictions_ts
 
 class AnimateModel(torch.nn.Module):

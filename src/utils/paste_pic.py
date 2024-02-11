@@ -41,7 +41,7 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
     # for complete video inference, we also need to look up crop_info[idx]
     # to get crop info for each frame, instead of using only the first one
     # however, the result is too noisy (too shaky)
-    # as a research experiment, we could get the moving average of the crop offsets
+    # as a research experiment, we could get the moving average / other interpolation of the crop offsets
     # to get a smoother result and allow motion, but this is outside of the scope of
     # this assignment (we just use the first)
     crop_idx = 0

@@ -85,7 +85,7 @@ def main(args):
                                 expression_scale=args.expression_scale, still_mode=args.still, preprocess=args.preprocess, size=args.size)
     
     result = animate_from_coeff.generate(data, save_dir, pic_path, crop_info, \
-                                enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size, fps=fps)
+                                enhancer=args.enhancer, background_enhancer=args.background_enhancer, preprocess=args.preprocess, img_size=args.size, fps=fps, restore_eyes=args.restore_eyes)
     
     shutil.move(result, save_dir+'.mp4')
     print('The generated video is named:', save_dir+'.mp4')
@@ -97,6 +97,7 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()  
+    parser.add_argument("--restore-eyes", default=False, action="store_true", help="If specified pastes back the eyes from the original image(s) to the generated one")
     parser.add_argument("--first_frame_only", action="store_true", default=False, help="If specified only the first frame of the input video will be used, similar to original sadtalker")
     parser.add_argument("--driven_audio", help="path to driven audio", default="./data/audio_en-2s.wav")
     parser.add_argument("--source_image", help="path to source image", default="./data/60fps-1s.mp4")
