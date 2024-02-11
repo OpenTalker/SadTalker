@@ -93,19 +93,26 @@ class CropAndExtract():
 
         #### crop images as the 
         if 'crop' in crop_or_resize.lower(): # default crop
-            x_full_frames, crop, quad = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
-            clx, cly, crx, cry = crop
-            lx, ly, rx, ry = quad
-            lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-            oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-            crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
+            x_full_frames, crops, quads = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
+            crop_info = []
+            for crop, quad in zip(crops, quads):
+                clx, cly, crx, cry = crop
+                lx, ly, rx, ry = quad
+                lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+                oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+                crop_info_entry = ((ox2 - ox1, oy2 - oy1), crop, quad)
+                crop_info.append(crop_info_entry)
         elif 'full' in crop_or_resize.lower():
-            x_full_frames, crop, quad = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
-            clx, cly, crx, cry = crop
-            lx, ly, rx, ry = quad
-            lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-            oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
-            crop_info = ((ox2 - ox1, oy2 - oy1), crop, quad)
+            x_full_frames, crops, quads = self.propress.crop(x_full_frames, still=True if 'ext' in crop_or_resize.lower() else False, xsize=512)
+            crop_info = []
+            for crop, quad in zip(crops, quads):
+                clx, cly, crx, cry = crop
+                lx, ly, rx, ry = quad
+                lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+                oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
+                crop_info_entry = ((ox2 - ox1, oy2 - oy1), crop, quad)
+                crop_info.append(crop_info_entry)
+
         else: # resize mode
             oy1, oy2, ox1, ox2 = 0, x_full_frames[0].shape[0], 0, x_full_frames[0].shape[1] 
             crop_info = ((ox2 - ox1, oy2 - oy1), None, None)

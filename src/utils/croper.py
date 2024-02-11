@@ -124,21 +124,26 @@ class Preprocesser:
         return rsize, crop, [lx, ly, rx, ry]
     
     def crop(self, img_np_list, still=False, xsize=512):    # first frame for all video
-        img_np = img_np_list[0]
-        lm = self.get_landmark(img_np)
+        lms = [self.get_landmark(img_np) for img_np in img_np_list]
 
-        if lm is None:
+        if lms is None:
             raise 'can not detect the landmark from source image'
-        rsize, crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
-        clx, cly, crx, cry = crop
-        lx, ly, rx, ry = quad
-        lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
-        for _i in range(len(img_np_list)):
-            _inp = img_np_list[_i]
+        
+        face_alignments = [self.align_face(img=Image.fromarray(img_np), lm=lmi, output_size=xsize) for img_np, lmi in zip(img_np_list, lms)]
+        crops = []
+        quads = []
+        for i, (rsize, crop, quad) in enumerate(face_alignments):
+            clx, cly, crx, cry = crop
+            lx, ly, rx, ry = quad
+            lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
+            _inp = img_np_list[i]
             _inp = cv2.resize(_inp, (rsize[0], rsize[1]))
             _inp = _inp[cly:cry, clx:crx]
             if not still:
                 _inp = _inp[ly:ry, lx:rx]
-            img_np_list[_i] = _inp
-        return img_np_list, crop, quad
+            img_np_list[i] = _inp
+            crops.append(crop)
+            quads.append(quad)
+
+        return img_np_list, crops, quads
 

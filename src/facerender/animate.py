@@ -155,7 +155,6 @@ class AnimateFromCoeff():
         return checkpoint['epoch']
 
     def generate(self, x, video_save_dir, pic_path, crop_info, enhancer=None, background_enhancer=None, preprocess='crop', img_size=256, fps=25):
-
         source_semantics=x['source_semantics'].type(torch.FloatTensor)
         target_semantics=x['target_semantics_list'].type(torch.FloatTensor) 
         source_semantics=source_semantics.to(self.device)
@@ -193,7 +192,7 @@ class AnimateFromCoeff():
         result = img_as_ubyte(video)
 
         ### the generated video is 256x256, so we keep the aspect ratio, 
-        original_size = crop_info[0]
+        original_size = crop_info[0][0]
         if original_size:
             result = [ cv2.resize(result_i,(img_size, int(img_size * original_size[1]/original_size[0]) )) for result_i in result ]
         

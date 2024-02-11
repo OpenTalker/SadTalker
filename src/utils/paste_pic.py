@@ -37,14 +37,15 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
             video_stream.release()
             break
         crop_frames.append(frame)
-    
-    if len(crop_info) != 3:
-        print("you didn't crop the image")
-        return
-    else:
-        r_w, r_h = crop_info[0]
-        clx, cly, crx, cry = crop_info[1]
-        lx, ly, rx, ry = crop_info[2]
+
+    # instead of doing seamlessClone on the first image,
+    # we iterate the frames and paste on each individually
+    tmp_path = str(uuid.uuid4())+'.mp4'
+    out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
+    for idx, crop_frame in tqdm(enumerate(crop_frames), 'seamlessClone:'):
+        r_w, r_h = crop_info[idx][0]
+        clx, cly, crx, cry = crop_info[idx][1]
+        lx, ly, rx, ry = crop_info[idx][2]
         lx, ly, rx, ry = int(lx), int(ly), int(rx), int(ry)
         # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
         # oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
@@ -54,11 +55,6 @@ def paste_pic(video_path, pic_path, crop_info, new_audio_path, full_video_path, 
         else:
             oy1, oy2, ox1, ox2 = cly+ly, cly+ry, clx+lx, clx+rx
 
-    # instead of doing seamlessClone on the first image,
-    # we iterate the frames and paste on each individual
-    tmp_path = str(uuid.uuid4())+'.mp4'
-    out_tmp = cv2.VideoWriter(tmp_path, cv2.VideoWriter_fourcc(*'MP4V'), fps, (frame_w, frame_h))
-    for idx, crop_frame in tqdm(enumerate(crop_frames), 'seamlessClone:'):
         p = cv2.resize(crop_frame.astype(np.uint8), (ox2-ox1, oy2 - oy1)) 
 
         mask = 255*np.ones(p.shape, p.dtype)
