@@ -1,111 +1,185 @@
-import os, sys
+import os
+import sys
 import gradio as gr
-from src.gradio_demo import SadTalker  
+import logging
+from src.gradio_demo import SadTalker
 
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
+# Check if running in webui environment
 try:
-    import webui  # in webui
+    import webui
     in_webui = True
-except:
+except ImportError:
     in_webui = False
 
-
-def toggle_audio_file(choice):
-    if choice == False:
-        return gr.update(visible=True), gr.update(visible=False)
-    else:
-        return gr.update(visible=False), gr.update(visible=True)
-    
-def ref_video_fn(path_of_ref_video):
-    if path_of_ref_video is not None:
-        return gr.update(value=True)
-    else:
-        return gr.update(value=False)
-
 def sadtalker_demo(checkpoint_path='checkpoints', config_path='src/config', warpfn=None):
+    """Creates a Gradio interface for SadTalker."""
+    # Validate paths
+    try:
+        if not os.path.exists(checkpoint_path):
+            raise FileNotFoundError(f"Checkpoint path {checkpoint_path} does not exist.")
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"Config path {config_path} does not exist.")
+        logger.info(f"Checkpoint path: {checkpoint_path}")
+        logger.info(f"Config path: {config_path}")
+    except FileNotFoundError as e:
+        logger.error(str(e))
+        raise
 
-    sad_talker = SadTalker(checkpoint_path, config_path, lazy_load=True)
+    # Validate checkpoint files
+    required_checkpoints = [
+        'SadTalker_V0.0.2_256.safetensors',  # Updated to match logs
+        'mapping_00229-model.pth.tar'
+    ]
+    for chk in required_checkpoints:
+        chk_path = os.path.join(checkpoint_path, chk)
+        if not os.path.exists(chk_path):
+            logger.error(f"Missing checkpoint file: {chk_path}")
+            raise FileNotFoundError(f"Missing checkpoint file: {chk_path}")
 
-    with gr.Blocks(analytics_enabled=False) as sadtalker_interface:
-        gr.Markdown("<div align='center'> <h2> 😭 SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation (CVPR 2023) </span> </h2> \
-                    <a style='font-size:18px;color: #efefef' href='https://arxiv.org/abs/2211.12194'>Arxiv</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
-                    <a style='font-size:18px;color: #efefef' href='https://sadtalker.github.io'>Homepage</a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \
-                     <a style='font-size:18px;color: #efefef' href='https://github.com/Winfredy/SadTalker'> Github </div>")
-        
-        with gr.Row().style(equal_height=False):
+    # Initialize SadTalker
+    try:
+        sad_talker = SadTalker(checkpoint_path, config_path, lazy_load=True)
+        logger.info("SadTalker initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize SadTalker: {str(e)}")
+        raise
+
+    with gr.Blocks() as sadtalker_interface:
+        gr.Markdown(
+            """
+            <div align='center'>
+                <h2> 😭 SadTalker: Learning Realistic 3D Motion Coefficients for Stylized Audio-Driven Single Image Talking Face Animation (CVPR 2023) </h2>
+                <a style='font-size:18px;color: #efefef' href='https://arxiv.org/abs/2211.12194'>Arxiv</a>   
+                <a style='font-size:18px;color: #efefef' href='https://sadtalker.github.io'>Homepage</a>   
+                <a style='font-size:18px;color: #efefef' href='https://github.com/Winfredy/SadTalker'>Github</a>
+            </div>
+            """
+        )
+
+        with gr.Row():
+            # Input Column
             with gr.Column(variant='panel'):
-                with gr.Tabs(elem_id="sadtalker_source_image"):
-                    with gr.TabItem('Upload image'):
-                        with gr.Row():
-                            source_image = gr.Image(label="Source image", source="upload", type="filepath", elem_id="img2img_image").style(width=512)
+                gr.Markdown("### Upload Inputs")
+                source_image = gr.File(
+                    label="Source Image (PNG/JPG, ideally 512x512)",
+                    file_types=[".png", ".jpg", ".jpeg"],
+                    interactive=True
+                )
+                image_preview = gr.Image(label="Image Preview", interactive=False)
+                image_status = gr.Textbox(label="Image Upload Status", interactive=False)
+                driven_audio = gr.Audio(
+                    label="Input Audio (WAV/MP3)",
+                    type="filepath",
+                    interactive=True
+                )
+                audio_status = gr.Textbox(label="Audio Upload Status", interactive=False)
+                error_message = gr.Textbox(label="Error Message", interactive=False, visible=False)
 
-                with gr.Tabs(elem_id="sadtalker_driven_audio"):
-                    with gr.TabItem('Upload OR TTS'):
-                        with gr.Column(variant='panel'):
-                            driven_audio = gr.Audio(label="Input audio", source="upload", type="filepath")
+                # Log upload events
+                source_image.upload(
+                    fn=lambda x: (f"Image uploaded: {x}", x),
+                    inputs=[source_image],
+                    outputs=[image_status, image_preview]
+                )
+                driven_audio.upload(
+                    fn=lambda x: f"Audio uploaded: {x}",
+                    inputs=[driven_audio],
+                    outputs=[audio_status]
+                )
 
-                        if sys.platform != 'win32' and not in_webui: 
-                            from src.utils.text2speech import TTSTalker
-                            tts_talker = TTSTalker()
-                            with gr.Column(variant='panel'):
-                                input_text = gr.Textbox(label="Generating audio from text", lines=5, placeholder="please enter some text here, we genreate the audio from text using @Coqui.ai TTS.")
-                                tts = gr.Button('Generate audio',elem_id="sadtalker_audio_generate", variant='primary')
-                                tts.click(fn=tts_talker.test, inputs=[input_text], outputs=[driven_audio])
-                            
-            with gr.Column(variant='panel'): 
-                with gr.Tabs(elem_id="sadtalker_checkbox"):
-                    with gr.TabItem('Settings'):
-                        gr.Markdown("need help? please visit our [best practice page](https://github.com/OpenTalker/SadTalker/blob/main/docs/best_practice.md) for more detials")
-                        with gr.Column(variant='panel'):
-                            # width = gr.Slider(minimum=64, elem_id="img2img_width", maximum=2048, step=8, label="Manually Crop Width", value=512) # img2img_width
-                            # height = gr.Slider(minimum=64, elem_id="img2img_height", maximum=2048, step=8, label="Manually Crop Height", value=512) # img2img_width
-                            pose_style = gr.Slider(minimum=0, maximum=46, step=1, label="Pose style", value=0) # 
-                            size_of_image = gr.Radio([256, 512], value=256, label='face model resolution', info="use 256/512 model?") # 
-                            preprocess_type = gr.Radio(['crop', 'resize','full', 'extcrop', 'extfull'], value='crop', label='preprocess', info="How to handle input image?")
-                            is_still_mode = gr.Checkbox(label="Still Mode (fewer head motion, works with preprocess `full`)")
-                            batch_size = gr.Slider(label="batch size in generation", step=1, maximum=10, value=2)
-                            enhancer = gr.Checkbox(label="GFPGAN as Face enhancer")
-                            submit = gr.Button('Generate', elem_id="sadtalker_generate", variant='primary')
-                            
-                with gr.Tabs(elem_id="sadtalker_genearted"):
-                        gen_video = gr.Video(label="Generated video", format="mp4").style(width=256)
+            # Settings and Output Column
+            with gr.Column(variant='panel'):
+                gr.Markdown("### Settings and Output")
+                pose_style = gr.Slider(
+                    minimum=0,
+                    maximum=46,
+                    step=1,
+                    label="Pose Style",
+                    value=0
+                )
+                size_of_image = gr.Radio(
+                    [256, 512],
+                    value=256,
+                    label="Face Model Resolution",
+                    info="Use 256/512 model?"
+                )
+                preprocess_type = gr.Radio(
+                    ['crop', 'resize', 'full', 'extcrop', 'extfull'],
+                    value='crop',
+                    label="Preprocess",
+                    info="How to handle input image?"
+                )
+                is_still_mode = gr.Checkbox(
+                    label="Still Mode (fewer head motions, works with preprocess 'full')"
+                )
+                batch_size = gr.Slider(
+                    label="Batch Size in Generation",
+                    step=1,
+                    minimum=1,
+                    maximum=10,
+                    value=2
+                )
+                enhancer = gr.Checkbox(label="GFPGAN as Face Enhancer")
+                submit = gr.Button('Generate', variant='primary')
+                gen_video = gr.Video(
+                    label="Generated Video (MP4)",
+                    interactive=False
+                )
 
-        if warpfn:
-            submit.click(
-                        fn=warpfn(sad_talker.test), 
-                        inputs=[source_image,
-                                driven_audio,
-                                preprocess_type,
-                                is_still_mode,
-                                enhancer,
-                                batch_size,                            
-                                size_of_image,
-                                pose_style
-                                ], 
-                        outputs=[gen_video]
-                        )
-        else:
-            submit.click(
-                        fn=sad_talker.test, 
-                        inputs=[source_image,
-                                driven_audio,
-                                preprocess_type,
-                                is_still_mode,
-                                enhancer,
-                                batch_size,                            
-                                size_of_image,
-                                pose_style
-                                ], 
-                        outputs=[gen_video]
-                        )
+        # Submit button logic with input validation
+        def validate_and_run(source_image, driven_audio, preprocess_type, is_still_mode, enhancer, batch_size, size_of_image, pose_style):
+            try:
+                logger.info(f"Received inputs: image={source_image}, audio={driven_audio}")
+                # Handle gr.File and gr.Audio inputs
+                image_path = source_image.name if hasattr(source_image, 'name') else source_image
+                audio_path = driven_audio if driven_audio else None
+                logger.info(f"Processed paths: image={image_path}, audio={audio_path}")
+                if not image_path or not os.path.exists(image_path):
+                    logger.error("Invalid or missing source image")
+                    return None, "Error: Please upload a valid source image."
+                if not audio_path or not os.path.exists(audio_path):
+                    logger.error("Invalid or missing audio file")
+                    return None, "Error: Please upload a valid audio file."
+                if not isinstance(audio_path, (str, bytes, os.PathLike)):
+                    logger.error(f"Invalid audio path type: {type(audio_path)}")
+                    return None, f"Error: Audio input must be a file path, not {type(audio_path)}."
+                logger.info("Inputs validated successfully")
+                result = (warpfn(sad_talker.test) if warpfn else sad_talker.test)(
+                    image_path, audio_path, preprocess_type, is_still_mode, enhancer, batch_size, size_of_image, pose_style
+                )
+                logger.info("Video generation completed")
+                return result, None
+            except Exception as e:
+                logger.error(f"Error during video generation: {str(e)}")
+                return None, f"Error: {str(e)}"
+
+        submit.click(
+            fn=validate_and_run,
+            inputs=[
+                source_image,
+                driven_audio,
+                preprocess_type,
+                is_still_mode,
+                enhancer,
+                batch_size,
+                size_of_image,
+                pose_style
+            ],
+            outputs=[gen_video, error_message]
+        )
 
     return sadtalker_interface
- 
+
 
 if __name__ == "__main__":
-
-    demo = sadtalker_demo()
-    demo.queue()
-    demo.launch()
-
-
+    try:
+        demo = sadtalker_demo()
+        demo.queue()
+        demo.launch()
+    except Exception as e:
+        logger.error(f"Failed to launch Gradio interface: {str(e)}")
+        raise
