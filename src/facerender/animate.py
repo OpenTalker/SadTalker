@@ -32,7 +32,7 @@ except:
 
 class AnimateFromCoeff():
 
-    def __init__(self, sadtalker_path, device):
+    def __init__(self, sadtalker_path, device, loaded_checkpoints=None):
 
         with open(sadtalker_path['facerender_yaml']) as f:
             config = yaml.safe_load(f)
@@ -60,7 +60,12 @@ class AnimateFromCoeff():
 
         if sadtalker_path is not None:
             if 'checkpoint' in sadtalker_path: # use safe tensor
-                self.load_cpk_facevid2vid_safetensor(sadtalker_path['checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=None)
+                current_checkpoints = loaded_checkpoints
+                if current_checkpoints is None:
+                    print("Loading safetensors checkpoint in AnimateFromCoeff.")
+                    # This should ideally not be None if passed from inference.py
+                    current_checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
+                self.load_cpk_facevid2vid_safetensor(current_checkpoints, kp_detector=kp_extractor, generator=generator, he_estimator=None) # Pass loaded_checkpoints directly
             else:
                 self.load_cpk_facevid2vid(sadtalker_path['free_view_checkpoint'], kp_detector=kp_extractor, generator=generator, he_estimator=he_estimator)
         else:
@@ -83,11 +88,11 @@ class AnimateFromCoeff():
          
         self.device = device
     
-    def load_cpk_facevid2vid_safetensor(self, checkpoint_path, generator=None, 
-                        kp_detector=None, he_estimator=None,  
-                        device="cpu"):
+    def load_cpk_facevid2vid_safetensor(self, checkpoint_data, generator=None,
+                        kp_detector=None, he_estimator=None): # Changed checkpoint_path to checkpoint_data
 
-        checkpoint = safetensors.torch.load_file(checkpoint_path)
+        # checkpoint_data is now the already loaded dictionary from safetensors.torch.load_file()
+        # No need to call safetensors.torch.load_file(checkpoint_path) again
 
         if generator is not None:
             x_generator = {}

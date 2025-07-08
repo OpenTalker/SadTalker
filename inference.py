@@ -32,12 +32,20 @@ def main(args):
 
     sadtalker_paths = init_path(args.checkpoint_dir, os.path.join(current_root_path, 'src/config'), args.size, args.old_version, args.preprocess)
 
+    # Load safetensors checkpoint once if needed
+    loaded_checkpoints = None
+    if sadtalker_paths.get('use_safetensor', False) and 'checkpoint' in sadtalker_paths:
+        from safetensors import torch as safetensors_torch # Import moved here to avoid circular dependency if not used
+        print("Loading safetensors checkpoint...")
+        loaded_checkpoints = safetensors_torch.load_file(sadtalker_paths['checkpoint'])
+        print("Safetensors checkpoint loaded.")
+
     #init model
     preprocess_model = CropAndExtract(sadtalker_paths, device)
 
-    audio_to_coeff = Audio2Coeff(sadtalker_paths,  device)
+    audio_to_coeff = Audio2Coeff(sadtalker_paths, device, loaded_checkpoints=loaded_checkpoints)
     
-    animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device)
+    animate_from_coeff = AnimateFromCoeff(sadtalker_paths, device, loaded_checkpoints=loaded_checkpoints)
 
     #crop image and extract 3dmm from image
     first_frame_dir = os.path.join(save_dir, 'first_frame_dir')

@@ -24,7 +24,7 @@ def load_cpk(checkpoint_path, model=None, optimizer=None, device="cpu"):
 
 class Audio2Coeff():
 
-    def __init__(self, sadtalker_path, device):
+    def __init__(self, sadtalker_path, device, loaded_checkpoints=None):
         #load config
         fcfg_pose = open(sadtalker_path['audio2pose_yaml_path'])
         cfg_pose = CN.load_cfg(fcfg_pose)
@@ -42,12 +42,15 @@ class Audio2Coeff():
         
         try:
             if sadtalker_path['use_safetensor']:
-                checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
-                self.audio2pose_model.load_state_dict(load_x_from_safetensor(checkpoints, 'audio2pose'))
+                current_checkpoints = loaded_checkpoints
+                if current_checkpoints is None:
+                    print("Loading safetensors checkpoint in Audio2Coeff for audio2pose_model.")
+                    current_checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
+                self.audio2pose_model.load_state_dict(load_x_from_safetensor(current_checkpoints, 'audio2pose'))
             else:
                 load_cpk(sadtalker_path['audio2pose_checkpoint'], model=self.audio2pose_model, device=device)
-        except:
-            raise Exception("Failed in loading audio2pose_checkpoint")
+        except Exception as e:
+            raise Exception(f"Failed in loading audio2pose_checkpoint: {e}")
 
         # load audio2exp_model
         netG = SimpleWrapperV2()
@@ -57,11 +60,17 @@ class Audio2Coeff():
         netG.eval()
         try:
             if sadtalker_path['use_safetensor']:
-                checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
-                netG.load_state_dict(load_x_from_safetensor(checkpoints, 'audio2exp'))
+                current_checkpoints = loaded_checkpoints # Use the same loaded_checkpoints
+                if current_checkpoints is None:
+                    # This case should ideally not happen if loaded_checkpoints is passed correctly from inference.py
+                    # and models are loaded from the same safetensor file.
+                    # However, as a fallback, or if they were from different files (not the case here):
+                    print("Loading safetensors checkpoint in Audio2Coeff for audio2exp_model (netG).")
+                    current_checkpoints = safetensors.torch.load_file(sadtalker_path['checkpoint'])
+                netG.load_state_dict(load_x_from_safetensor(current_checkpoints, 'audio2exp'))
             else:
                 load_cpk(sadtalker_path['audio2exp_checkpoint'], model=netG, device=device)
-        except:
+        except Exception as e:
             raise Exception("Failed in loading audio2exp_checkpoint")
         self.audio2exp_model = Audio2Exp(netG, cfg_exp, device=device, prepare_training_loss=False)
         self.audio2exp_model = self.audio2exp_model.to(device)
