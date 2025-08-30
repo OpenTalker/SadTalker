@@ -4,13 +4,16 @@ from PIL import Image
 from skimage import io, img_as_float32, transform
 import torch
 import scipy.io as scio
+from src.utils.videoio import sanitize_filename
 
 def get_facerender_data(coeff_path, pic_path, first_coeff_path, audio_path, 
                         batch_size, input_yaw_list=None, input_pitch_list=None, input_roll_list=None, 
                         expression_scale=1.0, still_mode = False, preprocess='crop', size = 256):
 
     semantic_radius = 13
-    video_name = os.path.splitext(os.path.split(coeff_path)[-1])[0]
+    # Get the original video name from coeff_path and sanitize it
+    original_video_name = os.path.splitext(os.path.split(coeff_path)[-1])[0]
+    video_name = sanitize_filename(original_video_name, max_length=40)
     txt_path = os.path.splitext(coeff_path)[0]
 
     data={}
