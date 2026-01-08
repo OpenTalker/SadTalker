@@ -1,5 +1,5 @@
 llvmlite==0.38.1
-numpy==1.21.6
+numpy==1.26.4
 face_alignment==1.3.5
 imageio==2.19.3
 imageio-ffmpeg==0.4.7
