@@ -98,6 +98,13 @@ def align_img(img, lm, lm3D, mask=None, target_size=224., rescale_factor=102.):
 
     # processing the image
     img_new, lm_new, mask_new = resize_n_crop_img(img, lm, t, s, target_size=target_size, mask=mask)
-    trans_params = np.array([w0, h0, s, t[0], t[1]])
+    # trans_params = np.array([w0, h0, s, t[0], t[1]])
+    trans_params = np.array([
+        w0,  # PIL.Image的size返回的是int类型，无需转换
+        h0,
+        s.item() if isinstance(s, np.ndarray) else s,  # 确保s是标量
+        t[0].item() if isinstance(t, np.ndarray) else t[0],  # 提取标量值
+        t[1].item() if isinstance(t, np.ndarray) else t[1]
+    ])
 
     return trans_params, img_new, lm_new, mask_new
