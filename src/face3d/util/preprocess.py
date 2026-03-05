@@ -9,7 +9,12 @@ import os
 from skimage import transform as trans
 import torch
 import warnings
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
+# 兼容新版本 numpy (2.0+)，VisibleDeprecationWarning 已被移除
+try:
+    warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+except AttributeError:
+    # numpy 2.0+ 不再有 VisibleDeprecationWarning，忽略即可
+    pass
 warnings.filterwarnings("ignore", category=FutureWarning) 
 
 
@@ -27,14 +32,17 @@ def POS(xp, x):
 
     b = np.reshape(xp.transpose(), [2*npts, 1])
 
-    k, _, _, _ = np.linalg.lstsq(A, b)
+    k, _, _, _ = np.linalg.lstsq(A, b, rcond=None)
 
     R1 = k[0:3]
     R2 = k[4:7]
-    sTx = k[3]
-    sTy = k[7]
+    # Fixed for numpy 2.0+ compatibility: ensure scalars
+    sTx = float(k[3]) if hasattr(k[3], '__len__') else k[3]
+    sTy = float(k[7]) if hasattr(k[7], '__len__') else k[7]
     s = (np.linalg.norm(R1) + np.linalg.norm(R2))/2
-    t = np.stack([sTx, sTy], axis=0)
+    # Ensure s is a scalar
+    s = float(s) if hasattr(s, '__len__') else s
+    t = np.array([sTx, sTy], dtype=np.float64)
 
     return t, s
     
@@ -95,9 +103,12 @@ def align_img(img, lm, lm3D, mask=None, target_size=224., rescale_factor=102.):
     # calculate translation and scale factors using 5 facial landmarks and standard landmarks of a 3D face
     t, s = POS(lm5p.transpose(), lm3D.transpose())
     s = rescale_factor/s
+    # Ensure s is a scalar
+    s = float(s) if hasattr(s, '__len__') else s
 
     # processing the image
     img_new, lm_new, mask_new = resize_n_crop_img(img, lm, t, s, target_size=target_size, mask=mask)
-    trans_params = np.array([w0, h0, s, t[0], t[1]])
+    # Fixed for numpy 2.0+ compatibility: ensure all values are scalars
+    trans_params = np.array([float(w0), float(h0), float(s), float(t[0]), float(t[1])], dtype=np.float64)
 
     return trans_params, img_new, lm_new, mask_new
