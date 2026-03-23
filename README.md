@@ -82,52 +82,90 @@ If you have any problems, please read our [FAQs](docs/FAQ.md) before opening an 
 
 
 
-## 1. Installation.
+## 1. Installation
 
-Community tutorials: [中文Windows教程 (Chinese Windows tutorial)](https://www.bilibili.com/video/BV1Dc411W7V6/) | [日本語コース (Japanese tutorial)](https://br-d.fanbox.cc/posts/5685086).
+We provide automated installation scripts for all major platforms. Choose the appropriate method for your system:
 
-### Linux/Unix
+### Quick Installation
 
-1. Install [Anaconda](https://www.anaconda.com/), Python and `git`.
+#### Linux
+```bash
+git clone https://github.com/OpenTalker/SadTalker.git
+cd SadTalker
+bash installation/linux/install.sh
+```
 
-2. Creating the env and install the requirements.
-  ```bash
-  git clone https://github.com/OpenTalker/SadTalker.git
+#### macOS
+```bash
+git clone https://github.com/OpenTalker/SadTalker.git
+cd SadTalker
+bash installation/macos/install.sh
+```
 
-  cd SadTalker 
+#### Windows
+```cmd
+git clone https://github.com/OpenTalker/SadTalker.git
+cd SadTalker
+installation\windows\install.bat
+```
 
-  conda create -n sadtalker python=3.8
+#### Docker
+```bash
+git clone https://github.com/OpenTalker/SadTalker.git
+cd SadTalker/installation/docker
+docker-compose up -d
+```
 
-  conda activate sadtalker
+For detailed Docker instructions, see [installation/docker/README.md](installation/docker/README.md).
 
-  pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+### Manual Installation
 
-  conda install ffmpeg
+If you prefer manual installation or need to customize the setup:
 
-  pip install -r requirements.txt
+<details>
+<summary>Click to expand manual installation instructions</summary>
 
-  ### Coqui TTS is optional for gradio demo. 
-  ### pip install TTS
+#### Prerequisites
+- Python 3.8 or higher
+- Git
+- FFmpeg
 
-  ```  
-### Windows
+#### Linux/Unix/macOS
 
-A video tutorial in chinese is available [here](https://www.bilibili.com/video/BV1Dc411W7V6/). You can also follow the following instructions:
+1. Clone the repository and create virtual environment:
+```bash
+git clone https://github.com/OpenTalker/SadTalker.git
+cd SadTalker
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate.bat
+```
 
-1. Install [Python 3.8](https://www.python.org/downloads/windows/) and check "Add Python to PATH".
-2. Install [git](https://git-scm.com/download/win) manually or using [Scoop](https://scoop.sh/): `scoop install git`.
-3. Install `ffmpeg`, following [this tutorial](https://www.wikihow.com/Install-FFmpeg-on-Windows) or using [scoop](https://scoop.sh/): `scoop install ffmpeg`.
-4. Download the SadTalker repository by running `git clone https://github.com/Winfredy/SadTalker.git`.
-5. Download the checkpoints and gfpgan models in the [downloads section](#2-download-models).
-6. Run `start.bat` from Windows Explorer as normal, non-administrator, user, and a Gradio-powered WebUI demo will be started.
+2. Install PyTorch:
+```bash
+# CUDA (NVIDIA GPU)
+pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 
-### macOS
+# CPU only
+pip install torch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1
+```
 
-A tutorial on installing SadTalker on macOS can be found [here](docs/install.md).
+3. Install dependencies:
+```bash
+pip install -r req.txt  # Linux/macOS
+pip install -r requirements.txt  # Windows
+```
 
-### Docker, WSL, etc
+4. (Optional) Install TTS for text-to-speech in gradio demo:
+```bash
+pip install TTS
+```
 
-Please check out additional tutorials [here](docs/install.md).
+</details>
+
+### Community Tutorials
+- [中文Windows教程 (Chinese Windows tutorial)](https://www.bilibili.com/video/BV1Dc411W7V6/)
+- [日本語コース (Japanese tutorial)](https://br-d.fanbox.cc/posts/5685086)
+- Additional tutorials: [docs/install.md](docs/install.md)
 
 ## 2. Download Models
 
@@ -197,26 +235,63 @@ The final folder will be shown as:
 
 Please read our document on [best practices and configuration tips](docs/best_practice.md)
 
-### WebUI Demos
+### Running SadTalker
+
+After installation, you can run SadTalker using the convenient run scripts:
+
+#### Web UI (Recommended)
+
+**Linux:**
+```bash
+bash run_scripts/run_linux.sh
+```
+
+**macOS:**
+```bash
+bash run_scripts/run_macos.sh
+```
+
+**Windows:**
+```cmd
+run_scripts\run_windows.bat
+```
+
+**Docker:**
+```bash
+cd installation/docker
+docker-compose up -d
+# Access at http://localhost:7860
+```
+
+The web interface will be available at: **http://localhost:7860**
+
+#### Command Line Interface
+
+For CLI usage without the web interface:
+
+```bash
+# Using the convenience script
+bash run_scripts/run_inference.sh \
+    --audio examples/driven_audio/bus_chinese.wav \
+    --image examples/source_image/full_body_1.png \
+    --enhancer gfpgan
+
+# Or directly with Python
+python inference.py \
+    --driven_audio <audio.wav> \
+    --source_image <image.png> \
+    --enhancer gfpgan
+```
+
+For more details, see [run_scripts/README.md](run_scripts/README.md)
+
+### Online Demos
 
 **Online Demo**: [HuggingFace](https://huggingface.co/spaces/vinthony/SadTalker) | [SDWebUI-Colab](https://colab.research.google.com/github/camenduru/stable-diffusion-webui-colab/blob/main/video/stable/stable_diffusion_1_5_video_webui_colab.ipynb) | [Colab](https://colab.research.google.com/github/Winfredy/SadTalker/blob/main/quick_demo.ipynb)
 
 **Local WebUI extension**: Please refer to [WebUI docs](docs/webui_extension.md).
 
-**Local gradio demo (recommanded)**: A Gradio instance similar to our [Hugging Face demo](https://huggingface.co/spaces/vinthony/SadTalker) can be run locally:
-
-```bash
-## you need manually install TTS(https://github.com/coqui-ai/TTS) via `pip install tts` in advanced.
-python app_sadtalker.py
-```
-
-You can also start it more easily:
-
-- windows: just double click `webui.bat`, the requirements will be installed automatically.
-- Linux/Mac OS: run `bash webui.sh` to start the webui.
-
-
-### CLI usage
+### Advanced CLI Usage
 
 ##### Animating a portrait image from default config:
 ```bash
@@ -240,6 +315,26 @@ python inference.py --driven_audio <audio.wav> \
 ```
 
 More examples and configuration and tips can be founded in the [ >>> best practice documents <<<](docs/best_practice.md).
+
+## Project Structure
+
+SadTalker has been organized into a clear structure with dedicated folders for installation, configuration, and running scripts:
+
+```
+SadTalker/
+├── installation/      # Platform-specific installation scripts
+│   ├── linux/        # Linux installation
+│   ├── macos/        # macOS installation
+│   ├── windows/      # Windows installation
+│   └── docker/       # Docker setup
+├── run_scripts/      # Convenient scripts to run SadTalker
+├── config/           # Configuration files
+├── src/              # Source code
+├── docs/             # Documentation
+└── examples/         # Example files
+```
+
+For detailed project structure information, see [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
 ## Citation
 

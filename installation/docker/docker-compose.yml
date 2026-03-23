@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  sadtalker:
+    build:
+      context: ../..
+      dockerfile: installation/docker/Dockerfile
+    image: sadtalker:latest
+    container_name: sadtalker
+
+    # Enable GPU support (requires nvidia-docker2)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    # Alternative for older docker-compose versions:
+    # runtime: nvidia
+
+    ports:
+      - "7860:7860"
+
+    volumes:
+      # Mount checkpoints directory to persist downloaded models
+      - ./checkpoints:/app/checkpoints
+      - ./gfpgan:/app/gfpgan
+      # Mount results directory to access generated videos
+      - ./results:/app/results
+      # Optional: Mount input data
+      - ./examples:/app/examples
+
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+      - GRADIO_ANALYTICS_ENABLED=False
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:7860')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # CPU-only version (uncomment to use)
+  # sadtalker-cpu:
+  #   build:
+  #     context: ../..
+  #     dockerfile: installation/docker/Dockerfile.cpu
+  #   image: sadtalker:cpu
+  #   container_name: sadtalker-cpu
+  #   ports:
+  #     - "7860:7860"
+  #   volumes:
+  #     - ./checkpoints:/app/checkpoints
+  #     - ./gfpgan:/app/gfpgan
+  #     - ./results:/app/results
+  #     - ./examples:/app/examples
+  #   environment:
+  #     - GRADIO_SERVER_NAME=0.0.0.0
+  #     - GRADIO_SERVER_PORT=7860
+  #     - GRADIO_ANALYTICS_ENABLED=False
+  #   restart: unless-stopped
+
+volumes:
+  checkpoints:
+  gfpgan:
+  results:
+  examples:
