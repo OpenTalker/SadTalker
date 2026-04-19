@@ -127,8 +127,16 @@ class Preprocesser:
         img_np = img_np_list[0]
         lm = self.get_landmark(img_np)
 
-        if lm is None:
-            raise 'can not detect the landmark from source image'
+        # 顔未検出 + full モード時のフォールバック
+        if lm is None or len(lm) == 0:
+            if not still:   # still=False = full モード
+                H, W = img_np_list[0].shape[:2]
+                # 画像全体を crop/quad に設定（クロップなし）
+                # preprocess.py が lx, ly, rx, ry = quad と4スカラーで受け取るため
+                crop = [0, 0, W, H]
+                quad = [0, 0, W, H]   # [lx, ly, rx, ry]
+                return img_np_list, crop, quad
+            raise Exception('can not detect the landmark from source image')
         rsize, crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
         clx, cly, crx, cry = crop
         lx, ly, rx, ry = quad

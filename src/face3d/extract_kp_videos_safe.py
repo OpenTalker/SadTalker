@@ -89,10 +89,10 @@ class KeypointExtractor():
                     else:
                         print(e)
                         break    
-                except TypeError:
+                except (TypeError, IndexError):
                     print('No face detected in this image')
                     shape = [68, 2]
-                    keypoints = -1. * np.ones(shape)                    
+                    keypoints = -1. * np.ones(shape)
                     break
             if name is not None:
                 np.savetxt(os.path.splitext(name)[0]+'.txt', keypoints.reshape(-1))
