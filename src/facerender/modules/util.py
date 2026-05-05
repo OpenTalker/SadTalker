@@ -15,7 +15,7 @@ def kp2gaussian(kp, spatial_size, kp_variance):
     """
     mean = kp['value']
 
-    coordinate_grid = make_coordinate_grid(spatial_size, mean.type())
+    coordinate_grid = make_coordinate_grid(spatial_size, mean)
     number_of_leading_dimensions = len(mean.shape) - 1
     shape = (1,) * number_of_leading_dimensions + coordinate_grid.shape
     coordinate_grid = coordinate_grid.view(*shape)
@@ -32,13 +32,23 @@ def kp2gaussian(kp, spatial_size, kp_variance):
 
     return out
 
+def _ref_to_device_dtype(type_or_tensor):
+    """Return (device, dtype) from either a type string or a tensor reference."""
+    if isinstance(type_or_tensor, torch.Tensor):
+        return type_or_tensor.device, type_or_tensor.dtype
+    # Legacy string path: works for cpu / cuda but not mps.
+    tmp = torch.tensor(0).type(type_or_tensor)
+    return tmp.device, tmp.dtype
+
+
 def make_coordinate_grid_2d(spatial_size, type):
     """
     Create a meshgrid [-1,1] x [-1,1] of given spatial_size.
     """
+    device, dtype = _ref_to_device_dtype(type)
     h, w = spatial_size
-    x = torch.arange(w).type(type)
-    y = torch.arange(h).type(type)
+    x = torch.arange(w, dtype=dtype, device=device)
+    y = torch.arange(h, dtype=dtype, device=device)
 
     x = (2 * (x / (w - 1)) - 1)
     y = (2 * (y / (h - 1)) - 1)
@@ -52,10 +62,11 @@ def make_coordinate_grid_2d(spatial_size, type):
 
 
 def make_coordinate_grid(spatial_size, type):
+    device, dtype = _ref_to_device_dtype(type)
     d, h, w = spatial_size
-    x = torch.arange(w).type(type)
-    y = torch.arange(h).type(type)
-    z = torch.arange(d).type(type)
+    x = torch.arange(w, dtype=dtype, device=device)
+    y = torch.arange(h, dtype=dtype, device=device)
+    z = torch.arange(d, dtype=dtype, device=device)
 
     x = (2 * (x / (w - 1)) - 1)
     y = (2 * (y / (h - 1)) - 1)

@@ -1,7 +1,5 @@
 import os
-import torch 
-
-from gfpgan import GFPGANer
+import torch
 
 from tqdm import tqdm
 
@@ -100,6 +98,7 @@ def enhancer_generator_no_len(images, method='gfpgan', bg_upsampler='realesrgan'
         # download pre-trained models from url
         model_path = url
 
+    from gfpgan import GFPGANer
     restorer = GFPGANer(
         model_path=model_path,
         upscale=2,
