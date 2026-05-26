@@ -71,7 +71,10 @@ class KeypointExtractor():
                         # face detection -> face alignment.
                         img = np.array(images)
                         bboxes = self.det_net.detect_faces(images, 0.97)
-                        
+                        if len(bboxes) == 0:
+                            bboxes = self.det_net.detect_faces(images, 0.5)
+                        if len(bboxes) == 0:
+                            bboxes = self.det_net.detect_faces(images, 0.2)
                         bboxes = bboxes[0]
                         img = img[int(bboxes[1]):int(bboxes[3]), int(bboxes[0]):int(bboxes[2]), :]
 

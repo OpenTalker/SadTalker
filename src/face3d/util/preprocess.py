@@ -9,7 +9,10 @@ import os
 from skimage import transform as trans
 import torch
 import warnings
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
+try:
+    warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning)
+except AttributeError:
+    pass  # numpy 2.x removed VisibleDeprecationWarning
 warnings.filterwarnings("ignore", category=FutureWarning) 
 
 
@@ -43,9 +46,9 @@ def resize_n_crop_img(img, lm, t, s, target_size=224., mask=None):
     w0, h0 = img.size
     w = (w0*s).astype(np.int32)
     h = (h0*s).astype(np.int32)
-    left = (w/2 - target_size/2 + float((t[0] - w0/2)*s)).astype(np.int32)
+    left = (w/2 - target_size/2 + np.array((t[0] - w0/2)*s).item()).astype(np.int32)
     right = left + target_size
-    up = (h/2 - target_size/2 + float((h0/2 - t[1])*s)).astype(np.int32)
+    up = (h/2 - target_size/2 + np.array((h0/2 - t[1])*s).item()).astype(np.int32)
     below = up + target_size
 
     img = img.resize((w, h), resample=Image.BICUBIC)
@@ -98,6 +101,6 @@ def align_img(img, lm, lm3D, mask=None, target_size=224., rescale_factor=102.):
 
     # processing the image
     img_new, lm_new, mask_new = resize_n_crop_img(img, lm, t, s, target_size=target_size, mask=mask)
-    trans_params = np.array([w0, h0, s, t[0], t[1]])
+    trans_params = np.array([w0, h0, float(s), float(np.array(t[0]).flat[0]), float(np.array(t[1]).flat[0])])
 
     return trans_params, img_new, lm_new, mask_new
