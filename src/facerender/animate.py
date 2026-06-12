@@ -19,7 +19,6 @@ from src.facerender.modules.mapping import MappingNet
 from src.facerender.modules.generator import OcclusionAwareGenerator, OcclusionAwareSPADEGenerator
 from src.facerender.modules.make_animation import make_animation 
 
-from pydub import AudioSegment 
 from src.utils.face_enhancer import enhancer_generator_with_len, enhancer_list
 from src.utils.paste_pic import paste_pic
 from src.utils.videoio import save_video_with_watermark
@@ -207,17 +206,25 @@ class AnimateFromCoeff():
         av_path = os.path.join(video_save_dir, video_name)
         return_path = av_path 
         
-        audio_path =  x['audio_path'] 
+        audio_path =  x['audio_path']
         audio_name = os.path.splitext(os.path.split(audio_path)[-1])[0]
         new_audio_path = os.path.join(video_save_dir, audio_name+'.wav')
-        start_time = 0
-        # cog will not keep the .mp3 filename
-        sound = AudioSegment.from_file(audio_path)
-        frames = frame_num 
-        end_time = start_time + frames*1/25*1000
-        word1=sound.set_frame_rate(16000)
-        word = word1[start_time:end_time]
-        word.export(new_audio_path, format="wav")
+        frames = frame_num
+        duration_sec = frames / 25.0
+        # Resample + trim audio to 16 kHz using scipy (avoids pydub/audioop dependency).
+        import numpy as _np
+        from scipy.io import wavfile as _wf
+        from scipy.signal import resample as _resample
+        _rate, _data = _wf.read(audio_path)
+        if _data.ndim > 1:
+            _data = _data.mean(axis=1)
+        _target_samples = int(duration_sec * _rate)
+        _data = _data[:_target_samples]
+        if _rate != 16000:
+            _new_len = int(len(_data) * 16000 / _rate)
+            _data = _resample(_data, _new_len).astype(_np.int16)
+            _rate = 16000
+        _wf.write(new_audio_path, _rate, _data.astype(_np.int16))
 
         save_video_with_watermark(path, new_audio_path, av_path, watermark= False)
         print(f'The generated video is named {video_save_dir}/{video_name}') 

@@ -9,8 +9,7 @@ import os
 from skimage import transform as trans
 import torch
 import warnings
-warnings.filterwarnings("ignore", category=np.VisibleDeprecationWarning) 
-warnings.filterwarnings("ignore", category=FutureWarning) 
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 # calculating least square problem for image alignment
@@ -33,19 +32,22 @@ def POS(xp, x):
     R2 = k[4:7]
     sTx = k[3]
     sTy = k[7]
-    s = (np.linalg.norm(R1) + np.linalg.norm(R2))/2
-    t = np.stack([sTx, sTy], axis=0)
+    s = float((np.linalg.norm(R1) + np.linalg.norm(R2))/2)
+    t = np.array([float(sTx.flat[0]), float(sTy.flat[0])])
 
     return t, s
     
 # resize and crop images for face reconstruction
 def resize_n_crop_img(img, lm, t, s, target_size=224., mask=None):
     w0, h0 = img.size
-    w = (w0*s).astype(np.int32)
-    h = (h0*s).astype(np.int32)
-    left = (w/2 - target_size/2 + float((t[0] - w0/2)*s)).astype(np.int32)
+    _s = float(np.asarray(s).flat[0])
+    w = int(np.round(w0 * _s))
+    h = int(np.round(h0 * _s))
+    _t0 = float(np.asarray(t[0]).flat[0])
+    _t1 = float(np.asarray(t[1]).flat[0])
+    left = int(np.round(w/2 - target_size/2 + (_t0 - w0/2) * _s))
     right = left + target_size
-    up = (h/2 - target_size/2 + float((h0/2 - t[1])*s)).astype(np.int32)
+    up = int(np.round(h/2 - target_size/2 + (h0/2 - _t1) * _s))
     below = up + target_size
 
     img = img.resize((w, h), resample=Image.BICUBIC)

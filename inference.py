@@ -138,6 +138,8 @@ if __name__ == '__main__':
 
     if torch.cuda.is_available() and not args.cpu:
         args.device = "cuda"
+    elif torch.backends.mps.is_available() and not args.cpu:
+        args.device = "mps"
     else:
         args.device = "cpu"
 

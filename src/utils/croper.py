@@ -128,7 +128,7 @@ class Preprocesser:
         lm = self.get_landmark(img_np)
 
         if lm is None:
-            raise 'can not detect the landmark from source image'
+            raise RuntimeError('can not detect the landmark from source image')
         rsize, crop, quad = self.align_face(img=Image.fromarray(img_np), lm=lm, output_size=xsize)
         clx, cly, crx, cry = crop
         lx, ly, rx, ry = quad
