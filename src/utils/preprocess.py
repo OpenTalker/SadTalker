@@ -145,7 +145,7 @@ class CropAndExtract():
 
                 trans_params, im1, lm1, _ = align_img(frame, lm1, self.lm3d_std)
  
-                trans_params = np.array([float(item) for item in np.hsplit(trans_params, 5)]).astype(np.float32)
+                trans_params = np.array([item.item() for item in np.hsplit(trans_params, 5)]).astype(np.float32)
                 im_t = torch.tensor(np.array(im1)/255., dtype=torch.float32).permute(2, 0, 1).to(self.device).unsqueeze(0)
                 
                 with torch.no_grad():
