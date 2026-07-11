@@ -53,7 +53,7 @@ class CropAndExtract():
             checkpoint = safetensors.torch.load_file(sadtalker_path['checkpoint'])    
             self.net_recon.load_state_dict(load_x_from_safetensor(checkpoint, 'face_3drecon'))
         else:
-            checkpoint = torch.load(sadtalker_path['path_of_net_recon_model'], map_location=torch.device(device))    
+            checkpoint = torch.load(sadtalker_path['path_of_net_recon_model'], map_location=torch.device(device), weights_only=True)    
             self.net_recon.load_state_dict(checkpoint['net_recon'])
 
         self.net_recon.eval()
